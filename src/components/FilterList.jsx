@@ -5,56 +5,86 @@ import {
 	PopoverContent,
 	Button,
 	PopoverTrigger,
-	ListboxSection,
 } from "@nextui-org/react";
-import { useState,  useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { LuSettings2 } from "react-icons/lu";
+import { LuSettings2, LuGrid, LuList } from "react-icons/lu";
 
-export default function FilterList({ setFilters }) {
+function FilterList({ setOrder, meta, view, setView }) {
 	const [selectedKeys, setSelectedKeys] = useState([]);
 
 	useEffect(() => {
 		const filtersArr = Array.from(selectedKeys);
 
-		let filtersObj = {};
-		for (let i = 0; i < filtersArr.length; i++) {
-			filtersObj[filtersArr[i]] = filtersArr[i];
+		if (filtersArr.length > 0) {
+			setOrder(filtersArr[0]);
 		}
-	
-		setFilters(filtersObj);
-	}, [selectedKeys]);
+	}, [selectedKeys, setOrder]);
 
 	return (
-		<div className="flex justify-end mb-6">
-			<Popover placement="bottom" offset={5}>
-				<PopoverTrigger>
-					<Button startContent={<LuSettings2 />} variant="flat">
-						Filter
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent>
-					<Listbox
-						selectionMode="multiple"
-						aria-label="Actions"
-						selectedKeys={selectedKeys}
-						onSelectionChange={setSelectedKeys}
+		<div className="flex border-b dark:border-gray-600 pb-5 flex-wrap items-center justify-between mb-6">
+			<div>
+				<span className="text-black/70 text-sm md:text-base dark:text-slate-300">
+					Showing {meta?.first_item} -{" "}
+					{Math.min(
+						meta?.current_page * meta?.item_per_page,
+						meta?.total_items
+					) || 0}{" "}
+					of {meta?.total_items} Result
+				</span>
+			</div>
+			<div className="flex items-center gap-3">
+				<div className="hidden md:block">
+					<Button
+						size="sm"
+						isIconOnly
+						onPress={() => setView("grid")}
+						variant={view === "grid" ? "solid" : "light"}
+						color={view === "grid" ? "primary" : "light"}
 					>
-						<ListboxSection showDivider>
-							<ListboxItem key="views">Views</ListboxItem>
-							<ListboxItem key="copy">Read Time</ListboxItem>
-						</ListboxSection>
-						<ListboxSection>
-							<ListboxItem key="new">Newest</ListboxItem>
-							<ListboxItem key="old">Oldest</ListboxItem>
-						</ListboxSection>
-					</Listbox>
-				</PopoverContent>
-			</Popover>
+						<LuGrid />
+					</Button>
+
+					<Button
+						size="sm"
+						isIconOnly
+						onPress={() => setView("list")}
+						variant={view === "list" ? "solid" : "light"}
+						color={view !== "grid" ? "primary" : "light"}
+					>
+						<LuList />
+					</Button>
+				</div>
+				<Popover size="sm" placement="bottom" offset={5}>
+					<PopoverTrigger>
+						<Button startContent={<LuSettings2 />} variant="flat">
+							Filter
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent>
+						<Listbox
+							selectionMode="single"
+							aria-label="Actions"
+							selectedKeys={selectedKeys}
+							onSelectionChange={setSelectedKeys}
+						>
+							<ListboxItem key="read_count">Views</ListboxItem>
+							<ListboxItem key="reading_time">Read Time</ListboxItem>
+							<ListboxItem key="newest">Newest</ListboxItem>
+							<ListboxItem key="oldest">Oldest</ListboxItem>
+						</Listbox>
+					</PopoverContent>
+				</Popover>
+			</div>
 		</div>
 	);
 }
 
 FilterList.propTypes = {
-	setFilters: PropTypes.func,
+	setOrder: PropTypes.func,
+	meta: PropTypes.object,
+	view: PropTypes.string,
+	setView: PropTypes.func,
 };
+
+export default FilterList;

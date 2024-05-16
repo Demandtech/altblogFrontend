@@ -9,19 +9,20 @@ import {
 	Input,
 	Link,
 } from "@nextui-org/react";
-import { MailIcon, LockIcon } from "../Svgs.jsx";
+import {
+	MailIcon,
+	EyeFilledIcon,
+	EyeSlashFilledIcon,
+} from "../Svgs.jsx";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../../context/AppContext.jsx";
-import toast, { toastConfig } from "react-simple-toasts";
-import { RiErrorWarningFill } from "react-icons/ri";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-
-toastConfig({ theme: "dark" });
+import { useUserContext } from "../../context/UserContext.jsx";
 
 export default function Signup({ isOpen, onOpenChange }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { registerUser, user } = useAppContext();
+	const { registerUser, snackBar } = useUserContext();
+	const [isVisible, setIsVisible] = useState(false);
+	const toggleVisibility = () => setIsVisible(!isVisible);
 	const [values, setValues] = useState(() => {
 		const savedSignupValue = localStorage.getItem("SIGNUP-VALUE");
 		return savedSignupValue
@@ -31,7 +32,8 @@ export default function Signup({ isOpen, onOpenChange }) {
 					last_name: "",
 					email: "",
 					password: "",
-			  };
+					profession: "",
+			};
 	});
 	const checkInput = (e) => {
 		const { value, name } = e.target;
@@ -71,7 +73,14 @@ export default function Signup({ isOpen, onOpenChange }) {
 					};
 				});
 				break;
-
+			case "profession":
+				setInputError((prev) => {
+					return {
+						...prev,
+						[name]: !value,
+					};
+				});
+				break;
 			default:
 				break;
 		}
@@ -81,6 +90,7 @@ export default function Signup({ isOpen, onOpenChange }) {
 		last_name: false,
 		email: false,
 		password: false,
+		profession: false,
 	});
 
 	const handleChange = (e) => {
@@ -96,27 +106,16 @@ export default function Signup({ isOpen, onOpenChange }) {
 		});
 	};
 
-	console.log(inputError);
-
 	const handleSignup = async (onClose) => {
 		setIsLoading(true);
 
 		const { newUser, errorMessage } = await registerUser(values);
 
 		if (newUser) {
-			toast(`Welcome ${newUser?.first_name}, Registration successfull`, {
-				position: "top-center",
-				clickable: true,
-				clickClosable: true,
-				duration: 10000,
-
-				render: (message) => (
-					<div className=" text-sm flex gap-3 items-center bg-black/90 px-2 py-1 rounded text-success">
-						<IoMdCheckmarkCircleOutline />
-						<span>{message}</span>
-					</div>
-				),
-			});
+			snackBar(
+				`Welcome ${newUser?.first_name}, Registration successfull`,
+				"success"
+			);
 			onClose();
 			setIsLoading(false);
 			localStorage.removeItem("SIGNUP-VALUE");
@@ -125,20 +124,11 @@ export default function Signup({ isOpen, onOpenChange }) {
 				last_name: "",
 				email: "",
 				password: "",
+				profession: "",
 			});
-		} else {
-			toast(errorMessage, {
-				position: "top-center",
-				clickable: true,
-				clickClosable: true,
-				duration: 10000,
-				render: (message) => (
-					<span className="text-sm flex gap-3 items-center bg-black/90 px-2 py-1 rounded text-danger">
-						<RiErrorWarningFill />
-						{message}
-					</span>
-				),
-			});
+		}
+		if (errorMessage) {
+			snackBar(errorMessage, "error");
 			setIsLoading(false);
 		}
 	};
@@ -186,6 +176,20 @@ export default function Signup({ isOpen, onOpenChange }) {
 									}
 								/>
 								<Input
+									label="Profession"
+									placeholder="Enter your profession"
+									type="text"
+									variant="bordered"
+									value={values.profession}
+									onChange={handleChange}
+									name="profession"
+									isInvalid={inputError.profession}
+									color={inputError.profession ? "danger" : "default"}
+									errorMessage={
+										inputError.profession && "Please enter a valid last name"
+									}
+								/>
+								<Input
 									endContent={
 										<MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
 									}
@@ -201,11 +205,21 @@ export default function Signup({ isOpen, onOpenChange }) {
 								/>
 								<Input
 									endContent={
-										<LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+										<button
+											className="focus:outline-none"
+											type="button"
+											onClick={toggleVisibility}
+										>
+											{isVisible ? (
+												<EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+											) : (
+												<EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+											)}
+										</button>
 									}
 									label="Password"
 									placeholder="Enter your password"
-									type="password"
+									type={isVisible ? "text" : "password"}
 									variant="bordered"
 									value={values.password}
 									name="password"

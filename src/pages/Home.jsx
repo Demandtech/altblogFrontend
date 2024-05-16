@@ -1,27 +1,45 @@
-import { useDisclosure } from "@nextui-org/react";
-import FilterPanel from "../components/FilterPanel";
 import Hero from "../components/Hero";
 import PostsContainer from "../components/PostsContainer";
-import Login from "../components/modals/Login";
-import Signup from "../components/modals/Signup";
-import CreatePost from "../components/modals/CreatePost";
+import { usePostContext } from "../context/PostContext";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useSearchParams } from "react-router-dom";
 
-function Home() {
-	const {
-		isOpen: loginIsOpen,
-		onOpen: loginOnOpen,
-		onOpenChange: loginOnOpenChange,
-	} = useDisclosure();
-	const {
-		isOpen: signUpIsOpen,
-		onOpen: signupOnOpen,
-		onOpenChange: signupOnOpenChange,
-	} = useDisclosure();
-	const {
-		isOpen: createPostIsOpen,
-		onOpen: createPostOnOpen,
-		onOpenChange: createPostOnOpenChange,
-	} = useDisclosure();
+function Home({ createPostOnOpen, loginOnOpen, signupOnOpen, editPostOnOpen }) {
+	const { posts, getAllPublishedPosts } = usePostContext();
+	const [search, setSearch] = useState("");
+	const [order, setOrder] = useState("");
+	const [searchParams, setSearchParams] = useSearchParams();
+	const pageParam = searchParams.get("page");
+	const [page, setPage] = useState(pageParam ?? 1);
+	const [limit, setLimit] = useState("5");
+
+	const existingParams = Object.fromEntries(searchParams);
+
+	const getPosts = async () => {
+		try {
+			await getAllPublishedPosts({ search, page, order, limit });
+
+			let params = { ...existingParams, page };
+			if (page > 1) {
+				setSearchParams(params);
+			} else {
+				delete params.page;
+				setSearchParams(params);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		setPage(1);
+		getPosts();
+	}, [order, search, limit]);
+
+	useEffect(() => {
+		getPosts();
+	}, [page]);
 
 	return (
 		<>
@@ -29,20 +47,25 @@ function Home() {
 				createPostOnOpen={createPostOnOpen}
 				loginOnOpen={loginOnOpen}
 				signupOnOpen={signupOnOpen}
+				setSearch={setSearch}
+				search={search}
 			/>
-			<FilterPanel />
 			<PostsContainer
-				className="px-3 md:px-5 mt-6 lg:px-10"
-				posts={[1, 2, 3, 4, 5, 6, 7, 8]}
-			/>
-			<Login onOpenChange={loginOnOpenChange} isOpen={loginIsOpen} />
-			<Signup isOpen={signUpIsOpen} onOpenChange={signupOnOpenChange} />
-			<CreatePost
-				isOpen={createPostIsOpen}
-				onOpenChange={createPostOnOpenChange}
+				setOrder={setOrder}
+				setPage={setPage}
+				className="px-3 md:px-5 mt-6 lg:px-10 pb-10"
+				posts={posts}
+				editPostOnOpen={editPostOnOpen}
+				setLimit={setLimit}
+				limit={limit}
 			/>
 		</>
 	);
 }
-
+Home.propTypes = {
+	createPostOnOpen: PropTypes.func,
+	loginOnOpen: PropTypes.func,
+	signupOnOpen: PropTypes.func,
+	editPostOnOpen: PropTypes.func,
+};
 export default Home;

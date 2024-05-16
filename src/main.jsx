@@ -3,14 +3,20 @@ import App from "./App.jsx";
 import "./index.css";
 import { NextUIProvider } from "@nextui-org/react";
 import { BrowserRouter } from "react-router-dom";
-import AppProvider from "./context/AppContext.jsx";
+import UserProvider from "./context/UserContext.jsx";
+import PostProvider from "./context/PostContext.jsx";
+import ErrorBoundary from "./configs/ErrorBoundary.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<AppProvider>
-		<NextUIProvider>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</NextUIProvider>
-	</AppProvider>
+	<ErrorBoundary>
+		<UserProvider>
+			<PostProvider>
+				<NextUIProvider>
+					<BrowserRouter>
+						<App />
+					</BrowserRouter>
+				</NextUIProvider>
+			</PostProvider>
+		</UserProvider>
+	</ErrorBoundary>
 );

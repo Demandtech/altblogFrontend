@@ -15,80 +15,179 @@ import {
 
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
-import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmarkOutline, IoTimerOutline } from "react-icons/io5";
 import PropTypes from "prop-types";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
+import moment from "moment";
+import { FaRegEye } from "react-icons/fa";
+import { useUserContext } from "../context/UserContext";
+import { usePostContext } from "../context/PostContext";
+import { handleTime } from "../helper/convertReadingTime";
+import { MdPublish } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 
-const PostCard = ({ onOpen }) => {
+const PostCard = ({
+	title,
+	body,
+	author,
+	createdAt,
+	tags,
+	_id,
+	reading_time,
+	read_count,
+	state,
+	editPostOnOpen,
+	publishedAt,
+}) => {
+	const { user } = useUserContext();
+	const { publishPost, deletePost } = usePostContext();
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const existingParams = Object.fromEntries(searchParams);
+
+	const handleEditPost = () => {
+		editPostOnOpen();
+
+		const params = { ...existingParams, postId: _id };
+		setSearchParams(params);
+	};
+
+	const truncateText = (text) => {
+		const wordCount = text.split(" ");
+
+		let words = wordCount.filter((word) => word != "");
+
+		words = wordCount.map((el) => {
+			const modifiedElement = el
+				.replace(/<\/?[a-zA-Z]+(?:\s[^>]*)?>/g, "<span>")
+				.replace(/<\/?br\s*\/?>/g, "");
+			return modifiedElement;
+		});
+
+		return words.join(" ");
+	};
+
 	return (
-		<Card className="bg-black/5 flex shadow-none flex-col items-start justify-between">
-			<CardHeader className="flex items-center gap-x-4 text-xs">
-				<time dateTime="2020-03-16" className="text-gray-500">
-					Mar 16, 2020
+		<Card className="dark:bg-[#27272a] dark:border-none dark:shadow-sm border flex shadow-sm flex-col items-start">
+			<CardHeader className="flex items-center gap-x-3 text-xs">
+				<time dateTime={"2020-03-16"} className="text-gray-500">
+					{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}
 				</time>
-				<Chip size="sm">Marketing</Chip>
+				{tags.length > 0 && (
+					<Chip
+						className="capitalize bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
+						size="sm"
+					>
+						{tags[0]}
+					</Chip>
+				)}
 
-				<Dropdown>
-					<DropdownTrigger>
-						<Button className="ml-auto" isIconOnly variant="light">
-							<BsThreeDotsVertical /> 
-						</Button> 
-					</DropdownTrigger>
-					<DropdownMenu aria-label="Static Actions">
-						<DropdownItem
-							onPress={() => {
-								onOpen();
-							}}
-							key="edit"
-							startContent={<FiEdit />}
-						>
-							Edit Post
-						</DropdownItem>
-						<DropdownItem
-							startContent={<RiDeleteBin5Line />}
-							key="delete"
-							className="text-danger"
-							color="danger"
-						>
-							Delete Post
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
+				<Chip
+					size="sm"
+					className="pe-3 bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
+					endContent={<FaRegEye />}
+				>
+					{read_count}
+				</Chip>
+				<Chip
+					size="sm"
+					className="bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
+					startContent={<IoTimerOutline />}
+				>
+					{handleTime(reading_time)}
+				</Chip>
+				{user?._id === author?._id && (
+					<Dropdown className="">
+						<DropdownTrigger>
+							<Button className="ml-auto" isIconOnly variant="light">
+								<BsThreeDotsVertical className="dark:text-white/80" />
+							</Button>
+						</DropdownTrigger>
+						<DropdownMenu aria-label="Static Actions">
+							{state === "DRAFT" && (
+								<DropdownItem
+									onPress={() => {
+										publishPost(_id);
+									}}
+									key="publish"
+									startContent={<MdPublish />}
+								>
+									Publish Post
+								</DropdownItem>
+							)}
+							<DropdownItem
+								onPress={handleEditPost}
+								key="edit"
+								startContent={<FiEdit />}
+							>
+								Edit Post
+							</DropdownItem>
+
+							<DropdownItem
+								startContent={<RiDeleteBin5Line />}
+								key="delete"
+								className="text-danger"
+								color="danger"
+								onPress={() => deletePost(_id)}
+							>
+								Delete Post
+							</DropdownItem>
+						</DropdownMenu>
+					</Dropdown>
+				)}
 			</CardHeader>
 			<CardBody className="group relative">
-				<h3 className="text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+				<h3 className="text-lg mb-3  font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
 					<Link
-						// className="text-lg bg-red-500  w-full line-clamp-1  font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
-						href="/posdId"
+						href={`/post/${_id}`}
+						className="capitalize w-full !line-clamp-1"
 					>
-						{/* <span className="absolute inset-0"></span> */}
-						Conversion rate Boost your conversion rate
+						{title}
 					</Link>
 				</h3>
-				<p className="mt-2 pr-4 md:pr-10 line-clamp-3 text-sm leading-6 text-gray-600">
-					Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam
-					vitae illo. Non aliquid explicabo necessitatibus unde. Sed
-					exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti
-					dicta.
-				</p>
+
+				<div
+					className="line-clamp-3 ! dark:text-slate-300"
+					dangerouslySetInnerHTML={{
+						__html: truncateText(body),
+					}}
+				/>
 			</CardBody>
 			<CardFooter className="flex gap-x-4">
-				<User name="Jane Doe" description="Product Designer" />
-				<div className="ml-auto flex gap-2">
-					<Button size="sm" isIconOnly className="rounded-full">
-						<BiLike />
-					</Button>
-					<Button size="sm" isIconOnly className="rounded-full">
-						<IoBookmarkOutline />
-					</Button>
-				</div>
+				<Link className="text-dark" href={`/profile/${author?._id}`}>
+					<User
+						name={`${author?.first_name + " " + author?.last_name}`}
+						description={author?.profession}
+						avatarProps={{ src: author?.avatar }}
+					/>
+				</Link>
+				{user?._id !== author?._id && (
+					<div className="ml-auto flex gap-2">
+						<Button size="sm" isIconOnly className="rounded-full bg-[#ebced0]">
+							<BiLike className="text-[#955055]" />
+						</Button>
+						<Button size="sm" isIconOnly className="rounded-full bg-[#ebced0]">
+							<IoBookmarkOutline className="text-[#955055]" />
+						</Button>
+					</div>
+				)}
 			</CardFooter>
 		</Card>
 	);
 };
 
 PostCard.propTypes = {
-	onOpen: PropTypes.func,
+	title: PropTypes.string,
+	author: PropTypes.object,
+	body: PropTypes.string,
+	createdAt: PropTypes.string,
+	publishedAt: PropTypes.string,
+	tags: PropTypes.array,
+	_id: PropTypes.string,
+	read_count: PropTypes.number,
+	reading_time: PropTypes.number,
+	state: PropTypes.string,
+	editPostOnOpen: PropTypes.func,
 };
 export default PostCard;

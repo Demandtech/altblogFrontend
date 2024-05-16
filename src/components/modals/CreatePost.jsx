@@ -10,13 +10,15 @@ import {
 } from "@nextui-org/react";
 import PropTypes from "prop-types";
 import TextEditor from "../TextEditor";
-import { useEffect,  useState } from "react";
+import { useEffect, useState } from "react";
 import TagSelect from "../TagSelect";
+import { usePostContext } from "../../context/PostContext";
+import { useUserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost({ isOpen, onOpenChange }) {
 	const [values, setValues] = useState(() => {
 		const savedValues = localStorage.getItem("CREATEPOST-VALUE");
-
 		return savedValues
 			? JSON.parse(savedValues)
 			: {
@@ -24,10 +26,18 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					tags: [],
 					description: "",
 					body: "",
-			};
+			  };
 	});
+	const [isLoading, setIsLoading] = useState(false);
+	const { createPost } = usePostContext();
+	const { snackBar, user } = useUserContext();
+	const [letterCount, setLetterCounter] = useState(0);
+	const navigate = useNavigate();
 
 	const handleChange = (name, value) => {
+		if (name === "description") {
+			setLetterCounter(value.length);
+		}
 		setValues((prev) => {
 			return {
 				...prev,
@@ -40,6 +50,29 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 		if (!values) return;
 		localStorage.setItem("CREATEPOST-VALUE", JSON.stringify(values));
 	}, [values]);
+
+	const handleCreatePost = async (onClose) => {
+		// onClose()
+		setIsLoading(true);
+		const result = await createPost(values);
+
+		if (result) {
+			snackBar("Post Created successfully", "success");
+			localStorage.removeItem("CREATEPOST-VALUE");
+			setValues({
+				title: "",
+				tags: [],
+				description: "",
+				body: "",
+			});
+			onClose();
+			navigate(`/profile/${user._id}`);
+		} else {
+			snackBar("An error occured, please try again later!", "error");
+		}
+
+		setIsLoading(false);
+	};
 
 	return (
 		<>
@@ -74,18 +107,29 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 									}}
 								/>
 								<TagSelect setValues={handleChange} />
-								<Textarea
-									label="Description"
-									labelPlacement="outside"
-									placeholder="Enter your description"
-									className="max-w-xl"
-									variant="bordered"
-									name="description"
-									value={values.description}
-									onChange={(e) => {
-										handleChange(e.target.name, e.target.value);
-									}}
-								/>
+								<div className="relative max-w-xl">
+									<Textarea
+										isRequired
+										label="Description"
+										labelPlacement="outside"
+										placeholder="Enter your description"
+										className="max-w-xl"
+										variant="bordered"
+										name="description"
+										value={values.description}
+										onChange={(e) => {
+											handleChange(e.target.name, e.target.value);
+										}}
+										maxLength={150}
+									/>
+									<span
+										className={`${
+											150 - letterCount < 10 ? "text-danger" : ""
+										} absolute bg-white dark:bg-inherit pl-2 right-2 bottom-2 text-xs`}
+									>
+										{letterCount}/150
+									</span>
+								</div>
 
 								<label className="text-sm text-black/90" htmlFor="">
 									Content
@@ -97,7 +141,14 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 								<Button color="danger" variant="light" onPress={onClose}>
 									Close
 								</Button>
-								<Button color="primary" onPress={onClose}>
+								<Button
+									color="primary"
+									onPress={() => handleCreatePost(onClose)}
+									isDisabled={
+										!values.title || !values.body || !values.description
+									}
+									isLoading={isLoading}
+								>
 									Save
 								</Button>
 							</ModalFooter>
