@@ -12,10 +12,9 @@ import {
 	DropdownItem,
 	User,
 } from "@nextui-org/react";
-
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiLike } from "react-icons/bi";
-import { IoBookmarkOutline, IoTimerOutline } from "react-icons/io5";
+import { BiLike, BiSolidLike } from "react-icons/bi";
+import { IoBookmarkOutline, IoTimerOutline, IoBookmark } from "react-icons/io5";
 import PropTypes from "prop-types";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
@@ -26,6 +25,7 @@ import { usePostContext } from "../context/PostContext";
 import { handleTime } from "../helper/convertReadingTime";
 import { MdPublish } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 const PostCard = ({
 	title,
@@ -41,9 +41,10 @@ const PostCard = ({
 	publishedAt,
 }) => {
 	const { user } = useUserContext();
-	const { publishPost, deletePost } = usePostContext();
+	const { publishPost, deletePost, likePost, bookmarkPost } = usePostContext();
 	const [searchParams, setSearchParams] = useSearchParams();
-
+	const [isLike, setIsLike] = useState(false);
+	const [isBookmark, setIsBookmark] = useState(false);
 	const existingParams = Object.fromEntries(searchParams);
 
 	const handleEditPost = () => {
@@ -66,6 +67,16 @@ const PostCard = ({
 		});
 
 		return words.join(" ");
+	};
+
+	const handleLike = async () => {
+		setIsLike(!isLike);
+		await likePost(_id);
+	};
+
+	const handleBookmark = () => {
+		setIsBookmark(!isBookmark);
+		bookmarkPost(_id);
 	};
 
 	return (
@@ -164,11 +175,29 @@ const PostCard = ({
 				</Link>
 				{user?._id !== author?._id && (
 					<div className="ml-auto flex gap-2">
-						<Button size="sm" isIconOnly className="rounded-full bg-[#ebced0]">
-							<BiLike className="text-[#955055]" />
+						<Button
+							onPress={handleLike}
+							size="sm"
+							isIconOnly
+							className="rounded-full bg-[#ebced0]"
+						>
+							{isLike ? (
+								<BiSolidLike className="text-[#955055]" />
+							) : (
+								<BiLike className="text-[#955055]" />
+							)}
 						</Button>
-						<Button size="sm" isIconOnly className="rounded-full bg-[#ebced0]">
-							<IoBookmarkOutline className="text-[#955055]" />
+						<Button
+							onPress={handleBookmark}
+							size="sm"
+							isIconOnly
+							className="rounded-full bg-[#ebced0]"
+						>
+							{isBookmark ? (
+								<IoBookmark className="text-[#955055]" />
+							) : (
+								<IoBookmarkOutline className="text-[#955055]" />
+							)}
 						</Button>
 					</div>
 				)}

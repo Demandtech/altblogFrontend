@@ -153,6 +153,28 @@ const PostProvider = ({ children }) => {
 		}
 	};
 
+	const likePost = async (postId) => {
+		if (!postId) return;
+
+		const { status, data } = await axios().get(`posts/like/${postId}`);
+
+		console.log(status, data);
+	};
+
+	const bookmarkPost = async (postId) => {
+		if (!postId) return;
+
+		const { status, data } = await axios().get(`posts/bookmark/${postId}`);
+
+		console.log(status, data);
+	};
+
+	const userbookmarkPosts = async () => {
+		const { status, data } = await axios().get(`posts/user/bookmark/`);
+
+		console.log(status, data);
+	};
+
 	return (
 		<PostContext.Provider
 			value={{
@@ -164,6 +186,9 @@ const PostProvider = ({ children }) => {
 				createPost,
 				editPost,
 				deletePost,
+				likePost,
+				bookmarkPost,
+				userbookmarkPosts,
 			}}
 		>
 			{children}

@@ -116,10 +116,10 @@ const Profile = ({
 							</div>
 						</div>
 						<div className="flex gap-2 justify-end pb-9 px-3 md:px-10">
-							{user?.facebook && (
+							{profile?.facebook && (
 								<a
 									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 w-7 h-7 rounded-full grid place-content-center"
-									href={user.facebook}
+									href={profile.facebook}
 									target="_blank"
 								>
 									<BsFacebook
@@ -128,10 +128,10 @@ const Profile = ({
 									/>
 								</a>
 							)}
-							{user?.twitter && (
+							{profile?.twitter && (
 								<a
 									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 w-7 h-7 rounded-full grid place-content-center"
-									href={user?.twitter}
+									href={profile?.twitter}
 									target="_blank"
 								>
 									<BsTwitter
@@ -140,10 +140,10 @@ const Profile = ({
 									/>
 								</a>
 							)}
-							{user?.linkedin && (
+							{profile?.linkedin && (
 								<a
 									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 w-7 h-7 rounded-full grid place-content-center"
-									href={user?.linkedin}
+									href={profile?.linkedin}
 									target="_blank"
 								>
 									<BsLinkedin
@@ -152,10 +152,10 @@ const Profile = ({
 									/>
 								</a>
 							)}
-							{user?.pinterest && (
+							{profile?.pinterest && (
 								<a
 									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 w-7 h-7 rounded-full grid place-content-center"
-									href={user?.pinterest}
+									href={profile?.pinterest}
 									target="_blank"
 								>
 									<BsPinterest
@@ -164,10 +164,10 @@ const Profile = ({
 									/>
 								</a>
 							)}
-							{user?.medium && (
+							{profile?.medium && (
 								<a
 									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 w-7 h-7 rounded-full grid place-content-center"
-									href={user?.medium}
+									href={profile?.medium}
 									target="_blank"
 								>
 									<BsMedium
@@ -176,10 +176,10 @@ const Profile = ({
 									/>
 								</a>
 							)}
-							{user?.telegram && (
+							{profile?.telegram && (
 								<a
 									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 w-7 h-7 rounded-full grid place-content-center"
-									href={user?.telegram}
+									href={profile?.telegram}
 									target="_blank"
 								>
 									<BsTelegram

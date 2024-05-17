@@ -9,20 +9,15 @@ import {
 	Input,
 	Link,
 } from "@nextui-org/react";
-import {
-	MailIcon,
-	EyeFilledIcon,
-	EyeSlashFilledIcon,
-} from "../Svgs.jsx";
+import { MailIcon, EyeFilledIcon, EyeSlashFilledIcon } from "../Svgs.jsx";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../context/UserContext.jsx";
 
-export default function Signup({ isOpen, onOpenChange }) {
+export default function Signup({ isOpen, onOpenChange, onLogin }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { registerUser, snackBar } = useUserContext();
 	const [isVisible, setIsVisible] = useState(false);
-	const toggleVisibility = () => setIsVisible(!isVisible);
 	const [values, setValues] = useState(() => {
 		const savedSignupValue = localStorage.getItem("SIGNUP-VALUE");
 		return savedSignupValue
@@ -35,6 +30,7 @@ export default function Signup({ isOpen, onOpenChange }) {
 					profession: "",
 			};
 	});
+	const toggleVisibility = () => setIsVisible(!isVisible);
 	const checkInput = (e) => {
 		const { value, name } = e.target;
 
@@ -131,6 +127,11 @@ export default function Signup({ isOpen, onOpenChange }) {
 			snackBar(errorMessage, "error");
 			setIsLoading(false);
 		}
+	};
+
+	const handleLogin = (onClose) => {
+		onClose();
+		onLogin();
 	};
 
 	useEffect(() => {
@@ -244,6 +245,17 @@ export default function Signup({ isOpen, onOpenChange }) {
 								</div>
 							</ModalBody>
 							<ModalFooter>
+								<div className="mr-auto ">
+									<small>
+										already a member?{" "}
+										<button
+											onClick={() => handleLogin(onClose)}
+											className="text-primary"
+										>
+											Sign in
+										</button>
+									</small>
+								</div>
 								<Button color="danger" variant="flat" onPress={onClose}>
 									Close
 								</Button>
@@ -270,4 +282,5 @@ export default function Signup({ isOpen, onOpenChange }) {
 Signup.propTypes = {
 	isOpen: PropTypes.bool,
 	onOpenChange: PropTypes.func,
+	onLogin: PropTypes.func,
 };

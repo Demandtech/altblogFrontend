@@ -79,8 +79,16 @@ function App() {
 					path="/profile/:id"
 				/>
 			</Routes>
-			<Login isOpen={loginIsOpen} onOpenChange={loginOnOpenChange} />
-			<Signup isOpen={signUpIsOpen} onOpenChange={signupOnOpenChange} />
+			<Login
+				onSignUpOpen={signupOnOpen}
+				isOpen={loginIsOpen}
+				onOpenChange={loginOnOpenChange}
+			/>
+			<Signup
+				onLogin={loginOnOpen}
+				isOpen={signUpIsOpen}
+				onOpenChange={signupOnOpenChange}
+			/>
 			<CreatePost
 				isOpen={createPostIsOpen}
 				onOpenChange={createPostOnOpenChange}

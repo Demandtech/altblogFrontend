@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useUserContext } from "../../context/UserContext.jsx";
 
-export default function Login({ isOpen, onOpenChange }) {
+export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { loginUser, snackBar } = useUserContext();
 	const [values, setValues] = useState(() => {
@@ -66,6 +66,11 @@ export default function Login({ isOpen, onOpenChange }) {
 		if (!values) return;
 		localStorage.setItem("LOGIN-VALUE", JSON.stringify(values));
 	}, [values]);
+
+	const handleCreateAccount = (onClose) => {
+		onClose();
+		onSignUpOpen();
+	};
 
 	return (
 		<>
@@ -128,7 +133,18 @@ export default function Login({ isOpen, onOpenChange }) {
 									</Link>
 								</div>
 							</ModalBody>
-							<ModalFooter>
+							<ModalFooter className="items-center">
+								<div className="mr-auto ">
+									<small>
+										Not a member?{" "}
+										<button
+											onClick={() => handleCreateAccount(onClose)}
+											className="text-primary"
+										>
+											Create an account
+										</button>
+									</small>
+								</div>
 								<Button color="danger" variant="flat" onPress={onClose}>
 									Close
 								</Button>
@@ -152,4 +168,5 @@ export default function Login({ isOpen, onOpenChange }) {
 Login.propTypes = {
 	isOpen: PropTypes.bool,
 	onOpenChange: PropTypes.func,
+	onSignUpOpen: PropTypes.func,
 };
