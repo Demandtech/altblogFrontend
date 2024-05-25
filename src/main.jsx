@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import UserProvider from "./context/UserContext.jsx";
 import PostProvider from "./context/PostContext.jsx";
 import ErrorBoundary from "./configs/ErrorBoundary.jsx";
+import { Analytics } from "@vercel/analytics/react";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<ErrorBoundary>
@@ -18,5 +19,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 				</NextUIProvider>
 			</PostProvider>
 		</UserProvider>
+		<Analytics />
 	</ErrorBoundary>
 );
