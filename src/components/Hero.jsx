@@ -55,6 +55,8 @@ const Hero = () => {
 					responsive={responsive}
 					swipeable={true}
 					ssr={true}
+					autoPlaySpeed={10000}
+					keyBoardControl={true}
 				>
 					{featuredPosts.map((post) => {
 						return (
