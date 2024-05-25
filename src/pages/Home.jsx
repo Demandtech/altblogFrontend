@@ -1,13 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Hero from "../components/Hero";
 import PostsContainer from "../components/PostsContainer";
 import { usePostContext } from "../context/PostContext";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
-function Home({ createPostOnOpen, loginOnOpen, signupOnOpen, editPostOnOpen }) {
+function Home({ editPostOnOpen, loginOnOpen, search }) {
 	const { posts, getAllPublishedPosts } = usePostContext();
-	const [search, setSearch] = useState("");
+	const { user } = useUserContext();
 	const [order, setOrder] = useState("");
 	const [searchParams, setSearchParams] = useSearchParams();
 	const pageParam = searchParams.get("page");
@@ -21,6 +23,7 @@ function Home({ createPostOnOpen, loginOnOpen, signupOnOpen, editPostOnOpen }) {
 			await getAllPublishedPosts({ search, page, order, limit });
 
 			let params = { ...existingParams, page };
+
 			if (page > 1) {
 				setSearchParams(params);
 			} else {
@@ -39,17 +42,11 @@ function Home({ createPostOnOpen, loginOnOpen, signupOnOpen, editPostOnOpen }) {
 
 	useEffect(() => {
 		getPosts();
-	}, [page]);
+	}, [page, user]);
 
 	return (
 		<>
-			<Hero
-				createPostOnOpen={createPostOnOpen}
-				loginOnOpen={loginOnOpen}
-				signupOnOpen={signupOnOpen}
-				setSearch={setSearch}
-				search={search}
-			/>
+			<Hero />
 			<PostsContainer
 				setOrder={setOrder}
 				setPage={setPage}
@@ -58,14 +55,14 @@ function Home({ createPostOnOpen, loginOnOpen, signupOnOpen, editPostOnOpen }) {
 				editPostOnOpen={editPostOnOpen}
 				setLimit={setLimit}
 				limit={limit}
+				onLogin={loginOnOpen}
 			/>
 		</>
 	);
 }
 Home.propTypes = {
-	createPostOnOpen: PropTypes.func,
 	loginOnOpen: PropTypes.func,
-	signupOnOpen: PropTypes.func,
 	editPostOnOpen: PropTypes.func,
+	search: PropTypes.string,
 };
 export default Home;

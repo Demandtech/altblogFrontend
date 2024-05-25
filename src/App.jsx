@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import Home from "./pages/Home";
 import SinglePost from "./pages/SinglePost";
 import "react-quill/dist/quill.snow.css";
@@ -9,6 +9,8 @@ import Signup from "./components/modals/Signup";
 import CreatePost from "./components/modals/CreatePost";
 import UpdateProfile from "./components/modals/UpdateProfile";
 import EditPost from "./components/modals/EditPost";
+import Navbar from "./components/Navbar";
+import { useState } from "react";
 
 function App() {
 	const {
@@ -41,38 +43,45 @@ function App() {
 		onOpenChange: editPostOnOpenChange,
 	} = useDisclosure();
 
+	const [search, setSearch] = useState("");
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const existingParams = Object.fromEntries(searchParams);
+
+	const handleEdit = () => {
+		const id = localStorage.getItem("EditPostId");
+		const params = { ...existingParams, postId: id };
+		setSearchParams(params);
+		editPostOnOpen();
+	};
+
 	return (
-		<div className=" dark:bg-[#171717]">
+		<div className=" dark:bg-[#171717] min-h-svh w-full ">
+			<Navbar
+				createPostOnOpen={createPostOnOpen}
+				signupOnOpen={signupOnOpen}
+				loginOnOpen={loginOnOpen}
+				setSearch={setSearch}
+				search={search}
+				editPostOnOpen={handleEdit}
+				profileUpdateOnOpen={profileUpdateOnOpen}
+			/>
 			<Routes>
 				<Route
 					element={
 						<Home
 							loginOnOpen={loginOnOpen}
-							signupOnOpen={signupOnOpen}
-							createPostOnOpen={createPostOnOpen}
 							editPostOnOpen={editPostOnOpen}
+							search={search}
 						/>
 					}
 					path="/"
 				/>
-				<Route
-					element={
-						<SinglePost
-							loginOnOpen={loginOnOpen}
-							signupOnOpen={signupOnOpen}
-							createPostOnOpen={createPostOnOpen}
-							editPostOnOpen={editPostOnOpen}
-						/>
-					}
-					path="/post/:id"
-				/>
+				<Route element={<SinglePost />} path="/post/:id" />
 				<Route
 					element={
 						<Profile
 							loginOnOpen={loginOnOpen}
-							signupOnOpen={signupOnOpen}
-							createPostOnOpen={createPostOnOpen}
-							profileUpdateOnOpen={profileUpdateOnOpen}
 							editPostOnOpen={editPostOnOpen}
 						/>
 					}

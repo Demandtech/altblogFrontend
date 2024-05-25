@@ -14,6 +14,7 @@ const PostsContainer = ({
 	editPostOnOpen,
 	setLimit,
 	limit,
+	onLogin,
 }) => {
 	const { meta, isPending } = usePostContext();
 	const scroll = useRef(null);
@@ -58,6 +59,7 @@ const PostsContainer = ({
 										{...post}
 										editPostOnOpen={editPostOnOpen}
 										key={index}
+										onLogin={onLogin}
 									/>
 								);
 							})}
@@ -89,6 +91,7 @@ PostsContainer.propTypes = {
 	editPostOnOpen: PropTypes.func,
 	setLimit: PropTypes.func,
 	limit: PropTypes.string,
+	onLogin: PropTypes.func,
 };
 
 export default PostsContainer;

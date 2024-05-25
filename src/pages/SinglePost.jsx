@@ -1,42 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams} from "react-router-dom";
 import { Spinner } from "@nextui-org/react";
 import { usePostContext } from "../context/PostContext";
-import Navbar from "../components/Navbar";
-import PropTypes from "prop-types";
 import moment from "moment";
 import { handleTime } from "../helper/convertReadingTime";
 import { MdOutlineCreate, MdOutlineUpdate } from "react-icons/md";
 import { CgReadme } from "react-icons/cg";
 import { FaRegEye } from "react-icons/fa";
 
-const SinglePost = ({
-	createPostOnOpen,
-	loginOnOpen,
-	signupOnOpen,
-	editPostOnOpen,
-}) => {
+const SinglePost = () => {
 	const { id } = useParams();
 	const { getSinglePost, singlePost, isPending } = usePostContext();
-	const [searchParams, setSearchParams] = useSearchParams();
 
 	useEffect(() => {
 		if (!id) return;
+
 		const getPost = async () => {
 			await getSinglePost(id);
 		};
 		getPost();
+		localStorage.setItem("EditPostId", id);
 	}, [id]);
-
-	const existingParams = Object.fromEntries(searchParams);
-
-	const handleEdit = () => {
-		const params = { ...existingParams, postId: id };
-		setSearchParams(params);
-		editPostOnOpen();
-	};
-
-	// console.log(singlePost.author);
 
 	return (
 		<>
@@ -48,14 +33,8 @@ const SinglePost = ({
 					className="min-h-screen flex"
 				/>
 			) : (
-				<div className="hero h-[250px] lg:h-[350px] pt-5">
+				<div className="">
 					<div className="px-3 lg:px-10 mb-4">
-						<Navbar
-							createPostOnOpen={createPostOnOpen}
-							loginOnOpen={loginOnOpen}
-							signupOnOpen={signupOnOpen}
-							editPostOnOpen={handleEdit}
-						/>
 						<div className="mt-8 pb-8">
 							<div className=" max-w-2xl">
 								<h1 className="mb-3 max-w-md font-bold text-3xl">
@@ -114,6 +93,9 @@ const SinglePost = ({
 							<style>
 								{`
 								.blog-body{
+									border-top: 2px solid;
+									padding-top: 20px;
+
 									h1,h2, h3{
 										font-weight: bold;
 										font-size: 1.2rem
@@ -140,13 +122,6 @@ const SinglePost = ({
 			)}
 		</>
 	);
-};
-
-SinglePost.propTypes = {
-	createPostOnOpen: PropTypes.func,
-	loginOnOpen: PropTypes.func,
-	signupOnOpen: PropTypes.func,
-	editPostOnOpen: PropTypes.func,
 };
 
 export default SinglePost;

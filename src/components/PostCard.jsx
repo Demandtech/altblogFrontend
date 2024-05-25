@@ -13,7 +13,7 @@ import {
 	User,
 } from "@nextui-org/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiLike, BiSolidLike } from "react-icons/bi";
+import { BiLike, BiSolidLike, BiShareAlt } from "react-icons/bi";
 import { IoBookmarkOutline, IoTimerOutline, IoBookmark } from "react-icons/io5";
 import PropTypes from "prop-types";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -39,12 +39,17 @@ const PostCard = ({
 	state,
 	editPostOnOpen,
 	publishedAt,
+	isLiked,
+	likeCount,
+	onLogin,
+	isBookmarked,
 }) => {
-	const { user } = useUserContext();
+	const { user, snackBar } = useUserContext();
 	const { publishPost, deletePost, likePost, bookmarkPost } = usePostContext();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [isLike, setIsLike] = useState(false);
-	const [isBookmark, setIsBookmark] = useState(false);
+	const [isLike, setIsLike] = useState(isLiked);
+	const [isBookmark, setIsBookmark] = useState(isBookmarked);
+	const [likeCounter, setLikeCounter] = useState(likeCount);
 	const existingParams = Object.fromEntries(searchParams);
 
 	const handleEditPost = () => {
@@ -70,13 +75,41 @@ const PostCard = ({
 	};
 
 	const handleLike = async () => {
-		setIsLike(!isLike);
-		await likePost(_id);
+		if (user) {
+			const isSuccess = await likePost(_id);
+
+			if (isSuccess) {
+				if (isLike) {
+					setLikeCounter(likeCounter - 1);
+					snackBar("Post unlike", "success");
+				} else {
+					snackBar("Post liked", "success");
+					setLikeCounter(likeCounter + 1);
+				}
+				setIsLike(!isLike);
+			} else {
+				snackBar("Something went wrong", "error");
+			}
+		} else {
+			onLogin();
+			snackBar("Please login to like post", "error");
+		}
 	};
 
-	const handleBookmark = () => {
-		setIsBookmark(!isBookmark);
-		bookmarkPost(_id);
+	const handleBookmark = async () => {
+		if (user) {
+			const isSuccess = await bookmarkPost(_id);
+
+			if (isSuccess) {
+				setIsBookmark(!isBookmark);
+				snackBar("Post successfuly bookmarked", "success");
+			} else {
+				snackBar("Something went wrong", "error");
+			}
+		} else {
+			onLogin();
+			snackBar("Please login to bookmark post", "error");
+		}
 	};
 
 	return (
@@ -85,7 +118,7 @@ const PostCard = ({
 				<time dateTime={"2020-03-16"} className="text-gray-500">
 					{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}
 				</time>
-				{tags.length > 0 && (
+				{tags?.length > 0 && (
 					<Chip
 						className="capitalize bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
 						size="sm"
@@ -173,34 +206,50 @@ const PostCard = ({
 						avatarProps={{ src: author?.avatar }}
 					/>
 				</Link>
-				{user?._id !== author?._id && (
-					<div className="ml-auto flex gap-2">
-						<Button
-							onPress={handleLike}
-							size="sm"
-							isIconOnly
-							className="rounded-full bg-[#ebced0]"
-						>
-							{isLike ? (
-								<BiSolidLike className="text-[#955055]" />
-							) : (
-								<BiLike className="text-[#955055]" />
-							)}
-						</Button>
-						<Button
-							onPress={handleBookmark}
-							size="sm"
-							isIconOnly
-							className="rounded-full bg-[#ebced0]"
-						>
-							{isBookmark ? (
-								<IoBookmark className="text-[#955055]" />
-							) : (
-								<IoBookmarkOutline className="text-[#955055]" />
-							)}
-						</Button>
-					</div>
-				)}
+
+				<div className="ml-auto flex">
+					<Button
+						onPress={handleLike}
+						size="sm"
+						isIconOnly
+						className="rounded-full"
+						variant="light"
+					>
+						{isLike ? (
+							<BiSolidLike className="text-[#955055]" />
+						) : (
+							<BiLike className="text-[#955055]" />
+						)}
+						{likeCounter > 0 && <sup className="">{likeCounter}</sup>}
+					</Button>
+					<Button
+						onPress={handleBookmark}
+						size="sm"
+						isIconOnly
+						className="rounded-full"
+						variant="light"
+					>
+						{isBookmark ? (
+							<IoBookmark className="text-[#955055]" />
+						) : (
+							<IoBookmarkOutline className="text-[#955055]" />
+						)}
+					</Button>
+					<Button
+						variant="light"
+						// onPress={handleBookmark}
+						size="sm"
+						isIconOnly
+						className="rounded-full"
+					>
+						{/* {isBookmark ? (
+							<IoBookmark className="text-[#955055]" />
+						) : (
+							<IoBookmarkOutline className="text-[#955055]" />
+						)} */}
+						<BiShareAlt className="text-[#955055]" />
+					</Button>
+				</div>
 			</CardFooter>
 		</Card>
 	);
@@ -218,5 +267,9 @@ PostCard.propTypes = {
 	reading_time: PropTypes.number,
 	state: PropTypes.string,
 	editPostOnOpen: PropTypes.func,
+	isLiked: PropTypes.bool,
+	isBookmarked: PropTypes.bool,
+	likeCount: PropTypes.number,
+	onLogin: PropTypes.func,
 };
 export default PostCard;

@@ -10,6 +10,7 @@ const PostProvider = ({ children }) => {
 	const { snackBar } = useUserContext();
 	const [initialState, setInitialState] = useState({
 		posts: [],
+		featuredPosts: [],
 		author_posts: [],
 		singlePost: null,
 		isPending: false,
@@ -52,6 +53,8 @@ const PostProvider = ({ children }) => {
 
 			if (status !== 200) throw new Error("An error occured, try again later!");
 
+			console.log(data.data.posts);
+
 			updateState("posts", data.data.posts);
 			updateState("meta", data.data.meta);
 
@@ -75,6 +78,23 @@ const PostProvider = ({ children }) => {
 			console.log(error);
 		} finally {
 			updateState("isPending", false);
+		}
+	};
+
+	const getFeaturedPosts = async () => {
+		try {
+			const {
+				data: { data },
+				status,
+			} = await axios().get("posts/featured");
+			// console.log(status, data);
+			if (status !== 200) throw new Error("An error occured");
+			// console.log(data);
+			updateState("featuredPosts", data);
+			return true;
+		} catch (error) {
+			console.log(error.message);
+			return false;
 		}
 	};
 
@@ -155,18 +175,32 @@ const PostProvider = ({ children }) => {
 
 	const likePost = async (postId) => {
 		if (!postId) return;
+		try {
+			const { status } = await axios().get(`posts/like/${postId}`);
 
-		const { status, data } = await axios().get(`posts/like/${postId}`);
+			if (status !== 200)
+				throw new Error("An error occured,  please try again");
 
-		console.log(status, data);
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
 	};
 
 	const bookmarkPost = async (postId) => {
 		if (!postId) return;
+		try {
+			const { status } = await axios().get(`posts/bookmark/${postId}`);
 
-		const { status, data } = await axios().get(`posts/bookmark/${postId}`);
+			if (status !== 200)
+				throw new Error("An error occured,  please try again");
 
-		console.log(status, data);
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
 	};
 
 	const userbookmarkPosts = async () => {
@@ -189,6 +223,7 @@ const PostProvider = ({ children }) => {
 				likePost,
 				bookmarkPost,
 				userbookmarkPosts,
+				getFeaturedPosts,
 			}}
 		>
 			{children}
