@@ -49,6 +49,7 @@ const PostCard = ({
 	const [isLike, setIsLike] = useState(isLiked);
 	const [isBookmark, setIsBookmark] = useState(isBookmarked);
 	const [likeCounter, setLikeCounter] = useState(likeCount);
+	
 	const existingParams = Object.fromEntries(searchParams);
 
 	const handleEditPost = () => {
@@ -216,11 +217,11 @@ const PostCard = ({
 						variant="light"
 					>
 						{isLike ? (
-							<BiSolidLike className="text-[#955055]" />
+							<BiSolidLike className=" text-slate-300" />
 						) : (
-							<BiLike className="text-[#955055]" />
+							<BiLike className=" text-slate-300" />
 						)}
-						{likeCounter > 0 && <sup className="">{likeCounter}</sup>}
+						{likeCounter > 0 && <sup className="text-slate-400">{likeCounter}</sup>}
 					</Button>
 					<Button
 						onPress={handleBookmark}
@@ -230,9 +231,9 @@ const PostCard = ({
 						variant="light"
 					>
 						{isBookmark ? (
-							<IoBookmark className="text-[#955055]" />
+							<IoBookmark className=" text-slate-300" />
 						) : (
-							<IoBookmarkOutline className="text-[#955055]" />
+							<IoBookmarkOutline className=" text-slate-300" />
 						)}
 					</Button>
 					<Button
@@ -247,7 +248,7 @@ const PostCard = ({
 						) : (
 							<IoBookmarkOutline className="text-[#955055]" />
 						)} */}
-						<BiShareAlt className="text-[#955055]" />
+						<BiShareAlt className=" text-slate-300" />
 					</Button>
 				</div>
 			</CardFooter>

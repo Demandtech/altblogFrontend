@@ -20,7 +20,13 @@ function Home({ editPostOnOpen, loginOnOpen, search }) {
 
 	const getPosts = async () => {
 		try {
-			await getAllPublishedPosts({ search, page, order, limit });
+			await getAllPublishedPosts({
+				search,
+				page,
+				order,
+				limit,
+				category: existingParams.category ? existingParams.category : "",
+			});
 
 			let params = { ...existingParams, page };
 
@@ -38,7 +44,7 @@ function Home({ editPostOnOpen, loginOnOpen, search }) {
 	useEffect(() => {
 		setPage(1);
 		getPosts();
-	}, [order, search, limit]);
+	}, [order, search, limit, existingParams.category]);
 
 	useEffect(() => {
 		getPosts();

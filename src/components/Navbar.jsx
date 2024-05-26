@@ -15,7 +15,12 @@ import {
 	Avatar,
 	Navbar,
 } from "@nextui-org/react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+	Link,
+	useLocation,
+	useNavigate,
+	useSearchParams,
+} from "react-router-dom";
 import { LiaUserEditSolid } from "react-icons/lia";
 import PropTypes from "prop-types";
 import { usePostContext } from "../context/PostContext";
@@ -94,6 +99,8 @@ function MyNavbar({
 	const { user, logoutUser, profile } = useUserContext();
 	const { singlePost, deletePost, userBookmarkPosts, bookmarkPosts } =
 		usePostContext();
+	const [searchParams, setSearchParams] = useSearchParams();
+	const existingParams = Object.fromEntries(searchParams);
 	const { pathname } = useLocation();
 	const [theme, setTheme] = useState(() => {
 		const savedTheme = localStorage.getItem("THEME");
@@ -109,6 +116,11 @@ function MyNavbar({
 		if (isDeleted) {
 			navigate("/");
 		}
+	};
+
+	const handleCategory = (e) => {
+		const params = { ...existingParams, category: e.target.value };
+		setSearchParams(params);
 	};
 
 	useEffect(() => {
@@ -149,6 +161,8 @@ function MyNavbar({
 								id="currency"
 								name="currency"
 								defaultValue={"category"}
+								onChange={handleCategory}
+								value={existingParams.category}
 							>
 								<option value={"category"} disabled>
 									{" "}

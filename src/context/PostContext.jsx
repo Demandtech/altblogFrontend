@@ -45,11 +45,17 @@ const PostProvider = ({ children }) => {
 		}
 	};
 
-	const getAllPublishedPosts = async ({ search, page, order, limit }) => {
+	const getAllPublishedPosts = async ({
+		search,
+		page,
+		order,
+		limit,
+		category,
+	}) => {
 		updateState("isPending", true);
 		try {
 			const { data, status } = await axios().get(
-				`/posts?page=${page}&search=${search}&order=${order}&limit=${limit}`
+				`/posts?page=${page}&search=${search}&order=${order}&limit=${limit}&category=${category}`
 			);
 
 			if (status !== 200) throw new Error("An error occured, try again later!");

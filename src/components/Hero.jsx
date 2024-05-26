@@ -152,7 +152,7 @@ const Hero = () => {
 										<div className="flex gap-2 md:ml-auto  md:px-10">
 											{post?.author?.facebook && (
 												<a
-													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author.facebook}
 													target="_blank"
 												>
@@ -164,7 +164,7 @@ const Hero = () => {
 											)}
 											{post?.author?.twitter && (
 												<a
-													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.twitter}
 													target="_blank"
 												>
@@ -176,7 +176,7 @@ const Hero = () => {
 											)}
 											{post?.author?.linkedin && (
 												<a
-													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.linkedin}
 													target="_blank"
 												>
@@ -188,7 +188,7 @@ const Hero = () => {
 											)}
 											{post?.author?.pinterest && (
 												<a
-													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.pinterest}
 													target="_blank"
 												>
@@ -200,7 +200,7 @@ const Hero = () => {
 											)}
 											{post?.author?.medium && (
 												<a
-													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.medium}
 													target="_blank"
 												>
@@ -212,7 +212,7 @@ const Hero = () => {
 											)}
 											{post?.author?.telegram && (
 												<a
-													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.telegram}
 													target="_blank"
 												>
