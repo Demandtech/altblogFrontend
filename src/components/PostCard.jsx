@@ -49,7 +49,7 @@ const PostCard = ({
 	const [isLike, setIsLike] = useState(isLiked);
 	const [isBookmark, setIsBookmark] = useState(isBookmarked);
 	const [likeCounter, setLikeCounter] = useState(likeCount);
-	
+
 	const existingParams = Object.fromEntries(searchParams);
 
 	const handleEditPost = () => {
@@ -119,14 +119,6 @@ const PostCard = ({
 				<time dateTime={"2020-03-16"} className="text-gray-500">
 					{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}
 				</time>
-				{tags?.length > 0 && (
-					<Chip
-						className="capitalize bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
-						size="sm"
-					>
-						{tags[0]}
-					</Chip>
-				)}
 
 				<Chip
 					size="sm"
@@ -182,6 +174,22 @@ const PostCard = ({
 					</Dropdown>
 				)}
 			</CardHeader>
+			<div className="flex gap-2 px-3 flex-wrap">
+				{tags?.length > 0 &&
+					tags
+						.map((tag) => {
+							return (
+								<Chip
+									key={tag}
+									className="capitalize bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
+									size="sm"
+								>
+									{tags}
+								</Chip>
+							);
+						})
+						.slice(0, 2)}
+			</div>
 			<CardBody className="group relative">
 				<h3 className="text-lg mb-3  font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
 					<Link
@@ -221,7 +229,9 @@ const PostCard = ({
 						) : (
 							<BiLike className=" text-slate-300" />
 						)}
-						{likeCounter > 0 && <sup className="text-slate-400">{likeCounter}</sup>}
+						{likeCounter > 0 && (
+							<sup className="text-slate-400">{likeCounter}</sup>
+						)}
 					</Button>
 					<Button
 						onPress={handleBookmark}
