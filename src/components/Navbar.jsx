@@ -13,6 +13,7 @@ import {
 	Switch,
 	Input,
 	Avatar,
+	Navbar,
 } from "@nextui-org/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LiaUserEditSolid } from "react-icons/lia";
@@ -26,6 +27,7 @@ import { MoonIcon, SunIcon } from "./Svgs";
 import { useEffect, useState } from "react";
 import { IoBookmark, IoNotifications } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
+import { categories } from "../../data";
 
 const mockNotifications = [
 	{
@@ -80,7 +82,7 @@ const mockNotifications = [
 	},
 ];
 
-function Navbar({
+function MyNavbar({
 	createPostOnOpen,
 	loginOnOpen,
 	signupOnOpen,
@@ -120,29 +122,63 @@ function Navbar({
 	}, [theme]);
 
 	return (
-		<div className="flex justify-between items-center px-2  md:px-4 py-5 sticky top-0 z-50 bg-white/80 dark:bg-black/80">
+		<Navbar classNames={{ wrapper: "max-w-full" }} shouldHideOnScroll>
 			<Link className="flex text-black/80 dark:text-white/80" to="/">
 				<BsFillMicMuteFill size={30} />
 				<span className=" hidden sm:block">BlogShot</span>
 			</Link>
+
 			<form className="flex max-w-md w-full  relative ">
 				<Input
 					className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
 					placeholder="Search by title, author, tags"
+					classNames={{
+						input: "pl-4 md:pl-6",
+					}}
 					type="text"
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					size="sm"
+					endContent={
+						<div className="flex items-center">
+							<label className="sr-only" htmlFor="currency">
+								Category
+							</label>
+							<select
+								className="outline-none w-[100px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
+								id="currency"
+								name="currency"
+								defaultValue={"category"}
+							>
+								<option value={"category"} disabled>
+									{" "}
+									Category
+								</option>
+								{categories.map((cat) => {
+									return (
+										<option
+											value={cat.value}
+											className="capitalize"
+											key={cat.label}
+										>
+											{cat.label[0].toUpperCase() + cat.label.slice(1)}
+										</option>
+									);
+								})}
+							</select>
+						</div>
+					}
 				/>
 				<Button
 					type="submit"
 					variant="light"
 					isIconOnly
-					className="absolute top-1/2 -translate-y-1/2 right-0 md:right-2"
+					className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
 				>
 					<FaSearch />
 				</Button>
 			</form>
+
 			<div className="flex  items-center">
 				<Dropdown className="">
 					<DropdownTrigger onClick={userBookmarkPosts}>
@@ -356,11 +392,11 @@ function Navbar({
 					</DropdownMenu>
 				</Dropdown>
 			</div>
-		</div>
+		</Navbar>
 	);
 }
 
-Navbar.propTypes = {
+MyNavbar.propTypes = {
 	createPostOnOpen: PropTypes.func,
 	loginOnOpen: PropTypes.func,
 	signupOnOpen: PropTypes.func,
@@ -370,4 +406,4 @@ Navbar.propTypes = {
 	setSearch: PropTypes.func,
 };
 
-export default Navbar;
+export default MyNavbar;

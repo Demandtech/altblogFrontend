@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import SinglePost from "./pages/SinglePost";
 import "react-quill/dist/quill.snow.css";
 import Profile from "./pages/Profile";
-import { useDisclosure } from "@nextui-org/react";
+import { Spinner, useDisclosure } from "@nextui-org/react";
 import Login from "./components/modals/Login";
 import Signup from "./components/modals/Signup";
 import CreatePost from "./components/modals/CreatePost";
@@ -11,8 +11,10 @@ import UpdateProfile from "./components/modals/UpdateProfile";
 import EditPost from "./components/modals/EditPost";
 import Navbar from "./components/Navbar";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 function App() {
+	const [onMount, setOnMount] = useState(false);
 	const {
 		isOpen: loginIsOpen,
 		onOpen: loginOnOpen,
@@ -55,59 +57,75 @@ function App() {
 		editPostOnOpen();
 	};
 
+	document.onreadystatechange = () => {
+		setOnMount(true);
+	};
+
 	return (
-		<div className=" dark:bg-[#171717] min-h-svh w-full ">
-			<Navbar
-				createPostOnOpen={createPostOnOpen}
-				signupOnOpen={signupOnOpen}
-				loginOnOpen={loginOnOpen}
-				setSearch={setSearch}
-				search={search}
-				editPostOnOpen={handleEdit}
-				profileUpdateOnOpen={profileUpdateOnOpen}
-			/>
-			<Routes>
-				<Route
-					element={
-						<Home
-							loginOnOpen={loginOnOpen}
-							editPostOnOpen={editPostOnOpen}
-							search={search}
-						/>
-					}
-					path="/"
+		<>
+			{!onMount ? (
+				<Spinner
+					className="w-full bg-black/20 h-svh flex justify-center items-center"
+					label="Loading... Please wait"
 				/>
-				<Route element={<SinglePost />} path="/post/:id" />
-				<Route
-					element={
-						<Profile
-							loginOnOpen={loginOnOpen}
-							editPostOnOpen={editPostOnOpen}
+			) : (
+				<motion.div className=" dark:bg-[#171717] min-h-svh w-full ">
+					<Navbar
+						createPostOnOpen={createPostOnOpen}
+						signupOnOpen={signupOnOpen}
+						loginOnOpen={loginOnOpen}
+						setSearch={setSearch}
+						search={search}
+						editPostOnOpen={handleEdit}
+						profileUpdateOnOpen={profileUpdateOnOpen}
+					/>
+					<Routes>
+						<Route
+							element={
+								<Home
+									loginOnOpen={loginOnOpen}
+									editPostOnOpen={editPostOnOpen}
+									search={search}
+								/>
+							}
+							path="/"
 						/>
-					}
-					path="/profile/:id"
-				/>
-			</Routes>
-			<Login
-				onSignUpOpen={signupOnOpen}
-				isOpen={loginIsOpen}
-				onOpenChange={loginOnOpenChange}
-			/>
-			<Signup
-				onLogin={loginOnOpen}
-				isOpen={signUpIsOpen}
-				onOpenChange={signupOnOpenChange}
-			/>
-			<CreatePost
-				isOpen={createPostIsOpen}
-				onOpenChange={createPostOnOpenChange}
-			/>
-			<UpdateProfile
-				isOpen={profileUpdateIsOpen}
-				onOpenChange={profileUpdateOnOpenChange}
-			/>
-			<EditPost isOpen={editPostIsOpen} onOpenChange={editPostOnOpenChange} />
-		</div>
+						<Route element={<SinglePost />} path="/post/:id" />
+						<Route
+							element={
+								<Profile
+									loginOnOpen={loginOnOpen}
+									editPostOnOpen={editPostOnOpen}
+								/>
+							}
+							path="/profile/:id"
+						/>
+					</Routes>
+					<Login
+						onSignUpOpen={signupOnOpen}
+						isOpen={loginIsOpen}
+						onOpenChange={loginOnOpenChange}
+					/>
+					<Signup
+						onLogin={loginOnOpen}
+						isOpen={signUpIsOpen}
+						onOpenChange={signupOnOpenChange}
+					/>
+					<CreatePost
+						isOpen={createPostIsOpen}
+						onOpenChange={createPostOnOpenChange}
+					/>
+					<UpdateProfile
+						isOpen={profileUpdateIsOpen}
+						onOpenChange={profileUpdateOnOpenChange}
+					/>
+					<EditPost
+						isOpen={editPostIsOpen}
+						onOpenChange={editPostOnOpenChange}
+					/>
+				</motion.div>
+			)}
+		</>
 	);
 }
 

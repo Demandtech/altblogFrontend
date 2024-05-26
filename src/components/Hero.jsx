@@ -60,6 +60,7 @@ const Hero = () => {
 					<Spinner
 						className="w-full h-52"
 						classNames={{ wrapper: "justify-content-center" }}
+						label="Loading..."
 					/>
 				) : (
 					<Carousel
