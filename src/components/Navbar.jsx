@@ -3,33 +3,82 @@ import { CiLogout } from "react-icons/ci";
 import { BiLogIn } from "react-icons/bi";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
-import { MdOutlineTravelExplore } from "react-icons/md";
 import { useUserContext } from "../context/UserContext";
-
 import {
 	Dropdown,
 	DropdownTrigger,
 	DropdownMenu,
 	DropdownItem,
 	Button,
-	Link,
 	Switch,
 	Input,
+	Avatar,
 } from "@nextui-org/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LiaUserEditSolid } from "react-icons/lia";
 import PropTypes from "prop-types";
 import { usePostContext } from "../context/PostContext";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { BsFillMicMuteFill } from "react-icons/bs";
-
 import { TbUserEdit } from "react-icons/tb";
 import { MoonIcon, SunIcon } from "./Svgs";
 import { useEffect, useState } from "react";
-
 import { IoBookmark, IoNotifications } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
+
+const mockNotifications = [
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: true,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: true,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+	{
+		senderId: "",
+		message: "John your  post",
+		isRead: false,
+	},
+];
 
 function Navbar({
 	createPostOnOpen,
@@ -41,7 +90,8 @@ function Navbar({
 	search,
 }) {
 	const { user, logoutUser, profile } = useUserContext();
-	const { singlePost, deletePost } = usePostContext();
+	const { singlePost, deletePost, userBookmarkPosts, bookmarkPosts } =
+		usePostContext();
 	const { pathname } = useLocation();
 	const [theme, setTheme] = useState(() => {
 		const savedTheme = localStorage.getItem("THEME");
@@ -70,12 +120,12 @@ function Navbar({
 	}, [theme]);
 
 	return (
-		<div className="flex justify-between items-center px-2  md:px-4 py-5">
-			<Link className="flex text-black/80 dark:text-white/80" href="/">
+		<div className="flex justify-between items-center px-2  md:px-4 py-5 sticky top-0 z-50 bg-white/80 dark:bg-black/80">
+			<Link className="flex text-black/80 dark:text-white/80" to="/">
 				<BsFillMicMuteFill size={30} />
 				<span className=" hidden sm:block">BlogShot</span>
 			</Link>
-			<form className="flex w-full sm:w-1/2 md:w-2/5  lg:w-2/6 relative ">
+			<form className="flex max-w-md w-full  relative ">
 				<Input
 					className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
 					placeholder="Search by title, author, tags"
@@ -88,50 +138,48 @@ function Navbar({
 					type="submit"
 					variant="light"
 					isIconOnly
-					className="absolute top-1/2 -translate-y-1/2 right-2"
+					className="absolute top-1/2 -translate-y-1/2 right-0 md:right-2"
 				>
 					<FaSearch />
 				</Button>
 			</form>
-			<div className="flex items-center">
+			<div className="flex  items-center">
 				<Dropdown className="">
-					<DropdownTrigger>
+					<DropdownTrigger onClick={userBookmarkPosts}>
 						<Button
 							size="sm"
-							variant="flat"
-							className="text-capitalize mr-2 rounded-full"
+							variant="light"
+							className="text-capitalize rounded-full"
 							isIconOnly
 						>
 							<IoBookmark />
 						</Button>
 					</DropdownTrigger>
-					<DropdownMenu className="w-[350px]" aria-label="Menu dropdown">
+					<DropdownMenu
+						className="max-h-[200px] max-w-[300px] p-0 rounded-none  overflow-y-auto"
+						aria-label="Bookmark list dropdown"
+					>
 						<DropdownItem
-							textValue="login"
-							onPress={loginOnOpen}
-							key="login"
-							startContent={<BiLogIn />}
+							textValue="Bookmark Posts"
+							className=" bg-white dark:bg-black z-50 sticky top-0 rounded-none  border-b"
 						>
-							Login
+							<h3 className="font-bold text-base">Bookmark Posts</h3>
 						</DropdownItem>
-						<DropdownItem
-							textValue="register"
-							onPress={signupOnOpen}
-							key="signup"
-							startContent={<FiUserPlus />}
-						>
-							Register
-						</DropdownItem>
-						{pathname.includes("post") && (
-							<DropdownItem
-								textValue="author"
-								key="author"
-								startContent={<RiDeleteBin2Line />}
-								href={`/profile/${singlePost?.author?._id}`}
-							>
-								Author Profile
-							</DropdownItem>
-						)}
+						{bookmarkPosts.map((bookmark) => {
+							return (
+								<DropdownItem
+									textValue={bookmark.post.title}
+									key={bookmark._id}
+									className=""
+								>
+									<Link to={`/post/${bookmark.post._id}`}>
+										<span className="text-primary text-small capitalize font-semibold">
+											{bookmark.post.title}
+										</span>
+									</Link>
+								</DropdownItem>
+							);
+						})}
 					</DropdownMenu>
 				</Dropdown>
 				<Switch
@@ -142,16 +190,26 @@ function Navbar({
 					color="default"
 					startContent={<SunIcon />}
 					endContent={<MoonIcon />}
+					classNames={{ wrapper: "mx-1" }}
 				/>
 				<Dropdown>
 					<DropdownTrigger>
 						<Button
 							size="sm"
-							endContent={<MdOutlineTravelExplore />}
-							variant="flat"
-							className="text-capitalize"
+							isIconOnly
+							variant="light"
+							className="rounded-full"
 						>
-							Menu
+							{user ? (
+								<Avatar
+									size="sm"
+									className="w-[20px] h-[20px]"
+									name={user.first_name}
+									src={user?.avatar}
+								/>
+							) : (
+								<FaRegUser />
+							)}
 						</Button>
 					</DropdownTrigger>
 					{!user ? (
@@ -261,12 +319,12 @@ function Navbar({
 					)}
 				</Dropdown>
 
-				<Dropdown classNames="" size="sm" className="">
+				<Dropdown size="sm">
 					<DropdownTrigger>
 						<Button
 							size="sm"
 							variant="light"
-							className="text-capitalize ml-2 rounded-full relative"
+							className="text-capitalize rounded-full relative"
 							isIconOnly
 						>
 							<IoNotifications />
@@ -275,33 +333,26 @@ function Navbar({
 							</sup>
 						</Button>
 					</DropdownTrigger>
-					<DropdownMenu className="w-[350px]" aria-label="Menu dropdown">
-						<DropdownItem
-							textValue="login"
-							onPress={loginOnOpen}
-							key="login"
-							startContent={<BiLogIn />}
-						>
-							Login
+
+					<DropdownMenu
+						selectionMode="multiple"
+						aria-label="Notification list dropdown"
+						className="max-h-[200px] p-0 rounded-none  overflow-y-auto"
+					>
+						<DropdownItem className="sticky top-0 z-10 bg-white dark:bg-black rounded-none border-b">
+							<h3 className="font-bold text-base">Notifications</h3>
 						</DropdownItem>
-						<DropdownItem
-							textValue="register"
-							onPress={signupOnOpen}
-							key="signup"
-							startContent={<FiUserPlus />}
-						>
-							Register
-						</DropdownItem>
-						{pathname.includes("post") && (
-							<DropdownItem
-								textValue="author"
-								key="author"
-								startContent={<RiDeleteBin2Line />}
-								href={`/profile/${singlePost?.author?._id}`}
-							>
-								Author Profile
-							</DropdownItem>
-						)}
+						{mockNotifications.map((not, idx) => {
+							return (
+								<DropdownItem
+									textValue="register"
+									key={idx}
+									className={`${not.isRead ? "bg-red-300" : " bg-transparent"}`}
+								>
+									John like a post
+								</DropdownItem>
+							);
+						})}
 					</DropdownMenu>
 				</Dropdown>
 			</div>

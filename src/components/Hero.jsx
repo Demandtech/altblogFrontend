@@ -64,10 +64,13 @@ const Hero = () => {
 								<div className="mb-5">
 									<Link
 										href={`/post/${post._id}`}
-										className="capitalize font-bold text-lg mb-3"
+										className="capitalize font-bold text-lg"
 									>
 										{post.title}
 									</Link>
+									<p className="mb-2 text-black/50 dark:text-white/50">
+										{post?.description}
+									</p>
 									<div
 										className=" line-clamp-3 xl:max-w-[80%]"
 										dangerouslySetInnerHTML={{

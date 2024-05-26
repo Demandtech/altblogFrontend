@@ -98,12 +98,13 @@ const PostCard = ({
 
 	const handleBookmark = async () => {
 		if (user) {
+			setIsBookmark(!isBookmark);
 			const isSuccess = await bookmarkPost(_id);
 
 			if (isSuccess) {
-				setIsBookmark(!isBookmark);
-				snackBar("Post successfuly bookmarked", "success");
+				snackBar(isSuccess.message, "success");
 			} else {
+				setIsBookmark(!isBookmark);
 				snackBar("Something went wrong", "error");
 			}
 		} else {

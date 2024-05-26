@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
 	Modal,
 	ModalContent,
@@ -12,12 +13,12 @@ import {
 import PropTypes from "prop-types";
 import TextEditor from "../TextEditor";
 import { useEffect, useState } from "react";
-import TagSelect from "../TagSelect";
+import Select from "../Select";
 import { useSearchParams } from "react-router-dom";
 import { usePostContext } from "../../context/PostContext";
+import { tags, categories } from "../../../data";
 
 export default function EditPost({ isOpen, onOpenChange }) {
-	// console.log(useParams);
 	const { getSinglePost, editPost } = usePostContext();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isBtnLoading, setIsBtnLoading] = useState(false);
@@ -31,28 +32,41 @@ export default function EditPost({ isOpen, onOpenChange }) {
 		tags: [],
 		description: "",
 		body: "",
+		category: "",
 	});
 	const [isEdited, setIsEdited] = useState(false);
 
 	const handleChange = (name, value) => {
+		setIsEdited(true);
 		if (name === "description") {
 			setLetterCounter(value.length);
 		}
-		setIsEdited(true);
-		setValues((prev) => {
-			return {
-				...prev,
-				[name]: value,
-			};
-		});
+		if (name === "category") {
+			setValues((prev) => {
+				return {
+					...prev,
+					category: value[0],
+					tags: [],
+				};
+			});
+		} else {
+			setValues((prev) => {
+				return {
+					...prev,
+					[name]: value,
+				};
+			});
+		}
 	};
 	const getPostToUpdate = async () => {
 		setIsLoading(true);
 		try {
-			const { title, tags, description, body } = await getSinglePost(postId);
+			const { title, tags, description, body, category } = await getSinglePost(
+				postId
+			);
 
 			setValues((prev) => {
-				return { ...prev, title, tags, description, body };
+				return { ...prev, title, tags, description, body, category };
 			});
 		} catch (error) {
 			console.log(error);
@@ -129,7 +143,21 @@ export default function EditPost({ isOpen, onOpenChange }) {
 												handleChange(e.target.name, e.target.value)
 											}
 										/>
-										<TagSelect setValues={handleChange} />
+										<Select
+											className={"mt-8"}
+											name="category"
+											handleChange={handleChange}
+											value={[values.category]}
+											options={categories}
+										/>
+										<Select
+											name="tags"
+											handleChange={handleChange}
+											value={values.tags}
+											options={tags.filter(
+												(tag) => tag.category === values.category
+											)}
+										/>
 										<div className="relative max-w-xl">
 											<Textarea
 												label="Description"

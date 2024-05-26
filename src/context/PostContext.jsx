@@ -11,6 +11,7 @@ const PostProvider = ({ children }) => {
 	const [initialState, setInitialState] = useState({
 		posts: [],
 		featuredPosts: [],
+		bookmarkPosts: [],
 		author_posts: [],
 		singlePost: null,
 		isPending: false,
@@ -52,8 +53,6 @@ const PostProvider = ({ children }) => {
 			);
 
 			if (status !== 200) throw new Error("An error occured, try again later!");
-
-			console.log(data.data.posts);
 
 			updateState("posts", data.data.posts);
 			updateState("meta", data.data.meta);
@@ -107,8 +106,7 @@ const PostProvider = ({ children }) => {
 			return true;
 		} catch (error) {
 			console.log(error.message);
-			if (error.response.status == 400)
-				console.log(error.response.data.message);
+
 			return false;
 		}
 	};
@@ -116,11 +114,9 @@ const PostProvider = ({ children }) => {
 	const publishPost = async (id) => {
 		try {
 			updateState("isPending", true);
-			const { status, data } = await axios().get(`posts/publish/${id}`);
+			const { status } = await axios().get(`posts/publish/${id}`);
 
 			if (status !== 200) throw new Error("An error occured, try again later!");
-
-			console.log(data);
 
 			snackBar("Post published successfully!", "success");
 		} catch (error) {
@@ -191,22 +187,36 @@ const PostProvider = ({ children }) => {
 	const bookmarkPost = async (postId) => {
 		if (!postId) return;
 		try {
-			const { status } = await axios().get(`posts/bookmark/${postId}`);
+			const { status, data } = await axios().get(`posts/bookmark/${postId}`);
 
 			if (status !== 200)
 				throw new Error("An error occured,  please try again");
 
-			return true;
+			return data;
 		} catch (error) {
 			console.log(error);
 			return false;
 		}
 	};
 
-	const userbookmarkPosts = async () => {
-		const { status, data } = await axios().get(`posts/user/bookmark/`);
+	const userBookmarkPosts = async () => {
+		try {
+			const {
+				status,
+				data: { data },
+			} = await axios().get(`posts/user/bookmark/`);
 
-		console.log(status, data);
+			if (status !== 200) throw new Error("Something went wrong, try again!");
+
+			updateState("bookmarkPosts", data);
+
+			console.log(data);
+
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
 	};
 
 	return (
@@ -222,7 +232,7 @@ const PostProvider = ({ children }) => {
 				deletePost,
 				likePost,
 				bookmarkPost,
-				userbookmarkPosts,
+				userBookmarkPosts,
 				getFeaturedPosts,
 			}}
 		>

@@ -86,8 +86,8 @@ function PhotosTab({ user }) {
 										type="file"
 										name="avatar"
 										hidden
-										// value={value.avatar}
 										onChange={handleChange}
+										accept="image/*"
 									/>
 								</div>
 								<Divider />
@@ -117,8 +117,8 @@ function PhotosTab({ user }) {
 										type="file"
 										name="banner_image"
 										hidden
-										// value={user.banner_image}
 										onChange={handleChange}
+										accept="image/*"
 									/>
 								</div>
 							</PopoverContent>

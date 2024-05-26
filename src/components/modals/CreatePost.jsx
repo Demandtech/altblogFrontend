@@ -11,10 +11,11 @@ import {
 import PropTypes from "prop-types";
 import TextEditor from "../TextEditor";
 import { useEffect, useState } from "react";
-import TagSelect from "../TagSelect";
+import Select from "../Select";
 import { usePostContext } from "../../context/PostContext";
 import { useUserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { tags, categories } from "../../../data";
 
 export default function CreatePost({ isOpen, onOpenChange }) {
 	const [values, setValues] = useState(() => {
@@ -26,7 +27,8 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					tags: [],
 					description: "",
 					body: "",
-			  };
+					category: "",
+			};
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const { createPost } = usePostContext();
@@ -38,12 +40,22 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 		if (name === "description") {
 			setLetterCounter(value.length);
 		}
-		setValues((prev) => {
-			return {
-				...prev,
-				[name]: value,
-			};
-		});
+		if (name === "category") {
+			setValues((prev) => {
+				return {
+					...prev,
+					category: value[0],
+					tags: [],
+				};
+			});
+		} else {
+			setValues((prev) => {
+				return {
+					...prev,
+					[name]: value,
+				};
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -54,6 +66,8 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 	const handleCreatePost = async (onClose) => {
 		// onClose()
 		setIsLoading(true);
+		if (values.tags.length > 5) return snackBar("Tags can not exceed 5", "error");
+
 		const result = await createPost(values);
 
 		if (result) {
@@ -64,6 +78,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 				tags: [],
 				description: "",
 				body: "",
+				category: "",
 			});
 			onClose();
 			navigate(`/profile/${user._id}`);
@@ -106,7 +121,21 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 										handleChange(e.target.name, e.target.value);
 									}}
 								/>
-								<TagSelect setValues={handleChange} />
+								<Select
+									name="category"
+									handleChange={handleChange}
+									value={[values.category]}
+									options={categories}
+								/>
+								<Select
+									name="tags"
+									handleChange={handleChange}
+									value={values.tags}
+									options={tags.filter(
+										(tag) => tag.category === values.category
+									)}
+								/>
+
 								<div className="relative max-w-xl">
 									<Textarea
 										isRequired
@@ -145,7 +174,10 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 									color="primary"
 									onPress={() => handleCreatePost(onClose)}
 									isDisabled={
-										!values.title || !values.body || !values.description
+										!values.title ||
+										!values.body ||
+										!values.description ||
+										values.tags.length > 5
 									}
 									isLoading={isLoading}
 								>
