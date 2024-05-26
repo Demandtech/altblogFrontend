@@ -10,7 +10,7 @@ import CreatePost from "./components/modals/CreatePost";
 import UpdateProfile from "./components/modals/UpdateProfile";
 import EditPost from "./components/modals/EditPost";
 import Navbar from "./components/Navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 function App() {
@@ -57,9 +57,9 @@ function App() {
 		editPostOnOpen();
 	};
 
-	document.onreadystatechange = () => {
-		setOnMount(true);
-	};
+	useEffect(() => {
+		setTimeout(() => setOnMount(true), 500);
+	}, []);
 
 	return (
 		<>
