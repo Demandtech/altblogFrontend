@@ -62,7 +62,6 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 		}
 	}, [page, order, state, profile, user, limit]);
 
-
 	return (
 		<>
 			{isLoading ? (
@@ -93,7 +92,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 									src={profile?.avatar}
 								/>
 								<div>
-									<h3 className="text-base font-semibold leading-7 tracking-tight">
+									<h3 className="text-base font-semibold leading-7 text-white tracking-tight">
 										{profile?.first_name} {profile?.last_name}
 									</h3>
 									<p className="text-sm font-semibold leading-6 text-indigo-600">

@@ -4,7 +4,6 @@ import {
 	CardBody,
 	CardFooter,
 	Chip,
-	Link,
 	Button,
 	Dropdown,
 	DropdownTrigger,
@@ -24,7 +23,7 @@ import { useUserContext } from "../context/UserContext";
 import { usePostContext } from "../context/PostContext";
 import { handleTime } from "../helper/convertReadingTime";
 import { MdPublish } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 
 const PostCard = ({
@@ -185,8 +184,8 @@ const PostCard = ({
 			<CardBody className="group relative">
 				<h3 className="text-lg mb-3  font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
 					<Link
-						href={`/post/${_id}`}
-						className="capitalize w-full !line-clamp-1"
+						to={`/post/${_id}`}
+						className="capitalize w-full !line-clamp-1 text-black dark:text-white hover:text-blue-400 transition-colors duration-150 ease-linear"
 					>
 						{title}
 					</Link>
@@ -200,7 +199,7 @@ const PostCard = ({
 				/>
 			</CardBody>
 			<CardFooter className="flex gap-x-4">
-				<Link className="text-dark" href={`/profile/${author?._id}`}>
+				<Link className="text-dark" to={`/profile/${author?._id}`}>
 					<User
 						name={`${author?.first_name + " " + author?.last_name}`}
 						description={author?.profession}

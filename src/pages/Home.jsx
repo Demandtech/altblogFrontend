@@ -50,7 +50,7 @@ function Home({ editPostOnOpen, loginOnOpen, search }) {
 			<PostsContainer
 				setOrder={setOrder}
 				setPage={setPage}
-				className="px-3 md:px-5 mt-6 lg:px-10 pb-10"
+				className="px-2 mt-6  pb-10 lg:px-5"
 				posts={posts}
 				editPostOnOpen={editPostOnOpen}
 				setLimit={setLimit}

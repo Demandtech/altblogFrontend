@@ -1,10 +1,11 @@
 import { useRef, useEffect, useState } from "react";
 import FilterList from "./FilterList";
 import PostCard from "./PostCard";
+
 import PropTypes from "prop-types";
-import { Spinner } from "@nextui-org/react";
 import { usePostContext } from "../context/PostContext";
 import MyPagination from "./Pagination";
+import PostCardSkeleton from "./PostCardSkeleton";
 
 const PostsContainer = ({
 	posts,
@@ -33,23 +34,22 @@ const PostsContainer = ({
 				meta={meta}
 				setOrder={setOrder}
 			/>
-			{isPending && posts.length === 0 && (
-				<Spinner
-					label="Loading..."
-					color="default"
-					size="sm"
-					classNames={{
-						label: "text-black/50",
-					}}
-					className="text-center  flex justify-center items-center pt-10"
-				/>
+			{isPending && (
+				<div
+					className={`mb-10 mx-auto grid max-w-2xl gap-4  border-gray-200 lg:mx-0 lg:max-w-none ${
+						view === "grid" ? "responsive-grid" : ""
+					}`}
+				>
+					{["", "", "", "", ""].map((_, index) => {
+						return <PostCardSkeleton key={index} />;
+					})}
+				</div>
 			)}
-
 			{posts.length > 0 && !isPending && (
 				<div>
 					<div
-						className={`mb-10 mx-auto grid max-w-2xl  grid-cols-1 gap-8  border-gray-200 lg:mx-0 lg:max-w-none ${
-							view === "grid" ? "md:grid-cols-2  lg:grid-cols-3" : ""
+						className={`mb-10 mx-auto grid max-w-2xl gap-4  border-gray-200 lg:mx-0 lg:max-w-none ${
+							view === "grid" ? "responsive-grid" : ""
 						}`}
 					>
 						{posts &&
