@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 
 function App() {
 	const [onMount, setOnMount] = useState(false);
+
 	const {
 		isOpen: loginIsOpen,
 		onOpen: loginOnOpen,
@@ -46,6 +47,7 @@ function App() {
 	} = useDisclosure();
 
 	const [search, setSearch] = useState("");
+	const [authorSearch, setAuthorSearch] = useState("");
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const existingParams = Object.fromEntries(searchParams);
@@ -83,7 +85,10 @@ function App() {
 						search={search}
 						editPostOnOpen={handleEdit}
 						profileUpdateOnOpen={profileUpdateOnOpen}
+						setAuthorSearch={setAuthorSearch}
+						authorSearch={authorSearch}
 					/>
+
 					<Routes>
 						<Route
 							element={
@@ -95,12 +100,16 @@ function App() {
 							}
 							path="/"
 						/>
-						<Route element={<SinglePost />} path="/post/:id" />
+						<Route
+							element={<SinglePost onLogin={loginOnOpen} />}
+							path="/post/:id"
+						/>
 						<Route
 							element={
 								<Profile
 									loginOnOpen={loginOnOpen}
 									editPostOnOpen={editPostOnOpen}
+									authorSearch={authorSearch}
 								/>
 							}
 							path="/profile/:id"

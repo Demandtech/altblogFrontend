@@ -3,7 +3,14 @@ import { CiLogout } from "react-icons/ci";
 import { BiLogIn } from "react-icons/bi";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
+import { CiEdit } from "react-icons/ci";
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { BsFillMicMuteFill } from "react-icons/bs";
+import { TbUserEdit } from "react-icons/tb";
+import { IoBookmark, IoNotifications } from "react-icons/io5";
+import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import { useUserContext } from "../context/UserContext";
+import { LiaUserEditSolid } from "react-icons/lia";
 import {
 	Dropdown,
 	DropdownTrigger,
@@ -22,17 +29,11 @@ import {
 	useNavigate,
 	useSearchParams,
 } from "react-router-dom";
-import { LiaUserEditSolid } from "react-icons/lia";
+
 import PropTypes from "prop-types";
 import { usePostContext } from "../context/PostContext";
-import { CiEdit } from "react-icons/ci";
-import { RiDeleteBin2Line } from "react-icons/ri";
-import { BsFillMicMuteFill } from "react-icons/bs";
-import { TbUserEdit } from "react-icons/tb";
 import { MoonIcon, SunIcon } from "./Svgs";
 import { useEffect, useState, useMemo } from "react";
-import { IoBookmark, IoNotifications } from "react-icons/io5";
-import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import { categories } from "../../data";
 
 const mockNotifications = [
@@ -106,9 +107,11 @@ function MyNavbar({
 	editPostOnOpen,
 	setSearch,
 	search,
+	setAuthorSearch,
+	authorSearch,
 }) {
 	const { user, logoutUser, profile } = useUserContext();
-	const { singlePost, deletePost, userBookmarkPosts, bookmarkPosts } =
+	const { singlePost, deletePost, getUserBookmarkPosts, bookmarkPosts } =
 		usePostContext();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const existingParams = Object.fromEntries(searchParams);
@@ -119,6 +122,7 @@ function MyNavbar({
 		return savedTheme ? JSON.parse(savedTheme) : false;
 	});
 	const navigate = useNavigate();
+
 	const [hideMenu, setHideMenu] = useState(false);
 	const [selectedBookmarkKeys, setSelectedBookmarkKeys] = useState(new Set([]));
 	const [selectedNotificationKeys, setSelectedNotificationKeys] = useState(
@@ -141,8 +145,8 @@ function MyNavbar({
 				.split(","),
 		[selectedNotificationKeys]
 	);
-	console.log(selectedBookmarkValue);
-	console.log(selectedNotificationValue);
+
+	console.log(selectedBookmarkValue, selectedNotificationValue);
 
 	const handleDeletePost = async () => {
 		if (!singlePost) return;
@@ -170,7 +174,7 @@ function MyNavbar({
 
 	return (
 		<Navbar
-			classNames={{ wrapper: "max-w-full px-2 sm:px-6" }}
+			classNames={{ wrapper: "max-w-full px-2 sm:px-6 md:px-10" }}
 			shouldHideOnScroll
 		>
 			<Link
@@ -183,61 +187,120 @@ function MyNavbar({
 				<span className=" hidden sm:block">BlogShot</span>
 			</Link>
 
-			<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
-				<Input
-					className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
-					placeholder="Search by title, author, tags"
-					classNames={{
-						input: "pl-4 md:pl-6",
-					}}
-					type="text"
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					size="sm"
-					endContent={
-						<div className="flex items-center">
-							<label className="sr-only" htmlFor="currency">
-								Category
-							</label>
-							<select
-								className="outline-none w-[80px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
-								id="currency"
-								name="currency"
-								defaultValue={"category"}
-								onChange={handleCategory}
-								value={existingParams.category}
-							>
-								<option value={"category"} disabled>
-									{" "}
+			{pathname === "/" && (
+				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
+					<Input
+						className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
+						placeholder="Search by title, author, tags"
+						classNames={{
+							input: "pl-4 md:pl-6",
+						}}
+						type="text"
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						size="sm"
+						endContent={
+							<div className="flex items-center">
+								<label className="sr-only" htmlFor="currency">
 									Category
-								</option>
-								{categories.map((cat) => {
-									return (
-										<option
-											value={cat.value}
-											className="capitalize"
-											key={cat.label}
-										>
-											{cat.label[0].toUpperCase() + cat.label.slice(1)}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-					}
-				/>
-				<Button
-					onPress={() => {
-						setHideMenu(!hideMenu);
-					}}
-					type="button"
-					variant="light"
-					isIconOnly
-					className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
-				>
-					<FaSearch />
-				</Button>
-			</form>
+								</label>
+								<select
+									className="outline-none w-[80px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
+									id="currency"
+									name="currency"
+									defaultValue={"category"}
+									onChange={handleCategory}
+									value={existingParams.category}
+								>
+									<option value={"category"} disabled>
+										{" "}
+										Category
+									</option>
+									{categories.map((cat) => {
+										return (
+											<option
+												value={cat.value}
+												className="capitalize"
+												key={cat.label}
+											>
+												{cat.label[0].toUpperCase() + cat.label.slice(1)}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+						}
+					/>
+					<Button
+						onPress={() => {
+							setHideMenu(!hideMenu);
+						}}
+						type="button"
+						variant="light"
+						isIconOnly
+						className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
+					>
+						<FaSearch />
+					</Button>
+				</form>
+			)}
+			{pathname.includes("profile") && (
+				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
+					<Input
+						className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
+						placeholder="Search by title, tags"
+						classNames={{
+							input: "pl-4 md:pl-6",
+						}}
+						type="text"
+						value={authorSearch}
+						onChange={(e) => setAuthorSearch(e.target.value)}
+						size="sm"
+						endContent={
+							<div className="flex items-center">
+								<label className="sr-only" htmlFor="currency">
+									Category
+								</label>
+								<select
+									className="outline-none w-[80px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
+									id="currency"
+									name="currency"
+									defaultValue={"category"}
+									onChange={handleCategory}
+									value={existingParams.category}
+								>
+									<option value={"category"} disabled>
+										{" "}
+										Category
+									</option>
+									{categories.map((cat) => {
+										return (
+											<option
+												value={cat.value}
+												className="capitalize"
+												key={cat.label}
+											>
+												{cat.label[0].toUpperCase() + cat.label.slice(1)}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+						}
+					/>
+					<Button
+						onPress={() => {
+							setHideMenu(!hideMenu);
+						}}
+						type="button"
+						variant="light"
+						isIconOnly
+						className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
+					>
+						<FaSearch />
+					</Button>
+				</form>
+			)}
 
 			<div
 				className={`${
@@ -245,7 +308,7 @@ function MyNavbar({
 				} opacity-100 sm:flex items-center`}
 			>
 				<Dropdown className="">
-					<DropdownTrigger onClick={userBookmarkPosts}>
+					<DropdownTrigger onClick={getUserBookmarkPosts}>
 						<Button
 							size="sm"
 							variant="light"
@@ -502,6 +565,8 @@ MyNavbar.propTypes = {
 	editPostOnOpen: PropTypes.func,
 	search: PropTypes.string,
 	setSearch: PropTypes.func,
+	authorSearch: PropTypes.string,
+	setAuthorSearch: PropTypes.func,
 };
 
 export default MyNavbar;

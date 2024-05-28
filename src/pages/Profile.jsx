@@ -20,9 +20,9 @@ import { Avatar, Spinner } from "@nextui-org/react";
 import PostsContainer from "../components/PostsContainer";
 import { handleTime } from "../helper/convertReadingTime";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
-const Profile = ({ loginOnOpen, editPostOnOpen }) => {
+const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 	const { id } = useParams();
 	const { getUserProfile, profile, user, snackBar } = useUserContext();
 	const { getAuthorPosts, author_posts } = usePostContext();
@@ -31,6 +31,9 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 	const [page, setPage] = useState(1);
 	const [order, setOrder] = useState("");
 	const [limit, setLimit] = useState("5");
+	const [searchParams] = useSearchParams();
+
+	const category = searchParams.get("category");
 
 	useEffect(() => {
 		const getProfile = async () => {
@@ -52,7 +55,15 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 	useEffect(() => {
 		const getPosts = async () => {
 			try {
-				await getAuthorPosts({ id: profile._id, order, page, limit, state });
+				await getAuthorPosts({
+					id: profile._id,
+					order,
+					page,
+					limit,
+					state,
+					search: authorSearch,
+					category,
+				});
 			} catch (error) {
 				console.log("Error Getting Post", error);
 			}
@@ -60,7 +71,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 		if (profile) {
 			getPosts();
 		}
-	}, [page, order, state, profile, user, limit]);
+	}, [page, order, state, profile, user, limit, authorSearch, category]);
 
 	return (
 		<>
@@ -276,6 +287,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 Profile.propTypes = {
 	loginOnOpen: PropTypes.func,
 	editPostOnOpen: PropTypes.func,
+	authorSearch: PropTypes.string,
 };
 
 export default Profile;

@@ -15,6 +15,7 @@ const PostProvider = ({ children }) => {
 		author_posts: [],
 		singlePost: null,
 		isPending: false,
+		relatedPosts: [],
 		meta: null,
 	});
 
@@ -27,13 +28,24 @@ const PostProvider = ({ children }) => {
 		});
 	};
 
-	const getAuthorPosts = async ({ id, page, order, limit, state }) => {
+	const getAuthorPosts = async ({
+		id,
+		page = 1,
+		order,
+		limit,
+		state,
+		search = "",
+		category = "",
+	}) => {
 		updateState("isPending", true);
+
 		try {
 			if (!id) throw new Error("Id is required");
 
 			const { data, status } = await axios().get(
-				`/posts/authors/${id}/?page=${page}&order=${order}&limit=${limit}&state=${state}`
+				`/posts/authors/${id}/?page=${page}&order=${order}&limit=${limit}&state=${state}&search=${search}&category=${
+					category ? category : ""
+				}`
 			);
 			if (status !== 200) return;
 			updateState("author_posts", data.data.posts);
@@ -205,16 +217,35 @@ const PostProvider = ({ children }) => {
 		}
 	};
 
-	const userBookmarkPosts = async () => {
+	const getUserBookmarkPosts = async () => {
 		try {
 			const {
 				status,
 				data: { data },
-			} = await axios().get(`posts/user/bookmark/`);
+			} = await axios().get(`posts/user/bookmarks`);
 
 			if (status !== 200) throw new Error("Something went wrong, try again!");
 
 			updateState("bookmarkPosts", data);
+
+			console.log(data);
+
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
+	};
+	const getRelatedPosts = async ({ postId, page = 1 }) => {
+		try {
+			const {
+				status,
+				data: { data },
+			} = await axios().get(`posts/related/${postId}?page=${page}`);
+
+			if (status !== 200) throw new Error("Something went wrong, try again!");
+
+			updateState("relatedPosts", data);
 
 			console.log(data);
 
@@ -238,8 +269,9 @@ const PostProvider = ({ children }) => {
 				deletePost,
 				likePost,
 				bookmarkPost,
-				userBookmarkPosts,
+				getUserBookmarkPosts,
 				getFeaturedPosts,
+				getRelatedPosts,
 			}}
 		>
 			{children}

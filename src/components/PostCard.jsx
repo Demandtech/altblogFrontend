@@ -10,9 +10,11 @@ import {
 	DropdownMenu,
 	DropdownItem,
 	User,
+	Textarea,
 } from "@nextui-org/react";
+
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiLike, BiSolidLike, BiShareAlt } from "react-icons/bi";
+import { BiLike, BiSolidLike, BiShareAlt, BiComment } from "react-icons/bi";
 import { IoBookmarkOutline, IoTimerOutline, IoBookmark } from "react-icons/io5";
 import PropTypes from "prop-types";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -43,6 +45,7 @@ const PostCard = ({
 	onLogin,
 	isBookmarked,
 	description,
+	commentCount,
 }) => {
 	const { user, snackBar } = useUserContext();
 	const { publishPost, deletePost, likePost, bookmarkPost } = usePostContext();
@@ -50,6 +53,8 @@ const PostCard = ({
 	const [isLike, setIsLike] = useState(isLiked);
 	const [isBookmark, setIsBookmark] = useState(isBookmarked);
 	const [likeCounter, setLikeCounter] = useState(likeCount);
+	const [commentCounter, setCommentCounter] = useState(commentCount);
+	const [writeComment, setWriteComment] = useState(false);
 
 	const existingParams = Object.fromEntries(searchParams);
 
@@ -82,13 +87,14 @@ const PostCard = ({
 			if (isSuccess) {
 				if (isLike) {
 					setLikeCounter(likeCounter - 1);
-					snackBar("Post unlike", "success");
+					snackBar("Post unlike a post", "success");
 				} else {
-					snackBar("Post liked", "success");
+					snackBar("You like a post", "success");
 					setLikeCounter(likeCounter + 1);
 				}
 				setIsLike(!isLike);
 			} else {
+				// setIsLike(!isLike);
 				snackBar("Something went wrong", "error");
 			}
 		} else {
@@ -118,21 +124,26 @@ const PostCard = ({
 		if (navigator.share) {
 			try {
 				await navigator.share({
-					title: { title },
-					text: { description },
+					title: title,
+					text: description,
 					url: location.href,
 				});
 			} catch (error) {
-				console.log(error);
+				alert("An error occured, please try again!");
 			}
 		} else {
-			console.log("Web Share API not supported");
-			alert("Can not Share here");
+			alert("Web Share not supported on your browser");
 		}
 	};
 
+	const handleComment = async () => {
+		setWriteComment(!writeComment);
+
+		setCommentCounter(commentCounter + 1);
+	};
+
 	return (
-		<Card className="dark:bg-[#27272a] dark:border-none dark:shadow-sm border flex shadow-sm flex-col items-start">
+		<Card className="dark:bg-[#27272a] transition-all duration-300 ease-linear dark:border-none dark:shadow-sm border flex shadow-sm flex-col items-start">
 			<CardHeader className="flex items-center gap-x-3 text-xs">
 				<time dateTime={"2020-03-16"} className="text-gray-500">
 					{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}
@@ -228,6 +239,18 @@ const PostCard = ({
 
 				<div className="ml-auto flex">
 					<Button
+						onPress={handleComment}
+						size="sm"
+						isIconOnly
+						className="rounded-full"
+						variant="light"
+					>
+						<BiComment className=" text-slate-300" />
+						{commentCounter > 0 && (
+							<sup className="text-slate-400">{commentCounter}</sup>
+						)}
+					</Button>
+					<Button
 						onPress={handleLike}
 						size="sm"
 						isIconOnly
@@ -267,6 +290,21 @@ const PostCard = ({
 					</Button>
 				</div>
 			</CardFooter>
+			<CardFooter className={writeComment ? "block" : "hidden"}>
+				<div className="w-full overflow-hidden flex gap-3 flex-col">
+					<Textarea
+						placeholder="Type your comment"
+						width={"100%"}
+						name=""
+						id=""
+						className="w-full"
+						// rows="2"
+					></Textarea>
+					<Button className="ml-auto" size="sm ">
+						Comment
+					</Button>
+				</div>
+			</CardFooter>
 		</Card>
 	);
 };
@@ -288,5 +326,6 @@ PostCard.propTypes = {
 	likeCount: PropTypes.number,
 	onLogin: PropTypes.func,
 	description: PropTypes.string,
+	commentCount: PropTypes.number,
 };
 export default PostCard;
