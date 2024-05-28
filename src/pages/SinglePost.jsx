@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
-import { Link, useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Spinner } from "@nextui-org/react";
 import { usePostContext } from "../context/PostContext";
 import moment from "moment";
@@ -36,7 +36,9 @@ const SinglePost = () => {
 				<div className="">
 					<div className="px-3 lg:px-10 mb-4">
 						<div className="mt-8 pb-8">
-							<div className=" max-w-2xl">
+							<div className="border-b-2">
+
+							<div className=" md:max-w-2xl">
 								<h1 className="mb-3 max-w-md font-bold text-3xl">
 									{singlePost?.title}
 								</h1>
@@ -90,10 +92,11 @@ const SinglePost = () => {
 									</small>
 								</li>
 							</ul>
+							</div>
 							<style>
 								{`
 								.blog-body{
-									border-top: 2px solid;
+									// border-top: 2px solid;
 									padding-top: 20px;
 
 									h1,h2, h3{
@@ -112,10 +115,18 @@ const SinglePost = () => {
 								}
 								`}
 							</style>
-							<div
-								className="blog-body"
-								dangerouslySetInnerHTML={{ __html: singlePost?.body }}
-							></div>
+							<div className="grid grid-cols-3">
+								<div
+									className="blog-body col-span-3 md:col-span-2"
+									dangerouslySetInnerHTML={{ __html: singlePost?.body }}
+								></div>
+								<div className="col-span-3 md:col-span-1 pt-5">
+									<h3 className="font-bold text-lg">
+
+									Related Post
+									</h3>
+									</div>
+							</div>
 						</div>
 					</div>
 				</div>

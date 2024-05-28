@@ -14,6 +14,7 @@ import {
 	Input,
 	Avatar,
 	Navbar,
+	DropdownSection,
 } from "@nextui-org/react";
 import {
 	Link,
@@ -29,9 +30,9 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import { BsFillMicMuteFill } from "react-icons/bs";
 import { TbUserEdit } from "react-icons/tb";
 import { MoonIcon, SunIcon } from "./Svgs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { IoBookmark, IoNotifications } from "react-icons/io5";
-import { FaSearch } from "react-icons/fa";
+import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import { categories } from "../../data";
 
 const mockNotifications = [
@@ -39,51 +40,61 @@ const mockNotifications = [
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 1,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 2,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 3,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 4,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: true,
+		id: 5,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 5,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 6,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: true,
+		id: 7,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 8,
 	},
 	{
 		senderId: "",
 		message: "John your  post",
 		isRead: false,
+		id: 9,
 	},
 ];
 
@@ -109,6 +120,29 @@ function MyNavbar({
 	});
 	const navigate = useNavigate();
 	const [hideMenu, setHideMenu] = useState(false);
+	const [selectedBookmarkKeys, setSelectedBookmarkKeys] = useState(new Set([]));
+	const [selectedNotificationKeys, setSelectedNotificationKeys] = useState(
+		new Set([])
+	);
+
+	const selectedBookmarkValue = useMemo(
+		() =>
+			Array.from(selectedBookmarkKeys)
+				.join(", ")
+				.replaceAll("_", " ")
+				.split(","),
+		[selectedBookmarkKeys]
+	);
+	const selectedNotificationValue = useMemo(
+		() =>
+			Array.from(selectedNotificationKeys)
+				.join(", ")
+				.replaceAll("_", " ")
+				.split(","),
+		[selectedNotificationKeys]
+	);
+	console.log(selectedBookmarkValue);
+	console.log(selectedNotificationValue);
 
 	const handleDeletePost = async () => {
 		if (!singlePost) return;
@@ -222,12 +256,19 @@ function MyNavbar({
 						</Button>
 					</DropdownTrigger>
 					<DropdownMenu
-						className="max-h-[200px] max-w-[300px] p-0 rounded-none  overflow-y-auto"
+						className="max-h-[200px] w-full  p-0 rounded-none  overflow-y-auto"
 						aria-label="Bookmark list dropdown"
+						selectionMode="multiple"
+						selectedKeys={selectedBookmarkKeys}
+						onSelectionChange={setSelectedBookmarkKeys}
+						closeOnSelect={false}
 					>
 						<DropdownItem
+							selectedIcon={<IoBookmark />}
+							d
 							textValue="Bookmark Posts"
-							className=" bg-white dark:bg-black z-50 sticky top-0 rounded-none  border-b"
+							showDivider
+							className=" bg-white dark:bg-[#18181b] z-50 sticky top-0 rounded-none "
 						>
 							<h3 className="font-bold text-base">Bookmark Posts</h3>
 						</DropdownItem>
@@ -236,7 +277,7 @@ function MyNavbar({
 								<DropdownItem
 									textValue={bookmark.post.title}
 									key={bookmark._id}
-									className=""
+									className="w-[250px] text-ellipsis overflow-x-hidden"
 								>
 									<Link to={`/post/${bookmark.post._id}`}>
 										<span className="text-primary text-small capitalize font-semibold">
@@ -395,7 +436,7 @@ function MyNavbar({
 						>
 							<IoNotifications />
 							<sup className="bg-red-600 rounded-full w-3 h-3 absolute grid place-content-center right-1 top-1">
-								9
+								{mockNotifications.filter((mock) => mock.isRead).length}
 							</sup>
 						</Button>
 					</DropdownTrigger>
@@ -403,22 +444,49 @@ function MyNavbar({
 					<DropdownMenu
 						selectionMode="multiple"
 						aria-label="Notification list dropdown"
-						className="max-h-[200px] p-0 rounded-none  overflow-y-auto"
+						className="max-h-[200px] p-0  overflow-y-auto"
+						selectedKeys={selectedNotificationKeys}
+						onSelectionChange={setSelectedNotificationKeys}
+						closeOnSelect={false}
 					>
-						<DropdownItem className="sticky top-0 z-10 bg-white dark:bg-black rounded-none border-b">
+						<DropdownItem
+							key=""
+							selectedIcon={<FaCheckCircle />}
+							className="sticky top-0 z-10 bg-white border-b-1  rounded-none dark:bg-[#18181b] "
+						>
 							<h3 className="font-bold text-base">Notifications</h3>
 						</DropdownItem>
-						{mockNotifications.map((not, idx) => {
-							return (
-								<DropdownItem
-									textValue="register"
-									key={idx}
-									className={`${not.isRead ? "bg-red-300" : " bg-transparent"}`}
-								>
-									John like a post
-								</DropdownItem>
-							);
-						})}
+						<DropdownSection>
+							{mockNotifications
+								.filter((item) => item.isRead)
+								.map((not) => {
+									return (
+										<DropdownItem
+											showDivider
+											textValue="register"
+											key={not.id}
+											className="bg-red-600 rounded-none"
+										>
+											John like a post
+										</DropdownItem>
+									);
+								})}
+
+							{mockNotifications
+								.filter((item) => !item.isRead)
+								.map((not) => {
+									return (
+										<DropdownItem
+											showDivider
+											textValue="register"
+											key={not.id}
+											className=" bg-transparent rounded-none"
+										>
+											John like a post
+										</DropdownItem>
+									);
+								})}
+						</DropdownSection>
 					</DropdownMenu>
 				</Dropdown>
 			</div>

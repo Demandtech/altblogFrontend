@@ -114,11 +114,7 @@ const PostCard = ({
 		}
 	};
 
-	console.log(description, location.href);
-
 	const handleShare = async () => {
-		console.log("Here");
-
 		if (navigator.share) {
 			try {
 				await navigator.share({
@@ -291,5 +287,6 @@ PostCard.propTypes = {
 	isBookmarked: PropTypes.bool,
 	likeCount: PropTypes.number,
 	onLogin: PropTypes.func,
+	description: PropTypes.string,
 };
 export default PostCard;
