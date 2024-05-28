@@ -42,6 +42,7 @@ const PostCard = ({
 	likeCount,
 	onLogin,
 	isBookmarked,
+	description,
 }) => {
 	const { user, snackBar } = useUserContext();
 	const { publishPost, deletePost, likePost, bookmarkPost } = usePostContext();
@@ -113,6 +114,27 @@ const PostCard = ({
 		}
 	};
 
+	console.log(description, location.href);
+
+	const handleShare = async () => {
+		console.log("Here");
+
+		if (navigator.share) {
+			try {
+				await navigator.share({
+					title: { title },
+					text: { description },
+					url: location.href,
+				});
+			} catch (error) {
+				console.log(error);
+			}
+		} else {
+			console.log("Web Share API not supported");
+			alert("Can not Share here");
+		}
+	};
+
 	return (
 		<Card className="dark:bg-[#27272a] dark:border-none dark:shadow-sm border flex shadow-sm flex-col items-start">
 			<CardHeader className="flex items-center gap-x-3 text-xs">
@@ -120,18 +142,10 @@ const PostCard = ({
 					{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}
 				</time>
 
-				<Chip
-					size="sm"
-					className="pe-3 bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
-					endContent={<FaRegEye />}
-				>
+				<Chip size="sm" endContent={<FaRegEye />}>
 					{read_count}
 				</Chip>
-				<Chip
-					size="sm"
-					className="bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
-					startContent={<IoTimerOutline />}
-				>
+				<Chip size="sm" startContent={<IoTimerOutline />}>
 					{handleTime(reading_time)}
 				</Chip>
 				{user?._id === author?._id && (
@@ -181,7 +195,7 @@ const PostCard = ({
 							return (
 								<Chip
 									key={tag}
-									className="capitalize bg-[#ede8f5] dark:bg-[#171717] dark:text-white/70"
+									className="capitalize  cursor-pointer "
 									size="sm"
 								>
 									{tags}
@@ -248,17 +262,12 @@ const PostCard = ({
 					</Button>
 					<Button
 						variant="light"
-						// onPress={handleBookmark}
+						onPress={handleShare}
 						size="sm"
 						isIconOnly
 						className="rounded-full"
 					>
-						{/* {isBookmark ? (
-							<IoBookmark className="text-[#955055]" />
-						) : (
-							<IoBookmarkOutline className="text-[#955055]" />
-						)} */}
-						<BiShareAlt className=" text-slate-300" />
+						<BiShareAlt className=" text-slate-400" />
 					</Button>
 				</div>
 			</CardFooter>

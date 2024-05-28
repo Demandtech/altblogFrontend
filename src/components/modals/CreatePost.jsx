@@ -36,6 +36,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 	const [letterCount, setLetterCounter] = useState(0);
 	const navigate = useNavigate();
 
+
 	const handleChange = (name, value) => {
 		if (name === "description") {
 			setLetterCounter(value.length);

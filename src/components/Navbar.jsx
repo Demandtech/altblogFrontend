@@ -108,6 +108,7 @@ function MyNavbar({
 		return savedTheme ? JSON.parse(savedTheme) : false;
 	});
 	const navigate = useNavigate();
+	const [hideMenu, setHideMenu] = useState(false);
 
 	const handleDeletePost = async () => {
 		if (!singlePost) return;
@@ -134,13 +135,21 @@ function MyNavbar({
 	}, [theme]);
 
 	return (
-		<Navbar classNames={{ wrapper: "max-w-full" }} shouldHideOnScroll>
-			<Link className="flex text-black/80 dark:text-white/80" to="/">
+		<Navbar
+			classNames={{ wrapper: "max-w-full px-2 sm:px-6" }}
+			shouldHideOnScroll
+		>
+			<Link
+				className={`${
+					hideMenu ? "opacity-0 hidden " : "flex opacity-100"
+				} sm:opacity-100 sm:flex transition-all duration-300 ease-linear text-black/80 dark:text-white/80`}
+				to="/"
+			>
 				<BsFillMicMuteFill size={30} />
 				<span className=" hidden sm:block">BlogShot</span>
 			</Link>
 
-			<form className="flex max-w-md w-full  relative ">
+			<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
 				<Input
 					className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
 					placeholder="Search by title, author, tags"
@@ -157,7 +166,7 @@ function MyNavbar({
 								Category
 							</label>
 							<select
-								className="outline-none w-[100px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
+								className="outline-none w-[80px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
 								id="currency"
 								name="currency"
 								defaultValue={"category"}
@@ -184,7 +193,10 @@ function MyNavbar({
 					}
 				/>
 				<Button
-					type="submit"
+					onPress={() => {
+						setHideMenu(!hideMenu);
+					}}
+					type="button"
 					variant="light"
 					isIconOnly
 					className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
@@ -193,7 +205,11 @@ function MyNavbar({
 				</Button>
 			</form>
 
-			<div className="flex  items-center">
+			<div
+				className={`${
+					hideMenu ? "opacity-0 hidden " : "flex opacity-100"
+				} opacity-100 sm:flex items-center`}
+			>
 				<Dropdown className="">
 					<DropdownTrigger onClick={userBookmarkPosts}>
 						<Button
