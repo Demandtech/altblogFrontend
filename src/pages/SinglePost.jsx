@@ -267,12 +267,12 @@ const SinglePost = ({ onLogin }) => {
 								}
 								`}
 							</style>
-							<div className="grid grid-cols-3">
+							<div className="grid grid-cols-3 gap-5">
 								<div
 									className="blog-body col-span-3 md:col-span-2"
 									dangerouslySetInnerHTML={{ __html: singlePost?.body }}
 								></div>
-								<div className="col-span-3 md:col-span-1 pt-5">
+								<div className="col-span-3 md:col-span-1 md:pt-5">
 									<h3 className="font-bold text-lg mb-5">Related Post</h3>
 									<div className="space-y-3">
 										{relatedPosts.map((item) => {
