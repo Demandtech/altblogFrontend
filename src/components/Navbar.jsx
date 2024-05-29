@@ -35,6 +35,7 @@ import { usePostContext } from "../context/PostContext";
 import { MoonIcon, SunIcon } from "./Svgs";
 import { useEffect, useState, useMemo } from "react";
 import { categories } from "../../data";
+import { debounce } from "lodash";
 
 const mockNotifications = [
 	{
@@ -172,6 +173,16 @@ function MyNavbar({
 		localStorage.setItem("THEME", JSON.stringify(theme));
 	}, [theme]);
 
+	const handleSearchChange = (e) => {
+		setSearch(e.target.value);
+	};
+	const handleAuthorSearchChange = (e) => {
+		setAuthorSearch(e.target.value);
+	};
+
+	const searchDebounce = debounce(handleSearchChange, 500);
+	const authorSearchDebounce = debounce(handleAuthorSearchChange, 500);
+
 	return (
 		<Navbar
 			classNames={{ wrapper: "max-w-full px-2 sm:px-6 md:px-10" }}
@@ -197,7 +208,7 @@ function MyNavbar({
 						}}
 						type="text"
 						value={search}
-						onChange={(e) => setSearch(e.target.value)}
+						onChange={searchDebounce}
 						size="sm"
 						endContent={
 							<div className="flex items-center">
@@ -254,7 +265,7 @@ function MyNavbar({
 						}}
 						type="text"
 						value={authorSearch}
-						onChange={(e) => setAuthorSearch(e.target.value)}
+						onChange={handleAuthorSearchChange}
 						size="sm"
 						endContent={
 							<div className="flex items-center">

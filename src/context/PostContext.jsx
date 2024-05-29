@@ -15,7 +15,7 @@ const PostProvider = ({ children }) => {
 		author_posts: [],
 		singlePost: null,
 		isPending: false,
-		relatedPosts: [],
+		relatedPosts: { posts: [], hasMore: false },
 		meta: null,
 	});
 
@@ -236,18 +236,37 @@ const PostProvider = ({ children }) => {
 			return false;
 		}
 	};
-	const getRelatedPosts = async ({ postId, page = 1 }) => {
+
+	const getRelatedPosts = async ({ postId, page = 1, search }) => {
 		try {
 			const {
 				status,
 				data: { data },
-			} = await axios().get(`posts/related/${postId}?page=${page}`);
+			} = await axios().get(
+				`posts/related/${postId}?page=${page}&search=${search}`
+			);
 
 			if (status !== 200) throw new Error("Something went wrong, try again!");
 
-			updateState("relatedPosts", data);
+			const existingPostIds = new Set(
+				initialState.relatedPosts.posts.map((post) => post._id)
+			);
 
-			console.log(data);
+			// console.log(data);
+
+			const newPosts = data.relatedPosts.filter(
+				(post) => !existingPostIds.has(post._id)
+			);
+
+			const relatedPosts = {
+				hasMore: data.hasMore,
+				posts:
+					page > 1
+						? [...initialState.relatedPosts.posts, ...newPosts]
+						: data.relatedPosts,
+			};
+
+			updateState("relatedPosts", relatedPosts);
 
 			return true;
 		} catch (error) {

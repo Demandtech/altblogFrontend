@@ -74,7 +74,7 @@ function App() {
 				<motion.div
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
-					transition={{ duration: 3 }}
+					transition={{ duration: 2 }}
 					className=" dark:bg-[#171717] min-h-svh w-full "
 				>
 					<Navbar

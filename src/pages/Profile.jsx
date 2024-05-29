@@ -21,6 +21,7 @@ import PostsContainer from "../components/PostsContainer";
 import { handleTime } from "../helper/convertReadingTime";
 import PropTypes from "prop-types";
 import { useParams, useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 	const { id } = useParams();
@@ -72,9 +73,44 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 			getPosts();
 		}
 	}, [page, order, state, profile, user, limit, authorSearch, category]);
-
+	
 	return (
 		<>
+			<Helmet>
+				<title> {`${profile?.first_name}`} | Profile | Blogshot</title>
+				<meta
+					name="author"
+					content={`${profile?.first_name} ${profile?.last_name}`}
+				/>
+				<meta
+					name="keywords"
+					content={`${profile?.first_name} ${profile?.last_name} profile, BLOGSHOT`}
+				/>
+				<meta property="og:type" content="profile" />
+				<meta
+					property="og:title"
+					content={`${profile?.first_name} ${profile?.last_name} | Profile | BLOGSHOT`}
+				/>
+				<meta
+					property="og:description"
+					content={`${profile?.first_name} ${profile?.last_name}'s profile on BLOGSHOT. ${profile?.profession}`}
+				/>
+				<meta property="og:site_name" content="BLOGSHOT" />
+				<meta property="og:locale" content="en_US" />
+				<meta
+					property="profile:username"
+					content={`${profile?.first_name} ${profile?.last_name}`}
+				/>
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta
+					name="twitter:title"
+					content={`${profile?.first_name} ${profile?.last_name} | Profile | BLOGSHOT`}
+				/>
+				<meta
+					name="twitter:description"
+					content={`${profile?.first_name} ${profile?.last_name}'s profile on BLOGSHOT. ${profile?.profession}`}
+				/>
+			</Helmet>
 			{isLoading ? (
 				<Spinner
 					className="flex justify-center items-center h-screen"

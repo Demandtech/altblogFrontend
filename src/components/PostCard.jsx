@@ -143,7 +143,10 @@ const PostCard = ({
 	};
 
 	return (
-		<Card className="dark:bg-[#27272a] transition-all duration-300 ease-linear dark:border-none dark:shadow-sm border flex shadow-sm flex-col items-start">
+		<Card
+			isHoverable={true}
+			className="dark:bg-[#27272a]  transition-all duration-300 ease-linear dark:border-none dark:shadow-sm border flex shadow-sm hover:drop-shadow-lg flex-col items-start"
+		>
 			<CardHeader className="flex items-center gap-x-3 text-xs">
 				<time dateTime={"2020-03-16"} className="text-gray-500">
 					{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}

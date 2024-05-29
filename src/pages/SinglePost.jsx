@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Spinner, Button } from "@nextui-org/react";
+import { Spinner, Button, Input } from "@nextui-org/react";
 import { usePostContext } from "../context/PostContext";
 import moment from "moment";
 import { handleTime } from "../helper/convertReadingTime";
@@ -13,6 +13,8 @@ import { BiLike, BiSolidLike, BiShareAlt, BiComment } from "react-icons/bi";
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import PropTypes from "prop-types";
 import PostCard from "../components/PostCard";
+import { debounce } from "lodash";
+import { Helmet } from "react-helmet";
 
 const SinglePost = ({ onLogin }) => {
 	const { id } = useParams();
@@ -33,6 +35,16 @@ const SinglePost = ({ onLogin }) => {
 		singlePost?.commentCount
 	);
 	const [writeComment, setWriteComment] = useState(false);
+	const [page, setPage] = useState(1);
+	const [isRelatedLoading, setRelatedLoading] = useState();
+	const [search, setSearch] = useState("");
+
+	const handleChange = (e) => {
+		setPage(1);
+		setSearch(e.target.value);
+	};
+
+	const handleDebounceChange = debounce(handleChange, 500);
 
 	const handleLike = async () => {
 		if (user) {
@@ -101,11 +113,24 @@ const SinglePost = ({ onLogin }) => {
 
 		const getPost = async () => {
 			await getSinglePost(id);
-			await getRelatedPosts({ postId: id, page: 1 });
 		};
 		getPost();
 		localStorage.setItem("EditPostId", id);
 	}, [id]);
+
+	useEffect(() => {
+		const getPost = async () => {
+			setRelatedLoading(true);
+			const isSuccess = await getRelatedPosts({ postId: id, page, search });
+
+			if (isSuccess) {
+				setRelatedLoading(false);
+			} else {
+				setRelatedLoading(false);
+			}
+		};
+		getPost();
+	}, [id, page, search]);
 
 	useEffect(() => {
 		if (singlePost) {
@@ -116,8 +141,46 @@ const SinglePost = ({ onLogin }) => {
 		}
 	}, [singlePost]);
 
+	console.log(singlePost);
+
 	return (
 		<>
+			<Helmet>
+				<title>Post | Blogshot</title>
+				<meta name="description" content={singlePost?.description} />
+				<meta
+					name="author"
+					content={`${singlePost?.author.first_name} ${singlePost?.author.last_name}`}
+				/>
+				<meta
+					name="keywords"
+					content="SEO, blog optimization, search engine optimization, blogging"
+				/>
+				<meta property="og:type" content="article" />
+				<meta property="og:title" content={singlePost?.title} />
+				<meta property="og:description" content={singlePost?.description} />
+				<meta property="og:site_name" content="BLOGSHOT" />
+				<meta property="og:locale" content="en_US" />
+				<meta
+					property="article:author"
+					content={`${singlePost?.author.first_name} ${singlePost?.author?.last_name}`}
+				/>
+				<meta
+					property="article:published_time"
+					content={singlePost?.publishedAt}
+				/>
+				<meta
+					property="article:modified_time"
+					content={singlePost?.updatedAt}
+				/>
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content={singlePost?.title} />
+				<meta name="twitter:description" content={singlePost?.description} />
+				<meta
+					name="twitter:creator"
+					content={`${singlePost?.author?.first_name} ${singlePost?.author?.last_name}`}
+				/>
+			</Helmet>
 			{isPending ? (
 				<Spinner
 					color="default"
@@ -272,12 +335,41 @@ const SinglePost = ({ onLogin }) => {
 									className="blog-body col-span-3 md:col-span-2"
 									dangerouslySetInnerHTML={{ __html: singlePost?.body }}
 								></div>
-								<div className="col-span-3 md:col-span-1 md:pt-5">
+								<div className="col-span-3 md:col-span-1 pt-5 border-t md:border-t-0">
 									<h3 className="font-bold text-lg mb-5">Related Post</h3>
-									<div className="space-y-3">
-										{relatedPosts.map((item) => {
-											return <PostCard {...item} key={item._id} />;
-										})}
+									<div className="mb-4 max-w-[220px]">
+										<Input
+											onChange={handleDebounceChange}
+											placeholder="Search by title, author, tags"
+										/>
+									</div>
+									<div className="space-y-3 ">
+										{relatedPosts && relatedPosts?.posts?.length > 0 ? (
+											relatedPosts?.posts.map((item) => {
+												return <PostCard {...item} key={item._id} />;
+											})
+										) : (
+											<div>No related Post found</div>
+										)}
+
+										{isRelatedLoading && (
+											<Spinner className="flex justify-center" size="sm" />
+										)}
+									</div>
+									<div className="mt-5 text-center ">
+										{relatedPosts && relatedPosts.hasMore && (
+											<Button
+												onPress={() =>
+													setPage((prev) => {
+														return prev + 1;
+													})
+												}
+												variant="flat"
+												color="primary"
+											>
+												See more
+											</Button>
+										)}
 									</div>
 								</div>
 							</div>
