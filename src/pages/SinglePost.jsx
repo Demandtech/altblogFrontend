@@ -12,7 +12,7 @@ import { useUserContext } from "../context/UserContext";
 import { BiLike, BiSolidLike, BiShareAlt, BiComment } from "react-icons/bi";
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import PropTypes from "prop-types";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/post/PostCard";
 import { debounce } from "lodash";
 import { Helmet } from "react-helmet";
 
@@ -346,7 +346,14 @@ const SinglePost = ({ onLogin }) => {
 									<div className="space-y-3 ">
 										{relatedPosts && relatedPosts?.posts?.length > 0 ? (
 											relatedPosts?.posts.map((item) => {
-												return <PostCard {...item} key={item._id} />;
+												console.log(item)
+												return (
+													<PostCard
+														key={item._id}
+														onLogin={onLogin}
+														{...item}
+													/>
+												);
 											})
 										) : (
 											<div>No related Post found</div>

@@ -1,10 +1,9 @@
 import { useRef, useEffect, useState } from "react";
-import FilterList from "./FilterList";
+import FilterList from "../FilterList";
 import PostCard from "./PostCard";
-
 import PropTypes from "prop-types";
-import { usePostContext } from "../context/PostContext";
-import MyPagination from "./Pagination";
+import { usePostContext } from "../../context/PostContext";
+import MyPagination from "../Pagination";
 import PostCardSkeleton from "./PostCardSkeleton";
 
 const PostsContainer = ({
@@ -16,6 +15,7 @@ const PostsContainer = ({
 	setLimit,
 	limit,
 	onLogin,
+	commentOnOpen,
 }) => {
 	const { meta, isPending } = usePostContext();
 	const scroll = useRef(null);
@@ -60,6 +60,7 @@ const PostsContainer = ({
 										editPostOnOpen={editPostOnOpen}
 										key={index}
 										onLogin={onLogin}
+										commentOnOpen={commentOnOpen}
 									/>
 								);
 							})}
@@ -92,6 +93,7 @@ PostsContainer.propTypes = {
 	setLimit: PropTypes.func,
 	limit: PropTypes.string,
 	onLogin: PropTypes.func,
+	commentOnOpen: PropTypes.func,
 };
 
 export default PostsContainer;

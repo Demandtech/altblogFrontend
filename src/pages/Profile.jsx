@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import PostTab from "../components/PostTab";
+import PostTab from "../components/post/PostTab";
 import { useUserContext } from "../context/UserContext";
 import { usePostContext } from "../context/PostContext";
 import {
@@ -12,16 +12,16 @@ import {
 	BsMedium,
 	BsTelegram,
 } from "react-icons/bs";
-import { IoEyeOutline } from "react-icons/io5";
-import { MdOutlineAccessTime } from "react-icons/md";
+
 import { RiDraftLine } from "react-icons/ri";
-import { MdPublish } from "react-icons/md";
 import { Avatar, Spinner } from "@nextui-org/react";
-import PostsContainer from "../components/PostsContainer";
+import PostsContainer from "../components/post/PostsContainer";
 import { handleTime } from "../helper/convertReadingTime";
 import PropTypes from "prop-types";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { FaPoll, FaReadme, FaPenSquare } from "react-icons/fa";
+import { RiDraftFill } from "react-icons/ri";
 
 const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 	const { id } = useParams();
@@ -73,7 +73,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 			getPosts();
 		}
 	}, [page, order, state, profile, user, limit, authorSearch, category]);
-	
+
 	return (
 		<>
 			<Helmet>
@@ -237,7 +237,8 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 
 							<div className="bg-[#f7f7fc] dark:bg-[#181b1e] rounded-md p-2 flex-1">
 								<small className="flex  text-nowrap gap-1 items-center uppercase font-light dark:text-white/70 text-black/70">
-									<IoEyeOutline />
+									{/* <IoEyeOutline /> */}
+									<FaPoll />
 									Total Views{" "}
 								</small>{" "}
 								<small className="font-semibold text-base dark:text-white/90 text-black/90">
@@ -247,7 +248,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 
 							<div className="bg-[#f7f7fc] dark:bg-[#181b1e] rounded-md p-2 flex-1">
 								<small className="flex  text-nowrap gap-1 items-center uppercase font-light dark:text-white/70 text-black/70">
-									<MdOutlineAccessTime />
+									<FaReadme />
 									Total read time
 								</small>{" "}
 								<small className="font-semibold text-base dark:text-white/90 text-black/90">
@@ -257,11 +258,11 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 							{profile?._id === user?._id && (
 								<div className="bg-[#f7f7fc] rounded-md p-2 flex-1 dark:bg-[#181b1e]">
 									<small className="flex  text-nowrap gap-1 items-center uppercase font-light dark:text-white/70 text-black/70">
-										<RiDraftLine />
+										<RiDraftFill />
 										Draft
 									</small>{" "}
 									<small className="font-semibold text-base dark:text-white/90 text-black/90">
-										{profile?.stats?.totalDraft}
+										{profile?.stats?.totalDraft || 0}
 									</small>
 								</div>
 							)}
@@ -280,7 +281,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 								<div className="bg-[#f7f7fc] rounded-md p-2 flex-1 dark:bg-[#181b1e]">
 									<small className="flex  text-nowrap gap-1 items-center uppercase font-light dark:text-white/70 text-black/70">
 										{" "}
-										<MdPublish />
+										<FaPenSquare />
 										Published{" "}
 									</small>{" "}
 									<small className="font-semibold text-base dark:text-white/90 text-black/90">

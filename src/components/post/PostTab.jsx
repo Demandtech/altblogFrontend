@@ -11,6 +11,7 @@ export default function PostTab({
 	setLimit,
 	limit,
 	onLogin,
+	commentOnOpen,
 }) {
 	const tabs = [
 		{
@@ -48,6 +49,7 @@ export default function PostTab({
 								setLimit={setLimit}
 								limit={limit}
 								onLogin={onLogin}
+								commentOnOpen={commentOnOpen}
 							/>
 						</Tab>
 					);
@@ -65,5 +67,6 @@ PostTab.propTypes = {
 	editPostOnOpen: PropTypes.func,
 	setLimit: PropTypes.func,
 	limit: PropTypes.string,
-	onLogin: PropTypes.func
+	onLogin: PropTypes.func,
+	commentOnOpen: PropTypes.func,
 };

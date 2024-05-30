@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Hero from "../components/Hero";
-import PostsContainer from "../components/PostsContainer";
+import PostsContainer from "../components/post/PostsContainer";
 import { usePostContext } from "../context/PostContext";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { Helmet } from "react-helmet";
 
-function Home({ editPostOnOpen, loginOnOpen, search }) {
+function Home({ editPostOnOpen, loginOnOpen, search}) {
 	const { posts, getAllPublishedPosts } = usePostContext();
 	const { user } = useUserContext();
 	const [order, setOrder] = useState("");
@@ -86,6 +86,7 @@ function Home({ editPostOnOpen, loginOnOpen, search }) {
 				setLimit={setLimit}
 				limit={limit}
 				onLogin={loginOnOpen}
+				
 			/>
 		</>
 	);
@@ -93,6 +94,7 @@ function Home({ editPostOnOpen, loginOnOpen, search }) {
 Home.propTypes = {
 	loginOnOpen: PropTypes.func,
 	editPostOnOpen: PropTypes.func,
+	
 	search: PropTypes.string,
 };
 export default Home;

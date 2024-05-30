@@ -14,7 +14,7 @@ const PostProvider = ({ children }) => {
 		bookmarkPosts: [],
 		author_posts: [],
 		singlePost: null,
-		isPending: false,
+		isPending: true,
 		relatedPosts: { posts: [], hasMore: false },
 		meta: null,
 	});
@@ -252,8 +252,6 @@ const PostProvider = ({ children }) => {
 				initialState.relatedPosts.posts.map((post) => post._id)
 			);
 
-			// console.log(data);
-
 			const newPosts = data.relatedPosts.filter(
 				(post) => !existingPostIds.has(post._id)
 			);
@@ -267,6 +265,67 @@ const PostProvider = ({ children }) => {
 			};
 
 			updateState("relatedPosts", relatedPosts);
+
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
+	};
+
+	const createComment = async ({ postId, userId, text }) => {
+		try {
+			const {
+				data: { data },
+				status,
+			} = await axios().post("/comments", { postId, userId, text });
+
+			if (status !== 200) throw new Error("An error occured, try again!");
+
+			return { success: true, data };
+		} catch (error) {
+			console.log(error);
+			return { success: false, data: null };
+		}
+	};
+
+	const getAllPostComments = async ({ postId, page = 1 }) => {
+		try {
+			const {
+				data: { data },
+				status,
+			} = await axios().get(`/comments/${postId}/?page=${page}`);
+
+			if (status !== 200) throw new Error("An error occured, try again!");
+
+			return { success: true, data };
+		} catch (error) {
+			console.log(error);
+			return { success: false, data: null };
+		}
+	};
+
+	const likeComment = async (commentId) => {
+		if (!commentId) return;
+		try {
+			const { status, data } = await axios().get(`comments/like/${commentId}`);
+
+			if (status !== 200)
+				throw new Error("An error occured,  please try again");
+			console.log(status, data);
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
+	};
+
+	const deleteComment = async (commentId) => {
+		try {
+			const { status } = await axios().delete(`comments/${commentId}`);
+
+			if (status !== 200)
+				throw new Error("An error occured, please try again later!");
 
 			return true;
 		} catch (error) {
@@ -291,6 +350,10 @@ const PostProvider = ({ children }) => {
 				getUserBookmarkPosts,
 				getFeaturedPosts,
 				getRelatedPosts,
+				createComment,
+				getAllPostComments,
+				likeComment,
+				deleteComment,
 			}}
 		>
 			{children}
