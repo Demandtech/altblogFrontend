@@ -177,7 +177,7 @@ function MyNavbar({
 	return (
 		<Navbar
 			classNames={{
-				wrapper: "max-w-full gap-0 sm:gap-5 px-2 sm:px-6 md:px-10",
+				wrapper: "max-w-full gap-5 sm:gap-5 px-2 sm:px-6 md:px-10",
 			}}
 			shouldHideOnScroll
 		>
@@ -320,7 +320,7 @@ function MyNavbar({
 			<div
 				className={`${
 					hideMenu ? "opacity-0 hidden " : "flex opacity-100"
-				} opacity-100 sm:flex items-center`}
+				} opacity-100 sm:flex items-center gap-3`}
 			>
 				<Dropdown className="">
 					<DropdownTrigger onClick={getUserBookmarkPosts}>

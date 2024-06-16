@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Spinner, Button, Input } from "@nextui-org/react";
 import { usePostContext } from "../context/PostContext";
 import moment from "moment";
 import { handleTime } from "../helper/convertReadingTime";
 import { MdOutlineCreate, MdOutlineUpdate } from "react-icons/md";
+import { FaArrowLeftLong } from "react-icons/fa6";
+
 import { CgReadme } from "react-icons/cg";
 import { FaRegEye } from "react-icons/fa";
 import { useUserContext } from "../context/UserContext";
@@ -38,6 +40,7 @@ const SinglePost = ({ onLogin }) => {
 	const [page, setPage] = useState(1);
 	const [isRelatedLoading, setRelatedLoading] = useState();
 	const [search, setSearch] = useState("");
+	const navigate = useNavigate();
 
 	const handleChange = (e) => {
 		setPage(1);
@@ -191,7 +194,15 @@ const SinglePost = ({ onLogin }) => {
 			) : (
 				<div className="">
 					<div className="px-3 lg:px-10 mb-4">
-						<div className="mt-8 pb-8">
+						<Button
+							// className="pl-0 justify-start"
+							onPress={() => navigate(-1)}
+							// isIconOnly
+							variant="flat"
+						>
+							<FaArrowLeftLong />
+						</Button>
+						<div className="mt-5 pb-8">
 							<div className="border-b-2">
 								<div className=" md:max-w-2xl">
 									<h1 className="mb-3 max-w-md font-bold text-3xl">
