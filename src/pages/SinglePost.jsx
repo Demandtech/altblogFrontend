@@ -337,16 +337,18 @@ const SinglePost = ({ onLogin }) => {
 								></div>
 								<div className="col-span-3 md:col-span-1 pt-5 border-t md:border-t-0">
 									<h3 className="font-bold text-lg mb-5">Related Post</h3>
-									<div className="mb-4 max-w-[220px]">
-										<Input
-											onChange={handleDebounceChange}
-											placeholder="Search by title, author, tags"
-										/>
-									</div>
+									{relatedPosts?.length > 0 && (
+										<div className="mb-4 max-w-[220px]">
+											<Input
+												onChange={handleDebounceChange}
+												placeholder="Search by title, author, tags"
+											/>
+										</div>
+									)}
 									<div className="space-y-3 ">
 										{relatedPosts && relatedPosts?.posts?.length > 0 ? (
 											relatedPosts?.posts.map((item) => {
-												console.log(item)
+												console.log(item);
 												return (
 													<PostCard
 														key={item._id}

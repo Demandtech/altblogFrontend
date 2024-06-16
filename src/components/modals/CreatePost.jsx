@@ -104,6 +104,8 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 			navigate(`/profile/${user._id}`);
 		}
 	};
+
+	console.log(values.tags)
 	return (
 		<>
 			<Modal

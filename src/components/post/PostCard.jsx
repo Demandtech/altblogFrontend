@@ -199,14 +199,14 @@ const PostCard = ({
 				<div className="flex gap-2 px-3 flex-wrap">
 					{tags?.length > 0 &&
 						tags
-							.map((tag) => {
+							.map((tag, index) => {
 								return (
 									<Chip
-										key={tag}
+										key={index}
 										className="capitalize  cursor-pointer "
 										size="sm"
 									>
-										{tags}
+										{tag}
 									</Chip>
 								);
 							})

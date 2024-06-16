@@ -26,7 +26,10 @@ export default function Selects({
 				isInvalid={name === "tags" && value.length > 5}
 				errorMessage={`Tags can not exceed five`}
 				name={name}
-				onChange={(e) => handleChange(name, e.target.value.split(","))}
+				onChange={(e) => {
+					console.log(e.target.value)
+					handleChange(name, e.target.value.split(","));
+				}}
 				startContent={name === "tags" && <FaHashtag />}
 				isRequired={name === "category" ? true : false}
 				value={value}

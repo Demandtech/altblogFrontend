@@ -136,6 +136,17 @@ const PostProvider = ({ children }) => {
 			if (status !== 200) throw new Error("An error occured, try again later!");
 
 			snackBar("Post published successfully!", "success");
+			const newAuthorPosts = initialState.author_posts.filter(
+				(post) => post._id != id
+			);
+
+			const newMeta = {
+				...initialState.meta,
+				total_items: initialState.meta.total_items - 1,
+			};
+
+			updateState("author_posts", newAuthorPosts);
+			updateState("meta", newMeta);
 			return true;
 		} catch (error) {
 			snackBar("An error occured, please try again!", "error");
@@ -173,11 +184,17 @@ const PostProvider = ({ children }) => {
 				(post) => post._id !== postId
 			);
 
+			const latestMeta = {
+				...initialState.meta,
+				total_items: initialState.meta.total_items - 1,
+			};
+
 			setInitialState((prev) => {
 				return {
 					...prev,
 					posts: latestPosts,
 					author_posts: authorLatestPosts,
+					meta: latestMeta,
 				};
 			});
 			snackBar("Post deleted successfully", "success");

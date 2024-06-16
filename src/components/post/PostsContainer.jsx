@@ -26,7 +26,7 @@ const PostsContainer = ({
 
 	const [view, setView] = useState("grid");
 
-	console.log({post: posts?.length, total:meta?.total_items });
+
 
 	return (
 		<div className={`${className}`}>

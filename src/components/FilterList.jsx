@@ -25,12 +25,12 @@ function FilterList({ setOrder, meta, view, setView }) {
 		<div className="flex border-b dark:border-gray-600 pb-5 flex-wrap items-center justify-between mb-6">
 			<div>
 				<span className="text-black/70 text-sm md:text-base dark:text-slate-300">
-					Showing {meta?.first_item} -{" "}
+					Showing {meta?.first_item || 0} -{" "}
 					{Math.min(
 						meta?.current_page * meta?.item_per_page,
 						meta?.total_items
 					) || 0}{" "}
-					of {meta?.total_items} Result
+					of {meta?.total_items || 0} Result
 				</span>
 			</div>
 			<div className="flex items-center gap-3">
