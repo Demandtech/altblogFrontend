@@ -118,6 +118,7 @@ function UserProvider({ children }) {
 			});
 			return { user: data.data.user, errorMessage: null };
 		} catch (error) {
+			console.log(error);
 			if (error.response.status === 401) {
 				return {
 					user: null,
@@ -199,9 +200,11 @@ function UserProvider({ children }) {
 
 			render: (text) => (
 				<div
-					className={`"text-sm flex gap-3 items-center ${
-						type === "success" ? " bg-success" : "bg-danger"
-					} px-2 py-1 rounded text-white`}
+					className={`"text-sm flex gap-1 items-center ${
+						type === "success"
+							? "bg-success-200 text-success-600"
+							: "bg-danger-500 text-danger-200"
+					} px-2 py-1 rounded text-xs`}
 				>
 					{type === "success" ? (
 						<IoMdCheckmarkCircleOutline />

@@ -28,7 +28,7 @@ const CommentCard = ({
 	const [openReply, setOpenReply] = useState(false);
 	const [likeBtnLoading, setLikeBtnLoading] = useState(false);
 
-	const handleLike = async () => {
+	const handleLikeComment = async () => {
 		if (user) {
 			try {
 				setLikeBtnLoading(true);
@@ -39,7 +39,7 @@ const CommentCard = ({
 						setLikeCounter(likeCounter - 1);
 						snackBar("You unlike a comment", "success");
 					} else {
-						snackBar("You like a post", "success");
+						snackBar("You like a comment", "success");
 						setLikeCounter(likeCounter + 1);
 					}
 					setIsLike(!isLike);
@@ -126,7 +126,7 @@ const CommentCard = ({
 					</Button>
 					<div className="flex items-center">
 						<Button
-							onPress={handleLike}
+							onPress={handleLikeComment}
 							size="sm"
 							className="rounded-full min-w-5 h-5 w-5 px-0 text-slate-300"
 							variant="light"
@@ -143,6 +143,7 @@ const CommentCard = ({
 							className="text-slate-300 w-5 min-w-10 h-5 px-0"
 							variant="light"
 							size="sm"
+							onPress={() => console.log("Clicked")}
 						>
 							{/* <small> */}
 							<span>

@@ -41,6 +41,7 @@ function FilterList({ setOrder, meta, view, setView }) {
 						onPress={() => setView("grid")}
 						variant={view === "grid" ? "solid" : "light"}
 						color={view === "grid" ? "primary" : "light"}
+						className={`${view === "grid" ? "text-white dark:text-black" :  ""}`}
 					>
 						<LuGrid />
 					</Button>
@@ -51,6 +52,7 @@ function FilterList({ setOrder, meta, view, setView }) {
 						onPress={() => setView("list")}
 						variant={view === "list" ? "solid" : "light"}
 						color={view !== "grid" ? "primary" : "light"}
+						className={`${view === "list" ? "text-white dark:text-black" :  ""}`}
 					>
 						<LuList />
 					</Button>

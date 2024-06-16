@@ -11,7 +11,7 @@ import moment from "moment";
 import { handleTime } from "../helper/convertReadingTime";
 import {
 	BsFacebook,
-	BsTwitter,
+	BsTwitterX,
 	BsLinkedin,
 	BsPinterest,
 	BsMedium,
@@ -152,73 +152,73 @@ const Hero = () => {
 										<div className="flex gap-2 md:ml-auto  md:px-10">
 											{post?.author?.facebook && (
 												<a
-													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author.facebook}
 													target="_blank"
 												>
 													<BsFacebook
 														size={15}
-														className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+														className="text-white dark:text-black  transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 													/>
 												</a>
 											)}
 											{post?.author?.twitter && (
 												<a
-													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.twitter}
 													target="_blank"
 												>
-													<BsTwitter
+													<BsTwitterX
 														size={15}
-														className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+														className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 													/>
 												</a>
 											)}
 											{post?.author?.linkedin && (
 												<a
-													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.linkedin}
 													target="_blank"
 												>
 													<BsLinkedin
 														size={15}
-														className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+														className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 													/>
 												</a>
 											)}
 											{post?.author?.pinterest && (
 												<a
-													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.pinterest}
 													target="_blank"
 												>
 													<BsPinterest
 														size={15}
-														className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+														className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 													/>
 												</a>
 											)}
 											{post?.author?.medium && (
 												<a
-													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.medium}
 													target="_blank"
 												>
 													<BsMedium
 														size={15}
-														className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+														className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 													/>
 												</a>
 											)}
 											{post?.author?.telegram && (
 												<a
-													className="group bg-primary/65 z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+													className="group bg-primary  z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 													href={post?.author?.telegram}
 													target="_blank"
 												>
 													<BsTelegram
 														size={15}
-														className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+														className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 													/>
 												</a>
 											)}

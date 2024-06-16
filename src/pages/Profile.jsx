@@ -6,7 +6,7 @@ import { usePostContext } from "../context/PostContext";
 import {
 	BsPostcard,
 	BsFacebook,
-	BsTwitter,
+	BsTwitterX,
 	BsLinkedin,
 	BsPinterest,
 	BsMedium,
@@ -53,26 +53,35 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 		getProfile();
 	}, [id, user]);
 
+	const getPosts = async () => {
+	
+		try {
+			await getAuthorPosts({
+				id: profile._id,
+				order,
+				page,
+				limit,
+				state,
+				search: authorSearch,
+				category,
+			});
+		} catch (error) {
+			console.log("Error Getting Post", error);
+		}
+	};
+
 	useEffect(() => {
-		const getPosts = async () => {
-			try {
-				await getAuthorPosts({
-					id: profile._id,
-					order,
-					page,
-					limit,
-					state,
-					search: authorSearch,
-					category,
-				});
-			} catch (error) {
-				console.log("Error Getting Post", error);
-			}
-		};
+		if (profile) {
+			setPage(1);
+			getPosts();
+		}
+	}, [order, state, profile, user, limit, authorSearch, category]);
+
+	useEffect(() => {
 		if (profile) {
 			getPosts();
 		}
-	}, [page, order, state, profile, user, limit, authorSearch, category]);
+	}, [page]);
 
 	return (
 		<>
@@ -151,73 +160,73 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 						<div className="flex gap-2 justify-end pb-9 px-3 md:px-10">
 							{profile?.facebook && (
 								<a
-									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+									className="group bg-primary z-10 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 									href={profile.facebook}
 									target="_blank"
 								>
 									<BsFacebook
 										size={15}
-										className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+										className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 									/>
 								</a>
 							)}
 							{profile?.twitter && (
 								<a
-									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+									className="group bg-primary z-10 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 									href={profile?.twitter}
 									target="_blank"
 								>
-									<BsTwitter
+									<BsTwitterX
 										size={15}
-										className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+										className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 									/>
 								</a>
 							)}
 							{profile?.linkedin && (
 								<a
-									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+									className="group bg-primary z-10 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 									href={profile?.linkedin}
 									target="_blank"
 								>
 									<BsLinkedin
 										size={15}
-										className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+										className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 									/>
 								</a>
 							)}
 							{profile?.pinterest && (
 								<a
-									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+									className="group bg-primary z-10 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 									href={profile?.pinterest}
 									target="_blank"
 								>
 									<BsPinterest
 										size={15}
-										className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+										className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 									/>
 								</a>
 							)}
 							{profile?.medium && (
 								<a
-									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+									className="group bg-primary z-10 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 									href={profile?.medium}
 									target="_blank"
 								>
 									<BsMedium
 										size={15}
-										className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+										className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 									/>
 								</a>
 							)}
 							{profile?.telegram && (
 								<a
-									className="group bg-primary z-50 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
+									className="group bg-primary z-10 transition-background ease-linear duration-200 hover:bg-black/80 dark:hover:bg-white/80 w-7 h-7 rounded-full grid place-content-center"
 									href={profile?.telegram}
 									target="_blank"
 								>
 									<BsTelegram
 										size={15}
-										className=" transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
+										className="text-white dark:text-black transition-colors duration-200 ease-linear group-hover:text-white dark:group-hover:text-black"
 									/>
 								</a>
 							)}

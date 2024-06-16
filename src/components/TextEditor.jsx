@@ -48,7 +48,9 @@ const TextEditor = ({ setValues, body, setIsEdited }) => {
 								body: content,
 							};
 						});
-						setIsEdited(true);
+						if (setIsEdited) {
+							setIsEdited(true);
+						}
 					}}
 					value={body}
 					style={{ height: "400px" }}

@@ -181,17 +181,16 @@ function MyNavbar({
 	};
 
 	const searchDebounce = debounce(handleSearchChange, 500);
-	const authorSearchDebounce = debounce(handleAuthorSearchChange, 500);
 
 	return (
 		<Navbar
-			classNames={{ wrapper: "max-w-full px-2 sm:px-6 md:px-10" }}
+			classNames={{
+				wrapper: "max-w-full gap-0 sm:gap-5 px-2 sm:px-6 md:px-10",
+			}}
 			shouldHideOnScroll
 		>
 			<Link
-				className={`${
-					hideMenu ? "opacity-0 hidden " : "flex opacity-100"
-				} sm:opacity-100 sm:flex transition-all duration-300 ease-linear text-black/80 dark:text-white/80`}
+				className={ "transition-all flex flex-col items-center duration-300 ease-linear text-black/80 dark:text-white/80"}
 				to="/"
 			>
 				<BsFillMicMuteFill size={30} />
@@ -201,18 +200,23 @@ function MyNavbar({
 			{pathname === "/" && (
 				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
 					<Input
-						className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
+						className={`${!hideMenu ? "w-12" : "w-full"} sm:w-full transition-width duration-250 overflow-hidden px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50`}
 						placeholder="Search by title, author, tags"
 						classNames={{
-							input: "pl-4 md:pl-6",
+							input: "pl-6",
 						}}
 						type="text"
 						value={search}
 						onChange={searchDebounce}
 						size="sm"
 						endContent={
-							<div className="flex items-center">
-								<label className="sr-only" htmlFor="currency">
+							<div className={`block`}>
+								<label
+									className={`${
+										hideMenu ? "opacity-0 hidden " : "flex opacity-100"
+									} sr-only`}
+									htmlFor="currency"
+								>
 									Category
 								</label>
 								<select
@@ -249,7 +253,7 @@ function MyNavbar({
 						type="button"
 						variant="light"
 						isIconOnly
-						className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
+						className="absolute top-1/2 -translate-y-1/2 left-1 md:left-2"
 					>
 						<FaSearch />
 					</Button>
@@ -268,7 +272,11 @@ function MyNavbar({
 						onChange={handleAuthorSearchChange}
 						size="sm"
 						endContent={
-							<div className="flex items-center">
+							<div
+								className={`${
+									hideMenu ? "opacity-0 hidden " : "flex opacity-100"
+								} sm:flex items-center`}
+							>
 								<label className="sr-only" htmlFor="currency">
 									Category
 								</label>

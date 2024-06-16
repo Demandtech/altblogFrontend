@@ -12,7 +12,7 @@ class ErrorBoundary extends React.Component {
 	}
 
 	componentDidCatch(error, errorInfo) {
-		console.log(error, errorInfo)
+		console.log(errorInfo);
 		this.setState({
 			hasError: true,
 			error: error,
@@ -23,7 +23,13 @@ class ErrorBoundary extends React.Component {
 	render() {
 		if (this.state.hasError) {
 			// You can render any custom fallback UI here
-			return <h1>Something went wrong.</h1>;
+			return (
+				<>
+					<h1>Something went wrong.</h1>
+					<p>{this.state.error.message}</p>
+					{/* <p>{this.state.errorInfo}</p> */}
+				</>
+			);
 		}
 
 		return this.props.children;

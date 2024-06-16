@@ -5,13 +5,15 @@ function MyPagination({ page, total, setPage, setLimit, limit }) {
 	return (
 		<div className="flex items-center flex-wrap gap-4 justify-center mb-10">
 			<Pagination
-				className="flex justify-center"
+				className="flex text-white dark:text-black justify-center"
+				
 				isCompact
 				showControls
 				loop
 				page={page}
 				onChange={setPage}
 				total={total}
+				classNames={"text-white"}
 			/>
 			<div>
 				<select

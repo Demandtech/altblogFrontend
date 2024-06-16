@@ -7,6 +7,7 @@ import {
 	Button,
 	Input,
 	Textarea,
+	useDisclosure,
 } from "@nextui-org/react";
 import PropTypes from "prop-types";
 import TextEditor from "../TextEditor";
@@ -28,14 +29,19 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					description: "",
 					body: "",
 					category: "",
-			};
+			  };
 	});
 	const [isLoading, setIsLoading] = useState(false);
-	const { createPost } = usePostContext();
+	const { createPost, publishPost } = usePostContext();
 	const { snackBar, user } = useUserContext();
 	const [letterCount, setLetterCounter] = useState(0);
+	const [postId, setPostId] = useState(null);
 	const navigate = useNavigate();
-
+	const {
+		isOpen: actionOpen,
+		onOpen,
+		onOpenChange: actionChange,
+	} = useDisclosure();
 
 	const handleChange = (name, value) => {
 		if (name === "description") {
@@ -65,31 +71,44 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 	}, [values]);
 
 	const handleCreatePost = async (onClose) => {
-		// onClose()
 		setIsLoading(true);
-		if (values.tags.length > 5) return snackBar("Tags can not exceed 5", "error");
+		if (values.tags.length > 5)
+			return snackBar("Tags can not exceed 5", "error");
 
 		const result = await createPost(values);
 
-		if (result) {
-			snackBar("Post Created successfully", "success");
-			localStorage.removeItem("CREATEPOST-VALUE");
-			setValues({
-				title: "",
-				tags: [],
-				description: "",
-				body: "",
-				category: "",
-			});
-			onClose();
-			navigate(`/profile/${user._id}`);
-		} else {
-			snackBar("An error occured, please try again later!", "error");
+		console.log(result);
+
+		if (result.success) {
+			setPostId(result.post._id);
+				localStorage.removeItem("CREATEPOST-VALUE");
+				setValues({
+					title: "",
+					tags: [],
+					description: "",
+					body: "",
+					category: "",
+				});
+				onOpen()
+				onClose();
+				
+			} else {
+				snackBar("An error occured, please try again later!", "error");
 		}
+		onOpen();
 
 		setIsLoading(false);
 	};
 
+
+	const handlePublishPost = async () => {
+		const isSuccess = await publishPost(postId);
+
+		if (isSuccess) {
+			snackBar("You Post is published successfully", "success");
+			navigate(`/profile/${user._id}`);
+		}
+	};
 	return (
 		<>
 			<Modal
@@ -181,10 +200,49 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 										values.tags.length > 5
 									}
 									isLoading={isLoading}
+									className="text-white dark:text-black"
 								>
-									Save
+									Continue
 								</Button>
 							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
+
+			<Modal
+				isOpen={actionOpen}
+				onOpenChange={actionChange}
+				placement="center"
+				size="sm"
+				className="pb-5"
+			>
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalHeader>Do you want to publish</ModalHeader>
+							<ModalBody>
+								<p className="text-sm text-center">
+									Post can be saved to draft or publish immediately
+								</p>
+								<div className="flex justify-center gap-5">
+									<Button
+										onPress={() => {
+											snackBar("You Post saved successfully", "success");
+											onClose();
+										}}
+									>
+										Save
+									</Button>
+									<Button
+										onPress={() => handlePublishPost()}
+										color="primary"
+										className="text-white dark:text-black"
+									>
+										Publish
+									</Button>
+								</div>
+							</ModalBody>
 						</>
 					)}
 				</ModalContent>

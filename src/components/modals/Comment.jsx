@@ -9,8 +9,8 @@ import {
 	Divider,
 	Spinner,
 } from "@nextui-org/react";
-import { usePostContext } from "../../context/PostContext";
-import { useEffect, useState } from "react";
+import { useCommentContext } from "../../context/CommentContext";
+import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 
 import CommentCard from "../post/CommentCard";
@@ -26,11 +26,20 @@ const Comment = ({
 	onLogin,
 	snackBar,
 }) => {
-	const { createComment, getAllPostComments } = usePostContext();
+	const { createComment, getAllPostComments } = useCommentContext();
 
-	const [commentPage, setCommentPage] = useState(1);
+	const [page, setPage] = useState(1);
 	const [commentText, setCommentText] = useState("");
 	const [comments, setComments] = useState([]);
+	const [btnLoading, setBtnLoading] = useState(false);
+	const [commentLoading, setCommentLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(false);
+
+	const containerRef = useRef(null);
+	const bottomRef = useRef(null);
+
+	// console.log(getAllPostComments)
+
 	const handleChange = (e) => {
 		if (!user) {
 			onLogin();
@@ -38,8 +47,6 @@ const Comment = ({
 		}
 		setCommentText(e.target.value);
 	};
-	const [btnLoading, setBtnLoading] = useState(false);
-	const [commentLoading, setCommentLoading] = useState(false);
 
 	const handleCreateComment = async (e) => {
 		e.preventDefault();
@@ -66,28 +73,72 @@ const Comment = ({
 		}
 	};
 
-	useEffect(() => {
-		const handleGetAllPostComments = async () => {
-			try {
-				setCommentLoading(true);
-				const allComments = await getAllPostComments({
-					postId,
-					page: commentPage,
+	const handleGetAllPostComments = async () => {
+		try {
+			setCommentLoading(true);
+			const allComments = await getAllPostComments({
+				postId,
+				page,
+			});
+
+			if (allComments.success) {
+				const commentsList = allComments.data.data.comments;
+
+				setComments((prev) => {
+					const prevIds = new Set(prev.map((comment) => comment._id));
+					const newComments = commentsList.filter(
+						(comment) => !prevIds.has(comment._id)
+					);
+					return [...prev, ...newComments];
 				});
-				console.log(allComments.data.data.hasMore);
-				if (allComments.success) {
-					setComments(allComments.data.data.comments);
-				}
-			} catch (error) {
-				console.log(error);
-			} finally {
-				setCommentLoading(false);
+
+				setHasMore(allComments.data.data.hasMore);
 			}
-		};
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setCommentLoading(false);
+		}
+	};
+
+	useEffect(() => {
 		if (isOpen) {
+			setPage(1);
 			handleGetAllPostComments();
 		}
 	}, [postId, isOpen]);
+
+	useEffect(() => {
+		if (isOpen) {
+			handleGetAllPostComments();
+		}
+	}, [page, isOpen]);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && comments.length > 0) {
+					if (hasMore) {
+						setPage(page + 1);
+					}
+				}
+			},
+			{
+				root: containerRef.current,
+				threshold: 1.0,
+			}
+		);
+
+		if (bottomRef.current) {
+			observer.observe(bottomRef.current);
+		}
+
+		return () => {
+			if (bottomRef.current) {
+				observer.unobserve(bottomRef.current);
+			}
+		};
+	}, [isOpen, comments]);
 
 	return (
 		<Modal
@@ -96,8 +147,9 @@ const Comment = ({
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			placement="top"
-			className="sm:rounded-lg max-h-screen sm:max-h-[500px] rounded-none"
+			className="sm:rounded-lg max-h-screen sm:max-h-[400px] rounded-none"
 			backdrop="blur"
+			ref={containerRef}
 		>
 			<ModalContent>
 				<ModalHeader className="">
@@ -131,16 +183,8 @@ const Comment = ({
 							Comment
 						</Button>
 					</form>
-					{/* <Divider /> */}
-					<ul className="space-y-2">
-						{commentLoading && (
-							<Spinner
-								className="flex pb-4 justify-center"
-								color=""
-								size="sm"
-							/>
-						)}
 
+					<ul className="space-y-2">
 						{comments.length > 0 && (
 							<small className="font-light">Comments</small>
 						)}
@@ -161,10 +205,17 @@ const Comment = ({
 									</li>
 								);
 							})}
-					</ul>
-				</ModalBody>
 
-				{/* <ModalFooter></ModalFooter> */}
+						{commentLoading && (
+							<Spinner
+								className="flex pb-4 justify-center"
+								color=""
+								size="sm"
+							/>
+						)}
+					</ul>
+					<div ref={bottomRef} style={{ height: "1px" }}></div>
+				</ModalBody>
 			</ModalContent>
 		</Modal>
 	);

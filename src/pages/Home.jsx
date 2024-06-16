@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { Helmet } from "react-helmet";
 
-function Home({ editPostOnOpen, loginOnOpen, search}) {
+function Home({ editPostOnOpen, loginOnOpen, search }) {
 	const { posts, getAllPublishedPosts } = usePostContext();
 	const { user } = useUserContext();
 	const [order, setOrder] = useState("");
@@ -76,25 +76,26 @@ function Home({ editPostOnOpen, loginOnOpen, search}) {
 					content="Welcome to BLOGSHOT, your go-to source for insightful blog posts on a variety of topics."
 				/>
 			</Helmet>
-			<Hero />
-			<PostsContainer
-				setOrder={setOrder}
-				setPage={setPage}
-				className="px-2 mt-6  pb-10 lg:px-5"
-				posts={posts}
-				editPostOnOpen={editPostOnOpen}
-				setLimit={setLimit}
-				limit={limit}
-				onLogin={loginOnOpen}
-				
-			/>
+			<>
+				<Hero />
+				<PostsContainer
+					setOrder={setOrder}
+					setPage={setPage}
+					className="px-2 mt-6 w-full  pb-10 lg:px-5"
+					posts={posts}
+					editPostOnOpen={editPostOnOpen}
+					setLimit={setLimit}
+					limit={limit}
+					onLogin={loginOnOpen}
+				/>
+			</>
 		</>
 	);
 }
 Home.propTypes = {
 	loginOnOpen: PropTypes.func,
 	editPostOnOpen: PropTypes.func,
-	
+
 	search: PropTypes.string,
 };
 export default Home;

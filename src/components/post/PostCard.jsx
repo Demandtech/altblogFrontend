@@ -28,10 +28,11 @@ import { MdPublish } from "react-icons/md";
 import { Link, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import Comment from "../modals/Comment";
+import UserList from "../UserList";
 
 const PostCard = ({
 	title,
-	body,
+
 	author,
 	createdAt,
 	tags,
@@ -58,7 +59,7 @@ const PostCard = ({
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [likeBtnLoading, setLikeBtnLoading] = useState(false);
 	const [bookmarkBtnLoading, setBookmarkBtnLoading] = useState(false);
-
+	// const [showCommentUserList, setShowCommentUserList] = useState(false);
 	const existingParams = Object.fromEntries(searchParams);
 
 	const handleEditPost = () => {
@@ -66,21 +67,6 @@ const PostCard = ({
 
 		const params = { ...existingParams, postId: _id };
 		setSearchParams(params);
-	};
-
-	const truncateText = (text) => {
-		const wordCount = text.split(" ");
-
-		let words = wordCount.filter((word) => word != "");
-
-		words = wordCount.map((el) => {
-			const modifiedElement = el
-				.replace(/<\/?[a-zA-Z]+(?:\s[^>]*)?>/g, "<span>")
-				.replace(/<\/?br\s*\/?>/g, "");
-			return modifiedElement;
-		});
-
-		return words.join(" ");
 	};
 
 	const handleLike = async () => {
@@ -157,7 +143,7 @@ const PostCard = ({
 		<>
 			<Card
 				isHoverable={true}
-				className="dark:bg-[#27272a]  transition-all duration-300 ease-linear dark:border-none dark:shadow-sm border flex shadow-sm hover:drop-shadow-lg flex-col items-start"
+				className="dark:bg-[#27272a] w-full   relative transition-all duration-300 ease-linear dark:border-none dark:shadow-sm border flex shadow-sm hover:drop-shadow-lg flex-col items-start"
 			>
 				<CardHeader className="flex items-center gap-x-3 text-xs">
 					<time dateTime={"2020-03-16"} className="text-gray-500">
@@ -235,13 +221,7 @@ const PostCard = ({
 							{title}
 						</Link>
 					</h3>
-
-					<div
-						className="line-clamp-3 ! dark:text-slate-300"
-						dangerouslySetInnerHTML={{
-							__html: truncateText(body),
-						}}
-					/>
+					<p className="line-clamp-3 ! dark:text-slate-300">{description}</p>
 				</CardBody>
 				<CardFooter className="flex gap-x-4 justify-between flex-wrap">
 					<Link className="text-dark" to={`/profile/${author?._id}`}>
@@ -264,14 +244,11 @@ const PostCard = ({
 								<BiComment className=" text-slate-400" />
 							</Button>
 							{commentCounter > 0 && (
-								<Button
-									isIconOnly
-									className="px-0  min-w-2 w-full"
-									variant="light"
-									size="sm"
-								>
-									<span className="text-slate-400">{commentCounter}</span>
-								</Button>
+								<UserList
+									postId={_id}
+									commentCounter={commentCounter}
+									list="comment"
+								/>
 							)}
 						</div>
 						<div className="flex items-center">
@@ -291,14 +268,11 @@ const PostCard = ({
 								)}
 							</Button>
 							{likeCounter > 0 && (
-								<Button
-									isIconOnly
-									className="px-1   min-w-2 w-full"
-									variant="light"
-									size="sm"
-								>
-									<span className="text-slate-400">{likeCounter}</span>
-								</Button>
+								<UserList
+									postId={_id}
+									commentCounter={likeCounter}
+									list="like"
+								/>
 							)}
 						</div>
 						<Button
@@ -346,7 +320,6 @@ const PostCard = ({
 PostCard.propTypes = {
 	title: PropTypes.string,
 	author: PropTypes.object,
-	body: PropTypes.string,
 	createdAt: PropTypes.string,
 	publishedAt: PropTypes.string,
 	tags: PropTypes.array,

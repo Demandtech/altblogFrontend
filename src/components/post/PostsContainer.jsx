@@ -36,7 +36,7 @@ const PostsContainer = ({
 			/>
 			{isPending && (
 				<div
-					className={`mb-10 mx-auto grid max-w-2xl gap-4  border-gray-200 lg:mx-0 lg:max-w-none ${
+					className={`mb-10  grid max-w-2xl gap-4  border-gray-200 lg:mx-0 lg:max-w-none ${
 						view === "grid" ? "responsive-grid" : ""
 					}`}
 				>
@@ -48,7 +48,7 @@ const PostsContainer = ({
 			{posts.length > 0 && !isPending && (
 				<div>
 					<div
-						className={`mb-10 mx-auto grid max-w-2xl gap-4  border-gray-200 lg:mx-0 lg:max-w-none ${
+						className={`mb-10 mx-auto grid max-w-2xl gap-4   border-gray-200 lg:mx-0 lg:max-w-none ${
 							view === "grid" ? "responsive-grid" : ""
 						}`}
 					>
@@ -65,15 +65,16 @@ const PostsContainer = ({
 								);
 							})}
 					</div>
-					<MyPagination
-						setPage={setPage}
-						total={meta?.last_page}
-						page={meta?.current_page}
-						setLimit={setLimit}
-						limit={limit}
-					/>
 				</div>
 			)}
+
+			<MyPagination
+				setPage={setPage}
+				total={meta?.last_page}
+				page={meta?.current_page}
+				setLimit={setLimit}
+				limit={limit}
+			/>
 
 			{!isPending && posts.length === 0 && (
 				<div>
