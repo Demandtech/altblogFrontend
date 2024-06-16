@@ -71,41 +71,49 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 	}, [values]);
 
 	const handleCreatePost = async (onClose) => {
-		setIsLoading(true);
-		if (values.tags.length > 5)
-			return snackBar("Tags can not exceed 5", "error");
+		try {
+			setIsLoading(true);
+			if (values.tags.length > 5)
+				return snackBar("Tags can not exceed 5", "error");
 
-		const result = await createPost(values);
+			const result = await createPost(values);
 
-		if (result.success) {
-			setPostId(result.post._id);
-			localStorage.removeItem("CREATEPOST-VALUE");
-			setValues({
-				title: "",
-				tags: [],
-				description: "",
-				body: "",
-				category: "",
-			});
-			onOpen();
-			onClose();
-		} else {
-			snackBar("An error occured, please try again later!", "error");
+			if (result.success) {
+				setPostId(result.post._id);
+				localStorage.removeItem("CREATEPOST-VALUE");
+				setValues({
+					title: "",
+					tags: [],
+					description: "",
+					body: "",
+					category: "",
+				});
+				onOpen();
+				onClose();
+			} else {
+				snackBar("An error occured, please try again later!", "error");
+			}
+		} catch (error) {
+			setIsLoading(false);
 		}
-
-		setIsLoading(false);
 	};
 
-	const handlePublishPost = async () => {
+	const handlePublishPost = async (onClose) => {
 		const isSuccess = await publishPost(postId);
-
-		if (isSuccess) {
-			snackBar("You Post is published successfully", "success");
-			navigate(`/profile/${user._id}`);
+		try {
+			if (isSuccess) {
+				snackBar("You Post is published successfully", "success");
+				navigate(`/profile/${user._id}`);
+			}
+			onClose;
+		} catch (error) {
+			console.log(error);
+			setIsLoading(false);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
-	console.log(values.tags)
 	return (
 		<>
 			<Modal
@@ -232,9 +240,11 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 										Save
 									</Button>
 									<Button
-										onPress={() => handlePublishPost()}
+										onPress={() => handlePublishPost(onClose)}
 										color="primary"
 										className="text-white dark:text-black"
+										isLoading={isLoading}
+										isDisabled={isLoading}
 									>
 										Publish
 									</Button>

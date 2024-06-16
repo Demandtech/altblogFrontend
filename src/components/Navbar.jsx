@@ -125,19 +125,19 @@ function MyNavbar({
 	const navigate = useNavigate();
 
 	const [hideMenu, setHideMenu] = useState(false);
-	const [selectedBookmarkKeys, setSelectedBookmarkKeys] = useState(new Set([]));
+	// const [selectedBookmarkKeys, setSelectedBookmarkKeys] = useState(new Set([]));
 	const [selectedNotificationKeys, setSelectedNotificationKeys] = useState(
 		new Set([])
 	);
 
-	const selectedBookmarkValue = useMemo(
-		() =>
-			Array.from(selectedBookmarkKeys)
-				.join(", ")
-				.replaceAll("_", " ")
-				.split(","),
-		[selectedBookmarkKeys]
-	);
+	// const selectedBookmarkValue = useMemo(
+	// 	() =>
+	// 		Array.from(selectedBookmarkKeys)
+	// 			.join(", ")
+	// 			.replaceAll("_", " ")
+	// 			.split(","),
+	// 	[selectedBookmarkKeys]
+	// );
 	const selectedNotificationValue = useMemo(
 		() =>
 			Array.from(selectedNotificationKeys)
@@ -147,7 +147,7 @@ function MyNavbar({
 		[selectedNotificationKeys]
 	);
 
-	console.log(selectedBookmarkValue, selectedNotificationValue);
+	console.log(selectedNotificationValue);
 
 	const handleDeletePost = async () => {
 		if (!singlePost) return;
@@ -340,9 +340,9 @@ function MyNavbar({
 					<DropdownMenu
 						className="max-h-[200px] w-full  p-0 rounded-none  overflow-y-auto"
 						aria-label="Bookmark list dropdown"
-						selectionMode="multiple"
-						selectedKeys={selectedBookmarkKeys}
-						onSelectionChange={setSelectedBookmarkKeys}
+						// selectionMode="multiple"
+						// selectedKeys={selectedBookmarkKeys}
+						// onSelectionChange={setSelectedBookmarkKeys}
 						closeOnSelect={false}
 					>
 						<DropdownItem

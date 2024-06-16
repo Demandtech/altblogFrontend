@@ -237,16 +237,16 @@ const PostProvider = ({ children }) => {
 
 	const getUserBookmarkPosts = async () => {
 		try {
-			const {
+			let {
 				status,
 				data: { data },
 			} = await axios().get(`posts/user/bookmarks`);
 
 			if (status !== 200) throw new Error("Something went wrong, try again!");
 
-			updateState("bookmarkPosts", data);
+			data = data.filter((item) => item.post);
 
-			console.log(data);
+			updateState("bookmarkPosts", data);
 
 			return true;
 		} catch (error) {
