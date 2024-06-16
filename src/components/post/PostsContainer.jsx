@@ -68,13 +68,15 @@ const PostsContainer = ({
 				</div>
 			)}
 
-			<MyPagination
-				setPage={setPage}
-				total={meta?.last_page}
-				page={meta?.current_page}
-				setLimit={setLimit}
-				limit={limit}
-			/>
+			{posts?.length > limit && (
+				<MyPagination
+					setPage={setPage}
+					total={meta?.last_page}
+					page={meta?.current_page}
+					setLimit={setLimit}
+					limit={limit}
+				/>
+			)}
 
 			{!isPending && posts.length === 0 && (
 				<div>

@@ -153,6 +153,7 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 									isDisabled={!values.email || !values.password}
 									color="primary"
 									onPress={() => handleLogin(onClose)}
+									className='text-white dark:text-black'
 								>
 									Sign in
 								</Button>

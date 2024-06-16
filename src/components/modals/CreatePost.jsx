@@ -29,7 +29,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					description: "",
 					body: "",
 					category: "",
-			  };
+			};
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const { createPost, publishPost } = usePostContext();
@@ -77,29 +77,24 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 
 		const result = await createPost(values);
 
-		console.log(result);
-
 		if (result.success) {
 			setPostId(result.post._id);
-				localStorage.removeItem("CREATEPOST-VALUE");
-				setValues({
-					title: "",
-					tags: [],
-					description: "",
-					body: "",
-					category: "",
-				});
-				onOpen()
-				onClose();
-				
-			} else {
-				snackBar("An error occured, please try again later!", "error");
+			localStorage.removeItem("CREATEPOST-VALUE");
+			setValues({
+				title: "",
+				tags: [],
+				description: "",
+				body: "",
+				category: "",
+			});
+			onOpen();
+			onClose();
+		} else {
+			snackBar("An error occured, please try again later!", "error");
 		}
-		onOpen();
 
 		setIsLoading(false);
 	};
-
 
 	const handlePublishPost = async () => {
 		const isSuccess = await publishPost(postId);

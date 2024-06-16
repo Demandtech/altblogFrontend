@@ -28,7 +28,7 @@ export default function Signup({ isOpen, onOpenChange, onLogin }) {
 					email: "",
 					password: "",
 					profession: "",
-			};
+			  };
 	});
 	const toggleVisibility = () => setIsVisible(!isVisible);
 	const checkInput = (e) => {
@@ -267,6 +267,7 @@ export default function Signup({ isOpen, onOpenChange, onLogin }) {
 									isLoading={isLoading}
 									color="primary"
 									onPress={() => handleSignup(onClose)}
+									className="text-white dark:text-black"
 								>
 									Sign Up
 								</Button>

@@ -75,6 +75,7 @@ function UserProvider({ children }) {
 					token: data.data.token,
 				};
 			});
+			authUser();
 			return { errorMessage: null, isSuccess: true };
 		} catch (error) {
 			localStorage.removeItem("LOGIN-DATA");
@@ -202,8 +203,8 @@ function UserProvider({ children }) {
 				<div
 					className={`"text-sm flex gap-1 items-center ${
 						type === "success"
-							? "bg-success-200 text-success-600"
-							: "bg-danger-500 text-danger-200"
+							? "bg-success-600 text-success-100"
+							: "bg-danger-100 text-danger-400"
 					} px-2 py-1 rounded text-xs`}
 				>
 					{type === "success" ? (

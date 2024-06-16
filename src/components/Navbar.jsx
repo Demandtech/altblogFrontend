@@ -392,7 +392,7 @@ function MyNavbar({
 							{user ? (
 								<Avatar
 									size="sm"
-									className="w-[20px] h-[20px]"
+									// className="w-[20px] h-[20px]"
 									name={user.first_name}
 									src={user?.avatar}
 								/>
