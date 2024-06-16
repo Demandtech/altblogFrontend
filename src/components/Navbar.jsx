@@ -66,7 +66,7 @@ const mockNotifications = [
 		senderId: "",
 		message: "John your  post",
 		isRead: true,
-		id: 5,
+		id: 10,
 	},
 	{
 		senderId: "",
@@ -511,49 +511,22 @@ function MyNavbar({
 					<DropdownMenu
 						selectionMode="multiple"
 						aria-label="Notification list dropdown"
-						className="max-h-[200px] p-0  overflow-y-auto"
+						className="max-h-[200px]  overflow-y-auto"
 						selectedKeys={selectedNotificationKeys}
 						onSelectionChange={setSelectedNotificationKeys}
 						closeOnSelect={false}
+						items={mockNotifications}
 					>
-						<DropdownItem
-							key=""
-							selectedIcon={<FaCheckCircle />}
-							className="sticky top-0 z-10 bg-white border-b-1  rounded-none dark:bg-[#18181b] "
-						>
-							<h3 className="font-bold text-base">Notifications</h3>
-						</DropdownItem>
-						<DropdownSection>
-							{mockNotifications
-								.filter((item) => item.isRead)
-								.map((not) => {
-									return (
-										<DropdownItem
-											showDivider
-											textValue="register"
-											key={not.id}
-											className="bg-red-600 rounded-none"
-										>
-											John like a post
-										</DropdownItem>
-									);
-								})}
-
-							{mockNotifications
-								.filter((item) => !item.isRead)
-								.map((not) => {
-									return (
-										<DropdownItem
-											showDivider
-											textValue="register"
-											key={not.id}
-											className=" bg-transparent rounded-none"
-										>
-											John like a post
-										</DropdownItem>
-									);
-								})}
-						</DropdownSection>
+						{(item) => (
+							<DropdownItem
+								showDivider
+								textValue={item.message}
+								key={item.id}
+								className=""
+							>
+								{item.message}
+							</DropdownItem>
+						)}
 					</DropdownMenu>
 				</Dropdown>
 			</div>
