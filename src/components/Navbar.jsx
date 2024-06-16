@@ -125,19 +125,11 @@ function MyNavbar({
 	const navigate = useNavigate();
 
 	const [hideMenu, setHideMenu] = useState(false);
-	// const [selectedBookmarkKeys, setSelectedBookmarkKeys] = useState(new Set([]));
+
 	const [selectedNotificationKeys, setSelectedNotificationKeys] = useState(
 		new Set([])
 	);
 
-	// const selectedBookmarkValue = useMemo(
-	// 	() =>
-	// 		Array.from(selectedBookmarkKeys)
-	// 			.join(", ")
-	// 			.replaceAll("_", " ")
-	// 			.split(","),
-	// 	[selectedBookmarkKeys]
-	// );
 	const selectedNotificationValue = useMemo(
 		() =>
 			Array.from(selectedNotificationKeys)
@@ -190,7 +182,9 @@ function MyNavbar({
 			shouldHideOnScroll
 		>
 			<Link
-				className={ "transition-all flex flex-col items-center duration-300 ease-linear text-black/80 dark:text-white/80"}
+				className={
+					"transition-all flex flex-col items-center duration-300 ease-linear text-black/80 dark:text-white/80"
+				}
 				to="/"
 			>
 				<BsFillMicMuteFill size={30} />
@@ -200,7 +194,9 @@ function MyNavbar({
 			{pathname === "/" && (
 				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
 					<Input
-						className={`${!hideMenu ? "w-12" : "w-full"} sm:w-full transition-width duration-250 overflow-hidden px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50`}
+						className={`${
+							!hideMenu ? "w-12" : "w-full"
+						} sm:w-full transition-width duration-250 overflow-hidden px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50`}
 						placeholder="Search by title, author, tags"
 						classNames={{
 							input: "pl-6",
@@ -340,35 +336,24 @@ function MyNavbar({
 					<DropdownMenu
 						className="max-h-[200px] w-full  p-0 rounded-none  overflow-y-auto"
 						aria-label="Bookmark list dropdown"
-						// selectionMode="multiple"
-						// selectedKeys={selectedBookmarkKeys}
-						// onSelectionChange={setSelectedBookmarkKeys}
 						closeOnSelect={false}
+						items={bookmarkPosts}
 					>
-						<DropdownItem
-							selectedIcon={<IoBookmark />}
-							d
-							textValue="Bookmark Posts"
-							showDivider
-							className=" bg-white dark:bg-[#18181b] z-50 sticky top-0 rounded-none "
-						>
-							<h3 className="font-bold text-base">Bookmark Posts</h3>
-						</DropdownItem>
-						{bookmarkPosts.map((bookmark) => {
+						{(item) => {
 							return (
 								<DropdownItem
-									textValue={bookmark.post.title}
-									key={bookmark._id}
+									textValue={item.post.title}
+									key={item._id}
 									className="w-[250px] text-ellipsis overflow-x-hidden"
 								>
-									<Link to={`/post/${bookmark.post._id}`}>
+									<Link to={`/post/${item.post._id}`}>
 										<span className="text-primary text-small capitalize font-semibold">
-											{bookmark.post.title}
+											{item.post.title}
 										</span>
 									</Link>
 								</DropdownItem>
 							);
-						})}
+						}}
 					</DropdownMenu>
 				</Dropdown>
 				<Switch

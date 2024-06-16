@@ -135,7 +135,6 @@ const PostProvider = ({ children }) => {
 
 			if (status !== 200) throw new Error("An error occured, try again later!");
 
-			snackBar("Post published successfully!", "success");
 			const newAuthorPosts = initialState.author_posts.filter(
 				(post) => post._id != id
 			);

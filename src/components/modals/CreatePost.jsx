@@ -29,7 +29,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					description: "",
 					body: "",
 					category: "",
-			};
+			  };
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const { createPost, publishPost } = usePostContext();
@@ -102,7 +102,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 		const isSuccess = await publishPost(postId);
 		try {
 			if (isSuccess) {
-				snackBar("You Post is published successfully", "success");
+				snackBar("Post published successfully!", "success");
 				navigate(`/profile/${user._id}`);
 			}
 			onClose;
@@ -113,6 +113,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 			setIsLoading(false);
 		}
 	};
+
 
 	return (
 		<>
@@ -234,6 +235,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 									<Button
 										onPress={() => {
 											snackBar("You Post saved successfully", "success");
+											setIsLoading(false);
 											onClose();
 										}}
 									>

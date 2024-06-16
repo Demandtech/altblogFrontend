@@ -163,7 +163,7 @@ const PostCard = ({
 									<BsThreeDotsVertical className="dark:text-white/80" />
 								</Button>
 							</DropdownTrigger>
-							<DropdownMenu aria-label="Static Actions">
+							<DropdownMenu aria-label="User menu dropdown">
 								{state === "DRAFT" && (
 									<DropdownItem
 										onPress={() => {
