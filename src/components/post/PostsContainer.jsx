@@ -26,6 +26,8 @@ const PostsContainer = ({
 
 	const [view, setView] = useState("grid");
 
+	console.log({post: posts?.length, total:meta?.total_items });
+
 	return (
 		<div className={`${className}`}>
 			<FilterList
@@ -68,7 +70,7 @@ const PostsContainer = ({
 				</div>
 			)}
 
-			{posts?.length > limit && (
+			{posts?.length < meta?.total_items && (
 				<MyPagination
 					setPage={setPage}
 					total={meta?.last_page}

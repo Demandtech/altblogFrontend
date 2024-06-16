@@ -213,7 +213,7 @@ const BasicInfoTab = ({ user }) => {
 			<div className="flex">
 				<Button
 					color="primary"
-					className="px-3 ml-auto"
+					className="px-3 ml-auto text-white dark:text-black"
 					type="submit"
 					isLoading={isLoading}
 					isDisabled={

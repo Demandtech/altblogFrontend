@@ -169,6 +169,7 @@ function UserProvider({ children }) {
 
 			if (status !== 200) throw new Error("An error occured while uploading ");
 			snackBar("Profile updated successfully", "success");
+			authUser();
 		} catch (error) {
 			snackBar("An error occured, please try again!", "error");
 			console.log(error);

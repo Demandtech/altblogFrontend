@@ -28,7 +28,7 @@ export default function Signup({ isOpen, onOpenChange, onLogin }) {
 					email: "",
 					password: "",
 					profession: "",
-			  };
+			};
 	});
 	const toggleVisibility = () => setIsVisible(!isVisible);
 	const checkInput = (e) => {

@@ -49,7 +49,6 @@ function PhotosTab({ user }) {
 		setIsLoading(false);
 	};
 
-	console.log(value);
 	return (
 		<div className="pt-5">
 			<p className="mb-5 font-semibold text-center">
@@ -145,7 +144,7 @@ function PhotosTab({ user }) {
 			<div className="flex justify-end mt-5">
 				<Button
 					onPress={() => handleSubmit(value)}
-					className="ml-auto"
+					className="ml-auto text-white dark:text-black"
 					color="primary"
 					isLoading={isLoading}
 				>
