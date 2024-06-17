@@ -29,7 +29,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					description: "",
 					body: "",
 					category: "",
-			  };
+			};
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const { createPost, publishPost } = usePostContext();
@@ -90,8 +90,10 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 				});
 				onOpen();
 				onClose();
+				setIsLoading(false);
 			} else {
 				snackBar("An error occured, please try again later!", "error");
+				setIsLoading(false);
 			}
 		} catch (error) {
 			setIsLoading(false);
@@ -99,13 +101,14 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 	};
 
 	const handlePublishPost = async (onClose) => {
-		const isSuccess = await publishPost(postId);
+		setIsLoading(true);
 		try {
+			const isSuccess = await publishPost(postId);
 			if (isSuccess) {
 				snackBar("Post published successfully!", "success");
 				navigate(`/profile/${user._id}`);
 			}
-			onClose;
+			onClose();
 		} catch (error) {
 			console.log(error);
 			setIsLoading(false);
@@ -113,7 +116,6 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 			setIsLoading(false);
 		}
 	};
-
 
 	return (
 		<>

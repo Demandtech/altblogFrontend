@@ -185,11 +185,12 @@ const Comment = ({
 					</form>
 
 					<ul className="space-y-2">
-						{comments.length > 0 && (
-							<small className="font-light">Comments</small>
-						)}
+						<small className="font-light">
+							{comments.length > 0 ? comments.length : 0}{" "}
+							{comments.length > 1 ? "Comments" : "Comment"}
+						</small>
 
-						{comments.length > 0 &&
+						{comments.length > 0 ? (
 							comments.map((comment) => {
 								return (
 									<li className="rounded-md " key={comment._id}>
@@ -204,7 +205,12 @@ const Comment = ({
 										/>
 									</li>
 								);
-							})}
+							})
+						) : (
+							<div className="text-center">
+								<small className=" font-light">No comment yet</small>
+							</div>
+						)}
 
 						{commentLoading && (
 							<Spinner

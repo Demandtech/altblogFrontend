@@ -7,27 +7,6 @@ import axios from "../configs/axios";
 const CommentContext = createContext(null);
 
 const CommentProvider = ({ children }) => {
-	// const { snackBar } = useUserContext();
-	// const [initialState, setInitialState] = useState({
-	// 	posts: [],
-	// 	featuredPosts: [],
-	// 	bookmarkPosts: [],
-	// 	author_posts: [],
-	// 	singlePost: null,
-	// 	isPending: true,
-	// 	relatedPosts: { posts: [], hasMore: false },
-	// 	meta: null,
-	// });
-
-	// const updateState = (name, value) => {
-	// 	setInitialState((prev) => {
-	// 		return {
-	// 			...prev,
-	// 			[name]: value,
-	// 		};
-	// 	});
-	// };
-
 	const createComment = async ({ postId, userId, text }) => {
 		try {
 			const {
@@ -45,14 +24,11 @@ const CommentProvider = ({ children }) => {
 	};
 
 	const getAllPostComments = async ({ postId, page = 1 }) => {
-		
 		try {
 			const {
 				data: { data },
 				status,
 			} = await axios().get(`/comments/${postId}/?page=${page}`);
-
-            console.log(data);
 
 			if (status !== 200) throw new Error("An error occured, try again!");
 
@@ -135,6 +111,72 @@ const CommentProvider = ({ children }) => {
 
 			if (status !== 200) throw new Error("An error occured, try again!");
 
+			await getAllCommentReply({ commentId, page: 1 });
+
+			return { success: true, data };
+		} catch (error) {
+			console.log(error);
+			return { success: false, data: null };
+		}
+	};
+
+	const getAllCommentReply = async ({ commentId, page = 1 }) => {
+		try {
+			const {
+				data: { data },
+				status,
+			} = await axios().get(`/comments/reply/${commentId}/?page=${page}`);
+
+			console.log(data);
+
+			if (status !== 200) throw new Error("An error occured, try again!");
+
+			return { success: true, data };
+		} catch (error) {
+			console.log(error);
+			return { success: false, data: null };
+		}
+	};
+
+	const likeReply = async (replyId) => {
+		if (!replyId) return;
+		try {
+			const { status, data } = await axios().get(`/likes/reply/${replyId}`);
+
+			if (status !== 200)
+				throw new Error("An error occured,  please try again");
+			console.log(status, data);
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
+	};
+
+	const getAllReplyUsers = async (commentId) => {
+		try {
+			const {
+				data: { data },
+				status,
+			} = await axios().get(`/comments/reply/users/${commentId}`);
+
+			if (status !== 200) throw new Error("An error occured, try again!");
+			// console.log(data);
+			return { success: true, data };
+		} catch (error) {
+			console.log(error);
+			return { success: false, data: null };
+		}
+	};
+	const getAllCommentLikeUsers = async (commentId) => {
+		try {
+			const {
+				data: { data },
+				status,
+			} = await axios().get(`/likes/comments/users/${commentId}`);
+
+			if (status !== 200) throw new Error("An error occured, try again!");
+			// console.log(data);
 			return { success: true, data };
 		} catch (error) {
 			console.log(error);
@@ -145,8 +187,6 @@ const CommentProvider = ({ children }) => {
 	return (
 		<CommentContext.Provider
 			value={{
-				// ...initialState,
-
 				createComment,
 				getAllPostComments,
 				likeComment,
@@ -154,6 +194,10 @@ const CommentProvider = ({ children }) => {
 				getAllPostCommentUsers,
 				getAllPostLikeUsers,
 				replyComment,
+				getAllCommentReply,
+				likeReply,
+				getAllReplyUsers,
+				getAllCommentLikeUsers,
 			}}
 		>
 			{children}

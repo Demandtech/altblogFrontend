@@ -8,7 +8,7 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import { BsFillMicMuteFill } from "react-icons/bs";
 import { TbUserEdit } from "react-icons/tb";
 import { IoBookmark, IoNotifications } from "react-icons/io5";
-import { FaCheckCircle, FaSearch } from "react-icons/fa";
+import {  FaSearch } from "react-icons/fa";
 import { useUserContext } from "../context/UserContext";
 import { LiaUserEditSolid } from "react-icons/lia";
 import {
@@ -21,7 +21,6 @@ import {
 	Input,
 	Avatar,
 	Navbar,
-	DropdownSection,
 } from "@nextui-org/react";
 import {
 	Link,
@@ -258,10 +257,12 @@ function MyNavbar({
 			{pathname.includes("profile") && (
 				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
 					<Input
-						className="w-full px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50 "
+						className={`${
+							!hideMenu ? "w-12" : "w-full"
+						} sm:w-full transition-width duration-250 overflow-hidden px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50`}
 						placeholder="Search by title, tags"
 						classNames={{
-							input: "pl-4 md:pl-6",
+							input: "pl-6",
 						}}
 						type="text"
 						value={authorSearch}
@@ -310,7 +311,7 @@ function MyNavbar({
 						type="button"
 						variant="light"
 						isIconOnly
-						className="absolute top-1/2 -translate-y-1/2 left-0 md:left-2"
+						className="absolute top-1/2 -translate-y-1/2 left-1 md:left-2"
 					>
 						<FaSearch />
 					</Button>
@@ -325,7 +326,7 @@ function MyNavbar({
 				<Dropdown className="">
 					<DropdownTrigger onClick={getUserBookmarkPosts}>
 						<Button
-							size="sm"
+							size="md"
 							variant="light"
 							className="text-capitalize rounded-full"
 							isIconOnly
@@ -360,7 +361,7 @@ function MyNavbar({
 					isSelected={theme}
 					onValueChange={setTheme}
 					value={theme}
-					size="sm"
+					size="md"
 					color="default"
 					startContent={<SunIcon />}
 					endContent={<MoonIcon />}
@@ -369,7 +370,7 @@ function MyNavbar({
 				<Dropdown>
 					<DropdownTrigger>
 						<Button
-							size="sm"
+							size="md"
 							isIconOnly
 							variant="light"
 							className="rounded-full"
@@ -493,16 +494,16 @@ function MyNavbar({
 					)}
 				</Dropdown>
 
-				<Dropdown size="sm">
+				<Dropdown>
 					<DropdownTrigger>
 						<Button
-							size="sm"
+							size="md"
 							variant="light"
 							className="text-capitalize rounded-full relative"
 							isIconOnly
 						>
 							<IoNotifications />
-							<sup className="bg-red-600 rounded-full w-3 h-3 absolute grid place-content-center right-1 top-1">
+							<sup className="bg-red-600 rounded-full w-3 h-3 absolute grid place-content-center right-2 top-2">
 								{mockNotifications.filter((mock) => mock.isRead).length}
 							</sup>
 						</Button>

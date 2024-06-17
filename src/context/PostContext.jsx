@@ -141,7 +141,10 @@ const PostProvider = ({ children }) => {
 
 			const newMeta = {
 				...initialState.meta,
-				total_items: initialState.meta.total_items - 1,
+				total_items:
+					initialState.meta.total_items > 0
+						? initialState.meta.total_items - 1
+						: 0,
 			};
 
 			updateState("author_posts", newAuthorPosts);
@@ -185,7 +188,10 @@ const PostProvider = ({ children }) => {
 
 			const latestMeta = {
 				...initialState.meta,
-				total_items: initialState.meta.total_items - 1,
+				total_items:
+					initialState.meta.total_items > 0
+						? initialState.meta.total_items - 1
+						: 0,
 			};
 
 			setInitialState((prev) => {

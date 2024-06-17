@@ -71,7 +71,7 @@ export default function UserList({ postId, commentCounter, list }) {
 			</DropdownTrigger>
 			<DropdownMenu
 				items={users}
-				aria-label="Static Actions"
+				aria-label="Post comment user"
 				className="max-h-[500px] overflow-y-auto"
 			>
 				{(item) => (
