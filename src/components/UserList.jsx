@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 export default function UserList({ postId, commentCounter, list }) {
 	const [users, setUsers] = useState([]);
 	const [dropDownOpen, setDropDownOpen] = useState(false);
-
 	const { getAllPostCommentUsers, getAllPostLikeUsers } = usePostContext();
 
 	useEffect(() => {

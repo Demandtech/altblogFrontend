@@ -1,15 +1,28 @@
-import { Button, Card, CardBody, CardFooter, User } from "@nextui-org/react";
+import {
+	Button,
+	Card,
+	CardBody,
+	DropdownMenu,
+	DropdownTrigger,
+	DropdownItem,
+	CardFooter,
+	Dropdown,
+	User,
+} from "@nextui-org/react";
 import { useState } from "react";
-import { BiLike, BiSolidLike } from "react-icons/bi";
+import { BiLike, BiSolidLike, BiFlag } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import PropTypes from "prop-types";
-import { useCommentContext } from "../../context/CommentContext";
 import { useUserContext } from "../../context/UserContext";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
+import moment from "moment";
+import { useReplyContext } from '../../context/ReplyContext';
 
 const ReplyCard = ({ reply, user, onLogin }) => {
 	const [isLike, setIsLike] = useState(reply?.isLiked || false);
 	const [likeCounter, setLikeCounter] = useState(reply?.likeCount || 0);
-	const { likeReply } = useCommentContext();
+	const { likeReply, deleteReply } = useReplyContext();
 	const { snackBar } = useUserContext();
 
 	const handleLike = async () => {
@@ -18,9 +31,9 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 			if (isSuccess) {
 				if (isLike) {
 					setLikeCounter(likeCounter - 1);
-					snackBar("You unlike a comment", "success");
+					snackBar("You unlike a reply", "success");
 				} else {
-					snackBar("You like a post", "success");
+					snackBar("You like a reply", "success");
 					setLikeCounter(likeCounter + 1);
 				}
 				setIsLike(!isLike);
@@ -33,22 +46,69 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 		}
 	};
 
+	console.log(reply._id)
+
 	return (
 		<div>
 			<Card className="shadow-none flex-1 border ">
 				<CardBody className="">
 					<div className="flex items-start gap-2">
 						<User
-							name={`Rosco Many`}
+							name={`${reply.user.first_name} ${reply.user.last_name}`}
 							description={"Frontend developer"}
-							// avatarProps={{ src: comment.user.avatar }}
+							avatarProps={{ src: reply.user.avatar }}
 						/>
+						<div className="ml-auto">
+							{user._id === reply.user._id ? (
+								<Dropdown className="">
+									<DropdownTrigger>
+										<Button className="ml-auto" isIconOnly variant="light">
+											<BsThreeDotsVertical className="dark:text-white/80" />
+										</Button>
+									</DropdownTrigger>
+									<DropdownMenu aria-label="User menu dropdown">
+										<DropdownItem
+											// onPress={handleEditPost}
+											key="edit"
+											startContent={<FiEdit />}
+										>
+											Edit Reply
+										</DropdownItem>
+
+										<DropdownItem
+											startContent={<RiDeleteBin5Line />}
+											key="delete"
+											className="text-danger"
+											color="danger"
+											// onPress={handleDeleteComment}
+										>
+											Delete Reply
+										</DropdownItem>
+									</DropdownMenu>
+								</Dropdown>
+							) : (
+								<Button
+									className="rounded-full"
+									variant="light"
+									color="danger"
+									size="sm"
+									isIconOnly
+								>
+									<BiFlag />
+								</Button>
+							)}
+						</div>
 					</div>
 					<p>
 						<small>{reply.text}</small>
 					</p>
 				</CardBody>
-				<CardFooter className="gap-2 items-center justify-end py-2">
+				<CardFooter className="gap-2 items-center justify-between py-2">
+					<div>
+						<small className="text-slate-300">
+							{moment(reply.createdAt).startOf("day").fromNow()}
+						</small>
+					</div>
 					<div className="flex items-center">
 						<Button
 							onPress={handleLike}
@@ -75,7 +135,7 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 							{/* </small> */}
 						</Button>
 					</div>
-					{user?._id === reply?.user?._id && (
+					{/* {user?._id === reply?.user?._id && (
 						<Button
 							// onPress={handleBookmark}
 							size="sm"
@@ -87,7 +147,7 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 						>
 							Delete
 						</Button>
-					)}
+					)} */}
 				</CardFooter>
 			</Card>
 		</div>

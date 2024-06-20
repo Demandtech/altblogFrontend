@@ -27,7 +27,6 @@ const Comment = ({
 	snackBar,
 }) => {
 	const { createComment, getAllPostComments } = useCommentContext();
-
 	const [page, setPage] = useState(1);
 	const [commentText, setCommentText] = useState("");
 	const [comments, setComments] = useState([]);
@@ -147,7 +146,7 @@ const Comment = ({
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			placement="top"
-			className="sm:rounded-lg max-h-screen sm:max-h-[400px] rounded-none"
+			className="sm:rounded-lg max-h-screen sm:max-h-[500px] rounded-none"
 			backdrop="blur"
 			ref={containerRef}
 		>

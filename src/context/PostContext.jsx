@@ -106,7 +106,7 @@ const PostProvider = ({ children }) => {
 			} = await axios().get("posts/featured");
 			// console.log(status, data);
 			if (status !== 200) throw new Error("An error occured");
-			// console.log(data);
+			console.log(data);
 			updateState("featuredPosts", data);
 			return true;
 		} catch (error) {
@@ -120,10 +120,13 @@ const PostProvider = ({ children }) => {
 			const { status, data } = await axios().post("/posts", value);
 
 			if (status !== 201) return;
-			console.log(data);
+
 			return { success: true, post: data.post };
 		} catch (error) {
-			console.log(error);
+			if (error?.response?.status === 409) {
+				error.message = "Title already exist, use a unique title";
+			}
+
 			return { success: false, post: null, message: error.message };
 		}
 	};

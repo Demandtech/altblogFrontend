@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import ReplyCard from "./ReplyCard";
-import { useCommentContext } from "../../context/CommentContext";
+import { useReplyContext } from "../../context/ReplyContext";
 
 const Reply = ({
 	user,
@@ -11,9 +12,9 @@ const Reply = ({
 	replies,
 	setReplies,
 }) => {
-	// const [replies, setReplies] = useState([]);
-	const { getAllCommentReply } = useCommentContext();
+	const { getAllCommentReply } = useReplyContext();
 	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(false);
 
 	const handleGetAllCommentReply = async () => {
 		const allReplies = await getAllCommentReply({
@@ -22,16 +23,54 @@ const Reply = ({
 		});
 
 		if (allReplies.success) {
-			setReplies(allReplies.data.data.replies);
+			const repliesList = allReplies.data.data.replies;
+
+			setReplies((prev) => {
+				const prevIds = new Set(prev.map((comment) => comment._id));
+				const newComments = repliesList.filter(
+					(comment) => !prevIds.has(comment._id)
+				);
+				return [...prev, ...newComments];
+			});
+
+			setHasMore(allReplies.data.data.hasMore);
 		}
-		// console.log(allReplies.data.data.replies);
 	};
+
+	const containerRef = useRef(null);
+	const bottomRef = useRef(null);
 
 	useEffect(() => {
 		if (openReply) {
 			handleGetAllCommentReply();
 		}
-	}, [openReply]);
+	}, [openReply, page]);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && replies.length > 0) {
+					if (hasMore) {
+						setPage(page + 1);
+					}
+				}
+			},
+			{
+				root: containerRef.current,
+				threshold: 1.0,
+			}
+		);
+
+		if (bottomRef.current) {
+			observer.observe(bottomRef.current);
+		}
+
+		return () => {
+			if (bottomRef.current) {
+				observer.unobserve(bottomRef.current);
+			}
+		};
+	}, [openReply, replies]);
 
 	return (
 		<div className="pt-5">
@@ -46,7 +85,7 @@ const Reply = ({
 					return (
 						<ul
 							key={reply._id}
-							className=" w-4/5 ml-auto  space-y-2 mt-4 max-h-[200px]"
+							className=" w-5/6 ml-auto  space-y-2 mt-4 max-h-[200px]"
 						>
 							<li>
 								<ReplyCard reply={reply} user={user} />
@@ -59,6 +98,7 @@ const Reply = ({
 					<small>No reply yet</small>
 				</div>
 			)}
+			<div ref={bottomRef} style={{ height: "1px" }}></div>
 		</div>
 	);
 };

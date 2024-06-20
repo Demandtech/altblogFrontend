@@ -29,7 +29,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 					description: "",
 					body: "",
 					category: "",
-			};
+			  };
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const { createPost, publishPost } = usePostContext();
@@ -92,7 +92,8 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 				onClose();
 				setIsLoading(false);
 			} else {
-				snackBar("An error occured, please try again later!", "error");
+				console.log(result);
+				snackBar(result.message, "error");
 				setIsLoading(false);
 			}
 		} catch (error) {

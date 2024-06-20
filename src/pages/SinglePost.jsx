@@ -198,7 +198,8 @@ const SinglePost = ({ onLogin }) => {
 							// className="pl-0 justify-start"
 							onPress={() => navigate(-1)}
 							// isIconOnly
-							variant="flat"
+							variant="light"
+							className="px-0 justify-start"
 						>
 							<FaArrowLeftLong />
 						</Button>
