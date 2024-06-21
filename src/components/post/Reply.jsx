@@ -11,16 +11,19 @@ const Reply = ({
 	replyCounter,
 	replies,
 	setReplies,
+	onLogin,
 }) => {
-	const { getAllCommentReply } = useReplyContext();
+	const { getAllReplies } = useReplyContext();
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(false);
 
 	const handleGetAllCommentReply = async () => {
-		const allReplies = await getAllCommentReply({
+		const allReplies = await getAllReplies({
 			commentId: comment._id,
 			page,
 		});
+
+		console.log("HERE");
 
 		if (allReplies.success) {
 			const repliesList = allReplies.data.data.replies;
@@ -88,7 +91,13 @@ const Reply = ({
 							className=" w-5/6 ml-auto  space-y-2 mt-4 max-h-[200px]"
 						>
 							<li>
-								<ReplyCard reply={reply} user={user} />
+								<ReplyCard
+									commentId={comment._id}
+									onLogin={onLogin}
+									setReplies={setReplies}
+									reply={reply}
+									user={user}
+								/>
 							</li>
 						</ul>
 					);

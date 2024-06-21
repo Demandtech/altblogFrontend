@@ -8,8 +8,9 @@ import {
 	CardFooter,
 	Dropdown,
 	User,
+	Avatar,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { BiLike, BiSolidLike, BiFlag } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import PropTypes from "prop-types";
@@ -17,12 +18,15 @@ import { useUserContext } from "../../context/UserContext";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import moment from "moment";
-import { useReplyContext } from '../../context/ReplyContext';
+import { useReplyContext } from "../../context/ReplyContext";
+import { Link } from 'react-router-dom';
 
-const ReplyCard = ({ reply, user, onLogin }) => {
+
+const ReplyCard = ({ reply, user, onLogin, setReplies, commentId }) => {
 	const [isLike, setIsLike] = useState(reply?.isLiked || false);
 	const [likeCounter, setLikeCounter] = useState(reply?.likeCount || 0);
-	const { likeReply, deleteReply } = useReplyContext();
+	const { likeReply, deleteReply, getAllReplyUsers } = useReplyContext();
+	const [replyLikeUsers, setReplyLikeUsers] = useState([]);
 	const { snackBar } = useUserContext();
 
 	const handleLike = async () => {
@@ -42,11 +46,33 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to like post", "error");
+			snackBar("Please login to continue", "error");
 		}
 	};
 
-	console.log(reply._id)
+	const handleDelete = async () => {
+		if (user) {
+			const isSuccess = await deleteReply(reply._id);
+
+			if (isSuccess) {
+				setReplies((prev) => {
+					return prev.filter((rep) => rep._id !== reply._id);
+				});
+				snackBar("Reply deleted successfully", "info");
+			}
+		} else {
+			console.log(onLogin());
+			onLogin();
+			snackBar("Please login to continue", "error");
+		}
+	};
+
+	const handleAllRepliesUser = async () => {
+		const result = await getAllReplyUsers(commentId);
+		if (result.success) {
+			setReplyLikeUsers(result.data.data);
+		}
+	};
 
 	return (
 		<div>
@@ -59,7 +85,7 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 							avatarProps={{ src: reply.user.avatar }}
 						/>
 						<div className="ml-auto">
-							{user._id === reply.user._id ? (
+							{user?._id === reply?.user?._id ? (
 								<Dropdown className="">
 									<DropdownTrigger>
 										<Button className="ml-auto" isIconOnly variant="light">
@@ -80,7 +106,7 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 											key="delete"
 											className="text-danger"
 											color="danger"
-											// onPress={handleDeleteComment}
+											onPress={handleDelete}
 										>
 											Delete Reply
 										</DropdownItem>
@@ -106,7 +132,7 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 				<CardFooter className="gap-2 items-center justify-between py-2">
 					<div>
 						<small className="text-slate-300">
-							{moment(reply.createdAt).startOf("day").fromNow()}
+							{moment(reply.createdAt).startOf("").fromNow()}
 						</small>
 					</div>
 					<div className="flex items-center">
@@ -123,31 +149,67 @@ const ReplyCard = ({ reply, user, onLogin }) => {
 								<BiLike className="text-slate-300" />
 							)}
 						</Button>
-						<Button
+						{/* <Button
 							className="text-slate-300 w-5 min-w-10 h-5 px-0"
 							variant="light"
 							size="sm"
+							onPress={handleAllRepliesUser}
 						>
-							{/* <small> */}
+							
 							<span>
 								{likeCounter} Like{likeCounter > 1 && "s"}
 							</span>
-							{/* </small> */}
-						</Button>
-					</div>
-					{/* {user?._id === reply?.user?._id && (
-						<Button
-							// onPress={handleBookmark}
-							size="sm"
-							className="rounded-full h-5 group px-0 text-slate-300 hover:text-danger-100 "
-							variant="light"
-							startContent={
-								<RiDeleteBin5Line className=" text-slate-300 group-hover:text-danger-100" />
-							}
+						
+						</Button> */}
+						<Dropdown
+							onOpenChange={(isOpen) => {
+								if (isOpen) {
+									handleAllRepliesUser();
+								}
+							}}
 						>
-							Delete
-						</Button>
-					)} */}
+							<DropdownTrigger>
+								<Button
+									className="text-slate-300 w-5 min-w-10 h-5 px-0"
+									variant="light"
+									size="sm"
+								>
+									<span>
+										{likeCounter} Like{likeCounter > 1 && "s"}
+									</span>
+								</Button>
+							</DropdownTrigger>
+							<DropdownMenu
+								aria-label="User that like Comment"
+								items={replyLikeUsers}
+							>
+								{(item) => {
+									return (
+										<DropdownItem textValue={item.first_name} key={item._id}>
+											<div className="flex gap-2 items-center">
+												<Avatar
+													alt={item.first_name}
+													className="flex-shrink-0"
+													size="sm"
+													src={item.avatar}
+												/>
+												<div className="flex flex-col">
+													<Link to={`/profile/${item._id}`}>
+														<span className="text-small">
+															{item.first_name}
+														</span>
+													</Link>
+													<span className="text-tiny text-default-400">
+														{item.profession}
+													</span>
+												</div>
+											</div>
+										</DropdownItem>
+									);
+								}}
+							</DropdownMenu>
+						</Dropdown>
+					</div>
 				</CardFooter>
 			</Card>
 		</div>
@@ -158,6 +220,7 @@ ReplyCard.propTypes = {
 	reply: PropTypes.object.isRequired,
 	user: PropTypes.object,
 	onLogin: PropTypes.func,
+	setReplies: PropTypes.func,
 };
 
 export default ReplyCard;

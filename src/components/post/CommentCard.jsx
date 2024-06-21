@@ -38,7 +38,7 @@ const CommentCard = ({
 	const [replyCounter, setReplyCounter] = useState(comment?.replyCount || 0);
 	const { likeComment, deleteComment, getAllCommentLikeUsers } =
 		useCommentContext();
-	const { replyComment, getAllReplyUsers } = useReplyContext();
+	const { getAllReplyUsers, createReply } = useReplyContext();
 	const [openReply, setOpenReply] = useState(false);
 	const [likeBtnLoading, setLikeBtnLoading] = useState(false);
 	const [value, setValue] = useState("");
@@ -46,6 +46,15 @@ const CommentCard = ({
 	const [replyUsers, setReplyUsers] = useState([]);
 	const [commentLikeUser, setCommentLikeUser] = useState([]);
 	const [isReplyLoading, setIsReplyLoading] = useState(false);
+
+	const handleChange = (e) => {
+		if (user) {
+			setValue(e.target.value);
+		} else {
+			snackBar("Please login to continue", "error");
+			onLogin();
+		}
+	};
 
 	const handleLikeComment = async () => {
 		if (user) {
@@ -72,7 +81,7 @@ const CommentCard = ({
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to like a Comment", "error");
+			snackBar("Please login to continue", "error");
 		}
 	};
 
@@ -93,24 +102,28 @@ const CommentCard = ({
 		}
 	};
 
-	console.log(comment);
-
 	const handleSubmitReply = async () => {
 		if (!value) return snackBar("Text can not be empty");
 
 		try {
 			setIsReplyLoading(true);
-			const reply = await replyComment({
-				commentId: comment._id,
-				userId: user._id,
-				text: value,
-			});
+			if (user) {
+				const reply = await createReply({
+					commentId: comment._id,
+					userId: user?._id,
+					text: value,
+				});
 
-			replies.unshift(reply.data.data);
-			if (reply.success) {
-				snackBar("reply sent successfully", "success");
-				setValue("");
-				setReplyCounter((prev) => prev + 1);
+				replies.unshift(reply.data.data);
+
+				if (reply.success) {
+					snackBar("reply sent successfully", "success");
+					setValue("");
+					setReplyCounter((prev) => prev + 1);
+				}
+			} else {
+				snackBar("Please login to continue", "error");
+				onLogin();
 			}
 		} catch (error) {
 			console.log(error);
@@ -118,6 +131,7 @@ const CommentCard = ({
 			setIsReplyLoading(false);
 		}
 	};
+
 	const handleGetCommentReplyUser = async () => {
 		const result = await getAllReplyUsers(comment._id);
 		if (result.success) {
@@ -190,7 +204,7 @@ const CommentCard = ({
 				<CardFooter className="gap-2 items-center justify-between py-2">
 					<div>
 						<small className="text-slate-300">
-							{moment(comment.createdAt).startOf("day").fromNow()}
+							{moment(comment.createdAt).startOf("").fromNow()}
 						</small>
 					</div>
 					<div className="flex items-center">
@@ -345,7 +359,7 @@ const CommentCard = ({
 								</Button>
 							}
 							value={value}
-							onChange={(e) => setValue(e.target.value)}
+							onChange={handleChange}
 							name="reply"
 							placeholder="Type your reply"
 						/>
@@ -357,6 +371,7 @@ const CommentCard = ({
 						user={user}
 						replies={replies}
 						setReplies={setReplies}
+						onLogin={onLogin}
 					/>
 				</CardFooter>
 			</Card>
