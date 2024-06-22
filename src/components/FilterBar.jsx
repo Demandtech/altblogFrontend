@@ -18,10 +18,14 @@ function FilterBar({ meta, view, setView }) {
 	const existingParams = Object.fromEntries(searchParams);
 
 	useEffect(() => {
-		existingParams.o = order;
+		if (order) {
+			existingParams.o = order;
+		} else {
+			delete existingParams.o;
+		}
 		setSearchParams(existingParams);
 	}, [order]);
-	
+
 	useEffect(() => {
 		const filtersArr = Array.from(selectedKeys);
 

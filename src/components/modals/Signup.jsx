@@ -9,7 +9,13 @@ import {
 	Input,
 	Link,
 } from "@nextui-org/react";
-import { MailIcon, EyeFilledIcon, EyeSlashFilledIcon } from "../Svgs.jsx";
+import {
+	MailIcon,
+	EyeFilledIcon,
+	EyeSlashFilledIcon,
+	GoogleIcon,
+	LinkedinIcon,
+} from "../Svgs.jsx";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../context/UserContext.jsx";
@@ -28,7 +34,7 @@ export default function Signup({ isOpen, onOpenChange, onLogin }) {
 					email: "",
 					password: "",
 					profession: "",
-			};
+			  };
 	});
 	const toggleVisibility = () => setIsVisible(!isVisible);
 	const checkInput = (e) => {
@@ -245,32 +251,47 @@ export default function Signup({ isOpen, onOpenChange, onLogin }) {
 								</div>
 							</ModalBody>
 							<ModalFooter>
-								<div className="mr-auto ">
-									<small>
-										already a member?{" "}
-										<button
-											onClick={() => handleLogin(onClose)}
-											className="text-primary"
-										>
-											Sign in
-										</button>
-									</small>
+								<div className="w-full">
+									<div className="flex items-center gap-5 md:gap-0 flex-wrap justify-center md:justify-between w-full">
+										<div className="">
+											<small>
+												already a member?{" "}
+												<button
+													onClick={() => handleLogin(onClose)}
+													className="text-primary"
+												>
+													Sign in
+												</button>
+											</small>
+										</div>
+										<div className='flex gap-5'>
+											<Button color="danger" variant="flat" onPress={onClose}>
+												Close
+											</Button>
+											<Button
+												isDisabled={
+													Object.values(inputError).some((val) => val) ||
+													Object.values(values).some((val) => !val)
+												}
+												isLoading={isLoading}
+												color="primary"
+												onPress={() => handleSignup(onClose)}
+												className="text-white dark:text-black"
+											>
+												Sign Up
+											</Button>
+										</div>
+									</div>
+									<div className="flex gap-3 justify-center my-5">
+										<Button variant="bordered" isIconOnly>
+											<GoogleIcon />
+										</Button>
+										<Button variant="bordered" isIconOnly>
+											{/* <?xml version="1.0" encoding="iso-8859-1"?> */}
+											<LinkedinIcon />
+										</Button>
+									</div>
 								</div>
-								<Button color="danger" variant="flat" onPress={onClose}>
-									Close
-								</Button>
-								<Button
-									isDisabled={
-										Object.values(inputError).some((val) => val) ||
-										Object.values(values).some((val) => !val)
-									}
-									isLoading={isLoading}
-									color="primary"
-									onPress={() => handleSignup(onClose)}
-									className="text-white dark:text-black"
-								>
-									Sign Up
-								</Button>
 							</ModalFooter>
 						</>
 					)}
