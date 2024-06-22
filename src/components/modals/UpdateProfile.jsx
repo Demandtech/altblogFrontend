@@ -14,7 +14,7 @@ export default function UpdateProfile({ isOpen, onOpenChange }) {
 				size="3xl"
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
-				placement="center"
+				placement="top"
 				className="rounded-lg"
 				backdrop="blur"
 			>

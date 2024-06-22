@@ -9,10 +9,19 @@ import {
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { LuSettings2, LuGrid, LuList } from "react-icons/lu";
+import { useSearchParams } from "react-router-dom";
 
-function FilterList({ setOrder, meta, view, setView }) {
+function FilterBar({ meta, view, setView }) {
 	const [selectedKeys, setSelectedKeys] = useState([]);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [order, setOrder] = useState("");
+	const existingParams = Object.fromEntries(searchParams);
 
+	useEffect(() => {
+		existingParams.o = order;
+		setSearchParams(existingParams);
+	}, [order]);
+	
 	useEffect(() => {
 		const filtersArr = Array.from(selectedKeys);
 
@@ -41,7 +50,7 @@ function FilterList({ setOrder, meta, view, setView }) {
 						onPress={() => setView("grid")}
 						variant={view === "grid" ? "solid" : "light"}
 						color={view === "grid" ? "primary" : "light"}
-						className={`${view === "grid" ? "text-white dark:text-black" :  ""}`}
+						className={`${view === "grid" ? "text-white dark:text-black" : ""}`}
 					>
 						<LuGrid />
 					</Button>
@@ -52,7 +61,7 @@ function FilterList({ setOrder, meta, view, setView }) {
 						onPress={() => setView("list")}
 						variant={view === "list" ? "solid" : "light"}
 						color={view !== "grid" ? "primary" : "light"}
-						className={`${view === "list" ? "text-white dark:text-black" :  ""}`}
+						className={`${view === "list" ? "text-white dark:text-black" : ""}`}
 					>
 						<LuList />
 					</Button>
@@ -82,11 +91,11 @@ function FilterList({ setOrder, meta, view, setView }) {
 	);
 }
 
-FilterList.propTypes = {
+FilterBar.propTypes = {
 	setOrder: PropTypes.func,
 	meta: PropTypes.object,
 	view: PropTypes.string,
 	setView: PropTypes.func,
 };
 
-export default FilterList;
+export default FilterBar;

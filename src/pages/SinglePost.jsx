@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Spinner, Button, Input } from "@nextui-org/react";
+import { Spinner, Button, Input, useDisclosure } from "@nextui-org/react";
 import { usePostContext } from "../context/PostContext";
 import moment from "moment";
 import { handleTime } from "../helper/convertReadingTime";
@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import PostCard from "../components/post/PostCard";
 import { debounce } from "lodash";
 import { Helmet } from "react-helmet";
+import Comment from "../components/modals/Comment";
 
 const SinglePost = ({ onLogin }) => {
 	const { id } = useParams();
@@ -48,7 +49,7 @@ const SinglePost = ({ onLogin }) => {
 	};
 
 	const handleDebounceChange = debounce(handleChange, 500);
-
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const handleLike = async () => {
 		if (user) {
 			const isSuccess = await likePost(singlePost._id);
@@ -72,7 +73,7 @@ const SinglePost = ({ onLogin }) => {
 		}
 	};
 
-	console.log(relatedPosts);
+	// console.log(relatedPosts);
 
 	const handleBookmark = async () => {
 		if (user) {
@@ -107,9 +108,10 @@ const SinglePost = ({ onLogin }) => {
 		}
 	};
 
-	const handleComment = async () => {
-		setWriteComment(!writeComment);
-	};
+	// const handleComment = async () => {
+	// 	console.log("HERE")
+	// 	setWriteComment(!writeComment);
+	// };
 
 	useEffect(() => {
 		if (!id) return;
@@ -144,7 +146,7 @@ const SinglePost = ({ onLogin }) => {
 		}
 	}, [singlePost]);
 
-	console.log(singlePost);
+	// console.log(singlePost);
 
 	return (
 		<>
@@ -261,7 +263,7 @@ const SinglePost = ({ onLogin }) => {
 									<div className="flex items-center">
 										<li>
 											<Button
-												onPress={handleComment}
+												onPress={onOpen}
 												size="sm"
 												isIconOnly
 												className="rounded-full"
@@ -398,6 +400,17 @@ const SinglePost = ({ onLogin }) => {
 					</div>
 				</div>
 			)}
+			<Comment
+				commentCounter={commentCounter}
+				setCommentCounter={setCommentCounter}
+				onOpenChange={onOpenChange}
+				isOpen={isOpen}
+				postId={singlePost?._id}
+				postTitle={singlePost?.title}
+				user={user}
+				onLogin={onLogin}
+				snackBar={snackBar}
+			/>
 		</>
 	);
 };

@@ -23,18 +23,14 @@ import { Helmet } from "react-helmet";
 import { FaPoll, FaReadme, FaPenSquare } from "react-icons/fa";
 import { RiDraftFill } from "react-icons/ri";
 
-const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
+const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 	const { id } = useParams();
 	const { getUserProfile, profile, user, snackBar } = useUserContext();
 	const { getAuthorPosts, author_posts } = usePostContext();
 	const [isLoading, setIsLoading] = useState(true);
-	const [state, setState] = useState("");
-	const [page, setPage] = useState(1);
-	const [order, setOrder] = useState("");
-	const [limit, setLimit] = useState("5");
 	const [searchParams] = useSearchParams();
 
-	const category = searchParams.get("category");
+	const { p, c, q, l, s, o } = Object.fromEntries(searchParams);
 
 	useEffect(() => {
 		const getProfile = async () => {
@@ -53,35 +49,26 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 		getProfile();
 	}, [id, user]);
 
-	const getPosts = async () => {
-	
-		try {
-			await getAuthorPosts({
-				id: profile._id,
-				order,
-				page,
-				limit,
-				state,
-				search: authorSearch,
-				category,
-			});
-		} catch (error) {
-			console.log("Error Getting Post", error);
-		}
-	};
-
 	useEffect(() => {
-		if (profile) {
-			setPage(1);
-			getPosts();
-		}
-	}, [order, state, profile, user, limit, authorSearch, category]);
-
-	useEffect(() => {
+		const getPosts = async () => {
+			try {
+				await getAuthorPosts({
+					id: profile._id,
+					order: o ? o : "",
+					page: p ? p : 1,
+					limit: l ? l : 5,
+					state: s ? s : "",
+					search: q ? q : "",
+					category: c ? c : "",
+				});
+			} catch (error) {
+				console.error("Error Getting Post", error);
+			}
+		};
 		if (profile) {
 			getPosts();
 		}
-	}, [page]);
+	}, [profile, user, l, q, c, p, s, o]);
 
 	return (
 		<>
@@ -303,23 +290,14 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 					<div className="px-5 mt-5">
 						{profile?._id === user?._id ? (
 							<PostTab
-								setPage={setPage}
-								setOrder={setOrder}
-								setState={setState}
 								posts={author_posts}
 								editPostOnOpen={editPostOnOpen}
-								setLimit={setLimit}
-								limit={limit}
 								onLogin={loginOnOpen}
 							/>
 						) : (
 							<PostsContainer
-								setPage={setPage}
-								setOrder={setOrder}
 								posts={author_posts}
 								editPostOnOpen={editPostOnOpen}
-								setLimit={setLimit}
-								limit={limit}
 								onLogin={loginOnOpen}
 							/>
 						)}
@@ -333,7 +311,6 @@ const Profile = ({ loginOnOpen, editPostOnOpen, authorSearch }) => {
 Profile.propTypes = {
 	loginOnOpen: PropTypes.func,
 	editPostOnOpen: PropTypes.func,
-	authorSearch: PropTypes.string,
 };
 
 export default Profile;

@@ -8,7 +8,7 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import { BsFillMicMuteFill } from "react-icons/bs";
 import { TbUserEdit } from "react-icons/tb";
 import { IoBookmark, IoNotifications } from "react-icons/io5";
-import {  FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { useUserContext } from "../context/UserContext";
 import { LiaUserEditSolid } from "react-icons/lia";
 import {
@@ -32,9 +32,9 @@ import {
 import PropTypes from "prop-types";
 import { usePostContext } from "../context/PostContext";
 import { MoonIcon, SunIcon } from "./Svgs";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { categories } from "../../data";
-import { debounce } from "lodash";
+import debounce from "lodash.debounce";
 
 const mockNotifications = [
 	{
@@ -105,10 +105,6 @@ function MyNavbar({
 	signupOnOpen,
 	profileUpdateOnOpen,
 	editPostOnOpen,
-	setSearch,
-	search,
-	setAuthorSearch,
-	authorSearch,
 }) {
 	const { user, logoutUser, profile } = useUserContext();
 	const { singlePost, deletePost, getUserBookmarkPosts, bookmarkPosts } =
@@ -129,16 +125,17 @@ function MyNavbar({
 		new Set([])
 	);
 
-	const selectedNotificationValue = useMemo(
-		() =>
-			Array.from(selectedNotificationKeys)
-				.join(", ")
-				.replaceAll("_", " ")
-				.split(","),
-		[selectedNotificationKeys]
-	);
+	const [search, setSearch] = useState("");
+	const [category, setCategory] = useState("");
 
-	console.log(selectedNotificationValue);
+	// const selectedNotificationValue = useMemo(
+	// 	() =>
+	// 		Array.from(selectedNotificationKeys)
+	// 			.join(", ")
+	// 			.replaceAll("_", " ")
+	// 			.split(","),
+	// 	[selectedNotificationKeys]
+	// );
 
 	const handleDeletePost = async () => {
 		if (!singlePost) return;
@@ -150,9 +147,30 @@ function MyNavbar({
 	};
 
 	const handleCategory = (e) => {
-		const params = { ...existingParams, category: e.target.value };
-		setSearchParams(params);
+		setCategory(e.target.value);
 	};
+
+	const handleChange = (e) => {
+		setSearch(e.target.value);
+	};
+
+	useEffect(() => {
+		const params = { ...existingParams };
+		if (search) {
+			params.q = search;
+		} else {
+			delete params.q;
+		}
+		if (category !== "All" && category !== "") {
+			params.c = category;
+		} else {
+			delete params.c;
+		}
+		if (params.p > 1) {
+			params.p = 1;
+		}
+		setSearchParams(params);
+	}, [search, category]);
 
 	useEffect(() => {
 		const rootElement = document.documentElement;
@@ -164,21 +182,13 @@ function MyNavbar({
 		localStorage.setItem("THEME", JSON.stringify(theme));
 	}, [theme]);
 
-	const handleSearchChange = (e) => {
-		setSearch(e.target.value);
-	};
-	const handleAuthorSearchChange = (e) => {
-		setAuthorSearch(e.target.value);
-	};
-
-	const searchDebounce = debounce(handleSearchChange, 500);
-
 	return (
 		<Navbar
 			classNames={{
-				wrapper: "max-w-full gap-5 sm:gap-5 px-2 sm:px-6 md:px-10",
+				wrapper: "max-w-full gap-5 sm:gap-5 px-2  sm:px-3 md:px-5",
 			}}
 			shouldHideOnScroll
+			className='py-2'
 		>
 			<Link
 				className={
@@ -187,14 +197,14 @@ function MyNavbar({
 				to="/"
 			>
 				<BsFillMicMuteFill size={30} />
-				<span className=" hidden sm:block">BlogShot</span>
+				<span className="">BlogShot</span>
 			</Link>
 
-			{pathname === "/" && (
+			{!pathname.includes("post") && (
 				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
 					<Input
 						className={`${
-							!hideMenu ? "w-12" : "w-full"
+							!hideMenu ? "w-12" : "w-fit"
 						} sm:w-full transition-width duration-250 overflow-hidden px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50`}
 						placeholder="Search by title, author, tags"
 						classNames={{
@@ -202,7 +212,7 @@ function MyNavbar({
 						}}
 						type="text"
 						value={search}
-						onChange={searchDebounce}
+						onChange={handleChange}
 						size="sm"
 						endContent={
 							<div className={`block`}>
@@ -215,80 +225,14 @@ function MyNavbar({
 									Category
 								</label>
 								<select
-									className="outline-none w-[80px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
+									className="outline-none w-[80px]  text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
 									id="currency"
 									name="currency"
-									defaultValue={"category"}
+									defaultValue="category"
 									onChange={handleCategory}
 									value={existingParams.category}
 								>
-									<option value={"category"} disabled>
-										{" "}
-										Category
-									</option>
-									{categories.map((cat) => {
-										return (
-											<option
-												value={cat.value}
-												className="capitalize"
-												key={cat.label}
-											>
-												{cat.label[0].toUpperCase() + cat.label.slice(1)}
-											</option>
-										);
-									})}
-								</select>
-							</div>
-						}
-					/>
-					<Button
-						onPress={() => {
-							setHideMenu(!hideMenu);
-						}}
-						type="button"
-						variant="light"
-						isIconOnly
-						className="absolute top-1/2 -translate-y-1/2 left-1 md:left-2"
-					>
-						<FaSearch />
-					</Button>
-				</form>
-			)}
-			{pathname.includes("profile") && (
-				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
-					<Input
-						className={`${
-							!hideMenu ? "w-12" : "w-full"
-						} sm:w-full transition-width duration-250 overflow-hidden px-2 rounded-md py-1 placeholder:text-sm focus:outline-black/50`}
-						placeholder="Search by title, tags"
-						classNames={{
-							input: "pl-6",
-						}}
-						type="text"
-						value={authorSearch}
-						onChange={handleAuthorSearchChange}
-						size="sm"
-						endContent={
-							<div
-								className={`${
-									hideMenu ? "opacity-0 hidden " : "flex opacity-100"
-								} sm:flex items-center`}
-							>
-								<label className="sr-only" htmlFor="currency">
-									Category
-								</label>
-								<select
-									className="outline-none w-[80px] text-ellipsis overflow-hidden text-nowrap border-0 bg-transparent text-default-400 text-small"
-									id="currency"
-									name="currency"
-									defaultValue={"category"}
-									onChange={handleCategory}
-									value={existingParams.category}
-								>
-									<option value={"category"} disabled>
-										{" "}
-										Category
-									</option>
+									<option value="All"> All</option>
 									{categories.map((cat) => {
 										return (
 											<option
@@ -320,8 +264,8 @@ function MyNavbar({
 
 			<div
 				className={`${
-					hideMenu ? "opacity-0 hidden " : "flex opacity-100"
-				} opacity-100 sm:flex items-center gap-3`}
+					hideMenu ? "opacity-0  hidden" : "opacity-100 flex"
+				}  sm:opacity-100 sm:flex items-center transition-all ease-linear duration-300`}
 			>
 				<Dropdown className="">
 					<DropdownTrigger onClick={getUserBookmarkPosts}>
@@ -365,7 +309,7 @@ function MyNavbar({
 					color="default"
 					startContent={<SunIcon />}
 					endContent={<MoonIcon />}
-					classNames={{ wrapper: "mx-1" }}
+					classNames={{ wrapper: "mx-1 mr-2.5" }}
 				/>
 				<Dropdown>
 					<DropdownTrigger>

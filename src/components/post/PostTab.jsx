@@ -1,18 +1,14 @@
 import { Tabs, Tab } from "@nextui-org/react";
 import PostsContainer from "./PostsContainer";
 import PropTypes from "prop-types";
+import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-export default function PostTab({
-	setOrder,
-	setPage,
-	setState,
-	posts,
-	editPostOnOpen,
-	setLimit,
-	limit,
-	onLogin,
-	commentOnOpen,
-}) {
+export default function PostTab({ posts, editPostOnOpen, onLogin }) {
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [state, setState] = useState("");
+	const existingParams = Object.fromEntries(searchParams);
+
 	const tabs = [
 		{
 			key: "all",
@@ -28,11 +24,19 @@ export default function PostTab({
 		},
 	];
 
+	useEffect(() => {
+		existingParams.s = state;
+
+		if (existingParams.p) {
+			existingParams.p = 1;
+		}
+
+		setSearchParams(existingParams);
+	}, [state]);
 	return (
 		<div className="flex w-full flex-col">
 			<Tabs
 				onSelectionChange={(value) => {
-					setPage(1);
 					setState(value !== "all" ? value : "");
 				}}
 				size="lg"
@@ -42,14 +46,9 @@ export default function PostTab({
 					return (
 						<Tab key={tab.key} title={tab.title}>
 							<PostsContainer
-								setOrder={setOrder}
-								setPage={setPage}
 								posts={posts}
 								editPostOnOpen={editPostOnOpen}
-								setLimit={setLimit}
-								limit={limit}
 								onLogin={onLogin}
-								commentOnOpen={commentOnOpen}
 							/>
 						</Tab>
 					);
@@ -60,13 +59,7 @@ export default function PostTab({
 }
 
 PostTab.propTypes = {
-	setState: PropTypes.func,
-	setOrder: PropTypes.func,
-	setPage: PropTypes.func,
 	posts: PropTypes.array,
 	editPostOnOpen: PropTypes.func,
-	setLimit: PropTypes.func,
-	limit: PropTypes.string,
 	onLogin: PropTypes.func,
-	commentOnOpen: PropTypes.func,
 };

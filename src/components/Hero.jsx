@@ -22,9 +22,9 @@ const Hero = () => {
 	}, []);
 
 	return (
-		<div className="pt-5 relative">
+		<div className="pt-5 relative border-b pb-5">
 			<div className="absolute bg-white/10 dark:bg-black/10 left-0 top-0 w-full h-full"></div>
-			<div className="px-3 lg:px-10 h-full">
+			<div className="px-3 md:px-5 h-full">
 				{isLoading ? (
 					<Spinner
 						className="w-full h-52"

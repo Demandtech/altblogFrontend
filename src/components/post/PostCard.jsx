@@ -32,7 +32,6 @@ import UserList from "../UserList";
 
 const PostCard = ({
 	title,
-
 	author,
 	createdAt,
 	tags,
@@ -59,7 +58,6 @@ const PostCard = ({
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [likeBtnLoading, setLikeBtnLoading] = useState(false);
 	const [bookmarkBtnLoading, setBookmarkBtnLoading] = useState(false);
-	// const [showCommentUserList, setShowCommentUserList] = useState(false);
 	const existingParams = Object.fromEntries(searchParams);
 
 	const handleEditPost = () => {
@@ -150,10 +148,10 @@ const PostCard = ({
 						{moment(state == "DRAFT" ? createdAt : publishedAt).format("ll")}
 					</time>
 
-					<Chip size="sm" endContent={<FaRegEye />}>
-						{read_count}
+					<Chip className="px-2" size="sm" endContent={<FaRegEye />}>
+						<span className='pr-1'>{read_count}</span>
 					</Chip>
-					<Chip size="sm" startContent={<IoTimerOutline />}>
+					<Chip className="px-2" size="sm" startContent={<IoTimerOutline />}>
 						{handleTime(reading_time)}
 					</Chip>
 					{user?._id === author?._id && (
@@ -203,7 +201,7 @@ const PostCard = ({
 								return (
 									<Chip
 										key={index}
-										className="capitalize  cursor-pointer "
+										className="capitalize px-2  cursor-pointer "
 										size="sm"
 									>
 										{tag}

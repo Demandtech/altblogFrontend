@@ -64,10 +64,10 @@ function App() {
 	}, []);
 
 	return (
-		<>
+		<div className="">
 			{!onMount ? (
 				<Spinner
-					className="w-full bg-black/20 h-svh flex justify-center items-center"
+					className="w-full dark:bg-black h-svh flex justify-center items-center"
 					label="Loading... Please wait"
 				/>
 			) : (
@@ -139,7 +139,7 @@ function App() {
 					/>
 				</motion.div>
 			)}
-		</>
+		</div>
 	);
 }
 

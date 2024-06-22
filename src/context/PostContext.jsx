@@ -38,14 +38,12 @@ const PostProvider = ({ children }) => {
 		category = "",
 	}) => {
 		updateState("isPending", true);
-
+		console.log(state);
 		try {
 			if (!id) throw new Error("Id is required");
 
 			const { data, status } = await axios().get(
-				`/posts/authors/${id}/?page=${page}&order=${order}&limit=${limit}&state=${state}&search=${search}&category=${
-					category ? category : ""
-				}`
+				`/posts/authors/${id}/?page=${page}&order=${order}&limit=${limit}&state=${state}&search=${search}&category=${category}`
 			);
 			if (status !== 200) return;
 			updateState("author_posts", data.data.posts);

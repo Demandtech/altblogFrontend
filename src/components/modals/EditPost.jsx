@@ -104,7 +104,7 @@ export default function EditPost({ isOpen, onOpenChange }) {
 				size="5xl"
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
-				placement="center"
+				placement="top"
 				className="rounded-lg"
 				backdrop="blur"
 			>

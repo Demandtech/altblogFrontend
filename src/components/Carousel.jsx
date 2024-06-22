@@ -36,7 +36,7 @@ const responsive = {
 const HeroCarousel = ({ featuredPosts }) => {
 	return (
 		<Carousel
-			removeArrowOnDeviceType={["tablet", "mobile"]}
+			removeArrowOnDeviceType={["desktop", "tablet", "mobile"]}
 			infinite={true}
 			autoPlay={true}
 			responsive={responsive}
@@ -47,7 +47,7 @@ const HeroCarousel = ({ featuredPosts }) => {
 		>
 			{featuredPosts.map((post) => {
 				return (
-					<div key={post._id} className=" xl:pl-24 px-2 ">
+					<div key={post._id}>
 						<div className="mb-5">
 							<Link
 								to={`/post/${post._id}`}

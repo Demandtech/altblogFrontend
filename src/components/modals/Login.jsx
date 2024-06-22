@@ -74,7 +74,7 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
+			<Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
 				<ModalContent>
 					{(onClose) => (
 						<>
