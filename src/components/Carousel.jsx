@@ -58,12 +58,12 @@ const HeroCarousel = ({ featuredPosts }) => {
 							<p className="mb-2 text-black/50 dark:text-white/50">
 								{post?.description}
 							</p>
-							<div
+							{/* <div
 								className=" line-clamp-3 xl:max-w-[80%]"
 								dangerouslySetInnerHTML={{
 									__html: post.body,
 								}}
-							/>
+							/> */}
 						</div>
 						<ul className="pb-5 flex flex-wrap gap-3 text-black/50 items-center dark:text-slate-300 dark:bg-[#171717]">
 							<li className="text-nowrap flex items-center">

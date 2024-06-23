@@ -185,10 +185,11 @@ function MyNavbar({
 	return (
 		<Navbar
 			classNames={{
-				wrapper: "max-w-full gap-5 sm:gap-5 px-2  sm:px-3 md:px-5",
+				base: "gap-0",
+				wrapper: "max-w-full gap-1 sm:gap-5 sm:gap-5 px-2  sm:px-3 md:px-5",
 			}}
 			shouldHideOnScroll
-			className='py-2'
+			className="py-2"
 		>
 			<Link
 				className={
@@ -201,7 +202,7 @@ function MyNavbar({
 			</Link>
 
 			{!pathname.includes("post") && (
-				<form className="flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
+				<form className="sm:flex max-w-md w-full transition-transform ease-linear duration-300 relative ">
 					<Input
 						className={`${
 							!hideMenu ? "w-12" : "w-fit"
