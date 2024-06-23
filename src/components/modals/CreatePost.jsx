@@ -178,14 +178,14 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 										onChange={(e) => {
 											handleChange(e.target.name, e.target.value);
 										}}
-										maxLength={150}
+										maxLength={500}
 									/>
 									<span
 										className={`${
-											150 - letterCount < 10 ? "text-danger" : ""
+											500 - letterCount < 10 ? "text-warning" : ""
 										} absolute bg-white dark:bg-inherit pl-2 right-2 bottom-2 text-xs`}
 									>
-										{letterCount}/150
+										{letterCount}/500
 									</span>
 								</div>
 
