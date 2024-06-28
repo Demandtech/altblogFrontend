@@ -10,14 +10,16 @@ const UserContext = createContext(null);
 toastConfig({ theme: "dark" });
 
 function UserProvider({ children }) {
+	const savedThemeData = localStorage.getItem("THEME");
+	const savedTokenData = localStorage.getItem("LOGIN-DATA");
 	const [initial, setInitial] = useState(() => {
-		const savedData = localStorage.getItem("LOGIN-DATA");
-
-		const savedToken = savedData ? JSON.parse(savedData).token : null;
+		console.log(savedThemeData);
+		const savedToken = savedTokenData ? JSON.parse(savedTokenData).token : null;
+		const savedTheme = savedThemeData ? JSON.parse(savedThemeData) : false;
 		return {
 			user: null,
 			token: savedToken,
-
+			theme: savedTheme,
 			profile: null,
 		};
 	});
@@ -182,14 +184,72 @@ function UserProvider({ children }) {
 
 			if (status !== 200) throw new Error("Error occured!");
 
+			// console.log(data?.data)
+
 			setInitial((prev) => {
 				return {
 					...prev,
 					user: data?.data,
+					theme: savedThemeData ? JSON.parse(savedThemeData) : data.data.theme,
 				};
 			});
 		} catch (error) {
 			console.log(error);
+		}
+	};
+
+	const changePassword = async ({
+		currentPassword,
+		newPassword,
+		confirmPassword,
+	}) => {
+		try {
+			if (newPassword !== confirmPassword)
+				snackBar("Password does not match", "error");
+
+			const { data, status } = await axios().post("/auth/changepassword", {
+				currentPassword,
+				newPassword,
+			});
+
+			console.log(status, data);
+		} catch (error) {
+			if (error.response.status && error.response.status === 400) {
+				snackBar(error.response.data.message || "An error occured!", "error");
+			}
+		}
+	};
+
+	const toggleTheme = (theme) => {
+		setInitial((prev) => {
+			return {
+				...prev,
+				theme,
+			};
+		});
+		console.log(theme);
+		localStorage.setItem("THEME", JSON.stringify(theme));
+	};
+
+	const updateUserTheme = async (theme) => {
+		console.log(theme);
+		try {
+			const { data, status } = await axios().patch("/users/theme", { theme });
+
+			console.log(status, data.theme);
+
+			if (status !== 200) return;
+
+			setInitial((prev) => {
+				return {
+					...prev,
+					theme: data.theme,
+				};
+			});
+			localStorage.setItem("THEME", JSON.stringify(data.theme));
+		} catch (error) {
+			console.log(error);
+			snackBar("An error occured", "error");
 		}
 	};
 
@@ -224,6 +284,14 @@ function UserProvider({ children }) {
 		authUser();
 	}, [initial.token]);
 
+	useEffect(() => {
+		const rootElement = document.documentElement;
+
+		rootElement.classList.remove("dark", "light");
+
+		rootElement.classList.add(initial.theme ? "dark" : "light");
+	}, [initial.theme, initial.user]);
+
 	return (
 		<UserContext.Provider
 			value={{
@@ -235,6 +303,9 @@ function UserProvider({ children }) {
 				getUserProfile,
 				updateUserDetails,
 				updateUserPhotos,
+				updateUserTheme,
+				toggleTheme,
+				changePassword,
 			}}
 		>
 			{children}

@@ -28,13 +28,11 @@ import {
 	useNavigate,
 	useSearchParams,
 } from "react-router-dom";
-
 import PropTypes from "prop-types";
 import { usePostContext } from "../context/PostContext";
-import { MoonIcon, SunIcon } from "./Svgs";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { categories } from "../../data";
-import debounce from "lodash.debounce";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const mockNotifications = [
 	{
@@ -106,17 +104,12 @@ function MyNavbar({
 	profileUpdateOnOpen,
 	editPostOnOpen,
 }) {
-	const { user, logoutUser, profile } = useUserContext();
+	const { user, logoutUser, profile, toggleTheme, theme } = useUserContext();
 	const { singlePost, deletePost, getUserBookmarkPosts, bookmarkPosts } =
 		usePostContext();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const existingParams = Object.fromEntries(searchParams);
 	const { pathname } = useLocation();
-	const [theme, setTheme] = useState(() => {
-		const savedTheme = localStorage.getItem("THEME");
-
-		return savedTheme ? JSON.parse(savedTheme) : false;
-	});
 	const navigate = useNavigate();
 
 	const [hideMenu, setHideMenu] = useState(false);
@@ -171,16 +164,6 @@ function MyNavbar({
 		}
 		setSearchParams(params);
 	}, [search, category]);
-
-	useEffect(() => {
-		const rootElement = document.documentElement;
-
-		rootElement.classList.remove("dark", "light");
-
-		rootElement.classList.add(theme ? "dark" : "light");
-
-		localStorage.setItem("THEME", JSON.stringify(theme));
-	}, [theme]);
 
 	return (
 		<Navbar
@@ -302,7 +285,7 @@ function MyNavbar({
 						}}
 					</DropdownMenu>
 				</Dropdown>
-				<Switch
+				{/* <Switch
 					isSelected={theme}
 					onValueChange={setTheme}
 					value={theme}
@@ -311,6 +294,12 @@ function MyNavbar({
 					startContent={<SunIcon />}
 					endContent={<MoonIcon />}
 					classNames={{ wrapper: "mx-1 mr-2.5" }}
+				/> */}
+				<ThemeSwitch
+					theme={theme}
+					setTheme={toggleTheme}
+					className="mx-1 mr-2.5"
+					size="md"
 				/>
 				<Dropdown>
 					<DropdownTrigger>
