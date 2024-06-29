@@ -75,13 +75,13 @@ const CommentCard = ({
 					snackBar("Something went wrong", "error");
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			} finally {
 				setLikeBtnLoading(false);
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to continue", "error");
+			snackBar("Please login to continue", "info");
 		}
 	};
 
@@ -98,7 +98,7 @@ const CommentCard = ({
 
 			snackBar("Comment deleted successfully", "error");
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -122,11 +122,11 @@ const CommentCard = ({
 					setReplyCounter((prev) => prev + 1);
 				}
 			} else {
-				snackBar("Please login to continue", "error");
+				snackBar("Please login to continue", "info");
 				onLogin();
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			setIsReplyLoading(false);
 		}

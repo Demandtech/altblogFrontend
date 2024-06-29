@@ -23,8 +23,6 @@ const Reply = ({
 			page,
 		});
 
-		console.log("HERE");
-
 		if (allReplies.success) {
 			const repliesList = allReplies.data.data.replies;
 

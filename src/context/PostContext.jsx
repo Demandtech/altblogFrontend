@@ -38,7 +38,7 @@ const PostProvider = ({ children }) => {
 		category = "",
 	}) => {
 		updateState("isPending", true);
-		console.log(state);
+
 		try {
 			if (!id) throw new Error("Id is required");
 
@@ -49,7 +49,7 @@ const PostProvider = ({ children }) => {
 			updateState("author_posts", data.data.posts);
 			updateState("meta", data.data.meta);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			updateState("isPending", false);
 		}
@@ -72,10 +72,8 @@ const PostProvider = ({ children }) => {
 
 			updateState("posts", data.data.posts);
 			updateState("meta", data.data.meta);
-
-			// console.log(data.data.meta);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			updateState("isPending", false);
 		}
@@ -90,7 +88,7 @@ const PostProvider = ({ children }) => {
 			updateState("singlePost", data.data);
 			return data.data;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			updateState("isPending", false);
 		}
@@ -102,13 +100,13 @@ const PostProvider = ({ children }) => {
 				data: { data },
 				status,
 			} = await axios().get("posts/featured");
-			// console.log(status, data);
+
 			if (status !== 200) throw new Error("An error occured");
-			console.log(data);
+
 			updateState("featuredPosts", data);
 			return true;
 		} catch (error) {
-			console.log(error.message);
+			console.error(error.message);
 			return false;
 		}
 	};
@@ -153,7 +151,7 @@ const PostProvider = ({ children }) => {
 			return true;
 		} catch (error) {
 			snackBar("An error occured, please try again!", "error");
-			console.log(error);
+			console.error(error);
 			return false;
 		} finally {
 			updateState("isPending", false);
@@ -169,7 +167,7 @@ const PostProvider = ({ children }) => {
 			snackBar("Post updated successfully!", "success");
 		} catch (error) {
 			snackBar("An error occured, please try again!", "error");
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -206,7 +204,7 @@ const PostProvider = ({ children }) => {
 			snackBar("Post deleted successfully", "success");
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -221,7 +219,7 @@ const PostProvider = ({ children }) => {
 
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -236,7 +234,7 @@ const PostProvider = ({ children }) => {
 
 			return data;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -256,7 +254,7 @@ const PostProvider = ({ children }) => {
 
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -292,7 +290,7 @@ const PostProvider = ({ children }) => {
 
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -308,7 +306,7 @@ const PostProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -324,7 +322,7 @@ const PostProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -338,10 +336,10 @@ const PostProvider = ({ children }) => {
 
 			if (status !== 200)
 				throw new Error("An error occured,  please try again");
-			console.log(status, data);
+			console.error(status, data);
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -355,7 +353,7 @@ const PostProvider = ({ children }) => {
 
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -371,7 +369,7 @@ const PostProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -387,7 +385,7 @@ const PostProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -403,7 +401,7 @@ const PostProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};

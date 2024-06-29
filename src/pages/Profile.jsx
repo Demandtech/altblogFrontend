@@ -12,16 +12,16 @@ import {
 	BsMedium,
 	BsTelegram,
 } from "react-icons/bs";
-
 import { RiDraftLine } from "react-icons/ri";
-import { Avatar, Spinner } from "@nextui-org/react";
+import { Avatar, Spinner, Button } from "@nextui-org/react";
 import PostsContainer from "../components/post/PostsContainer";
 import { handleTime } from "../helper/convertReadingTime";
 import PropTypes from "prop-types";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { FaPoll, FaReadme, FaPenSquare } from "react-icons/fa";
 import { RiDraftFill } from "react-icons/ri";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 	const { id } = useParams();
@@ -29,7 +29,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 	const { getAuthorPosts, author_posts } = usePostContext();
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchParams] = useSearchParams();
-
+	const navigate = useNavigate();
 	const { p, c, q, l, s, o } = Object.fromEntries(searchParams);
 
 	useEffect(() => {
@@ -127,8 +127,23 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 					</style>
 					<div className="hero  max-h-[350px] pt-4 relative">
 						<div className="absolute bg-white/10 dark:bg-black/10 left-0 top-0 w-full h-full"></div>
-						<div className="pt-10">
-							<div className="flex px-5 md:px-10 pt-3 md:pt-5 items-center gap-x-6">
+
+						<div className="px-2 mb-5 md:px-5 flex justify-between">
+							<Button
+								// className="pl-0 justify-start"
+								onPress={() => navigate(-1)}
+								isIconOnly
+								variant="flat"
+								className="text-white"
+							>
+								<FaArrowLeftLong />
+							</Button>
+							<Button variant="flat" className="text-primary bg-white">
+								Subscribe
+							</Button>
+						</div>
+						<div className="p">
+							<div className="flex px-2 md:px-5 pt-3 md:pt-5 items-center gap-x-6">
 								<Avatar
 									className="w-20 h-20 text-large"
 									name={profile?.first_name}
@@ -219,7 +234,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 							)}
 						</div>
 					</div>
-					<div className="px-5 mt-5">
+					<div className="px-2 md:px-5 mt-5">
 						<div className="flex py-5 gap-2 flex-wrap max-w-3xl border-b dark:border-gray-600 justify-start items-center">
 							<div className="p-2 rounded-md flex-1 bg-[#f7f7fc] dark:bg-[#181b1e]">
 								<small className="flex  text-nowrap gap-1 items-center uppercase font-light dark:text-white/70 text-black/70">
@@ -287,7 +302,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 							)}
 						</div>
 					</div>
-					<div className="px-5 mt-5">
+					<div className="px-2 md:px-5 mt-5">
 						{profile?._id === user?._id ? (
 							<PostTab
 								posts={author_posts}

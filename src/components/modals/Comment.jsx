@@ -37,8 +37,6 @@ const Comment = ({
 	const containerRef = useRef(null);
 	const bottomRef = useRef(null);
 
-	// console.log(getAllPostComments)
-
 	const handleChange = (e) => {
 		if (!user) {
 			onLogin();
@@ -66,7 +64,7 @@ const Comment = ({
 				throw new Error("An error occured, try again!");
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			setBtnLoading(false);
 		}
@@ -94,7 +92,7 @@ const Comment = ({
 				setHasMore(allComments.data.data.hasMore);
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			setCommentLoading(false);
 		}

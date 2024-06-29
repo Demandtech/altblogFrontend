@@ -69,7 +69,7 @@ export default function EditPost({ isOpen, onOpenChange }) {
 				return { ...prev, title, tags, description, body, category };
 			});
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return;
 		} finally {
 			setIsLoading(false);
@@ -86,12 +86,8 @@ export default function EditPost({ isOpen, onOpenChange }) {
 		setIsBtnLoading(true);
 		try {
 			await editPost(postId, values);
-
-			// await getPostToUpdate();
-
-			// onClose();
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		} finally {
 			setIsBtnLoading(false);
 		}

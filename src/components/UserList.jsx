@@ -28,7 +28,7 @@ export default function UserList({ postId, commentCounter, list }) {
 					setUsers(users);
 				}
 			} catch (err) {
-				console.log(err);
+				console.error(err);
 			}
 		};
 		const likeUsers = async () => {
@@ -41,7 +41,7 @@ export default function UserList({ postId, commentCounter, list }) {
 					setUsers(users);
 				}
 			} catch (err) {
-				console.log(err);
+				console.error(err);
 			}
 		};
 

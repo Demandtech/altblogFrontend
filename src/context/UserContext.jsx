@@ -14,7 +14,6 @@ function UserProvider({ children }) {
 	const savedThemeData = localStorage.getItem("THEME");
 	const savedTokenData = localStorage.getItem("LOGIN-DATA");
 	const [initial, setInitial] = useState(() => {
-		console.log(savedThemeData);
 		const savedToken = savedTokenData ? JSON.parse(savedTokenData).token : null;
 		const savedTheme = savedThemeData ? JSON.parse(savedThemeData) : false;
 		return {
@@ -52,7 +51,7 @@ function UserProvider({ children }) {
 				};
 			}
 
-			console.log(error);
+			console.error(error);
 
 			return {
 				newUser: null,
@@ -122,7 +121,7 @@ function UserProvider({ children }) {
 			});
 			return { user: data.data.user, errorMessage: null };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			if (error.response.status === 401) {
 				return {
 					user: null,
@@ -139,8 +138,6 @@ function UserProvider({ children }) {
 	const updateUserDetails = async (value) => {
 		try {
 			const { data, status } = await axios().put("/users", value);
-
-			console.log(status, data.user);
 
 			if (status !== 200) return;
 
@@ -159,7 +156,7 @@ function UserProvider({ children }) {
 			localStorage.setItem("LOGIN-DATA", JSON.stringify(newData));
 			snackBar("Profile Updated succesffully", "success");
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			snackBar("An error occured", "error");
 		}
 	};
@@ -175,7 +172,7 @@ function UserProvider({ children }) {
 			authUser();
 		} catch (error) {
 			snackBar("An error occured, please try again!", "error");
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -185,8 +182,6 @@ function UserProvider({ children }) {
 
 			if (status !== 200) throw new Error("Error occured!");
 
-			// console.log(data?.data)
-
 			setInitial((prev) => {
 				return {
 					...prev,
@@ -195,7 +190,7 @@ function UserProvider({ children }) {
 				};
 			});
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -235,16 +230,13 @@ function UserProvider({ children }) {
 				theme,
 			};
 		});
-		console.log(theme);
+
 		localStorage.setItem("THEME", JSON.stringify(theme));
 	};
 
 	const updateUserTheme = async (theme) => {
-		console.log(theme);
 		try {
 			const { data, status } = await axios().patch("/users/theme", { theme });
-
-			console.log(status, data.theme);
 
 			if (status !== 200) return;
 
@@ -256,7 +248,7 @@ function UserProvider({ children }) {
 			});
 			localStorage.setItem("THEME", JSON.stringify(data.theme));
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			snackBar("An error occured", "error");
 		}
 	};

@@ -7,7 +7,6 @@ import moment from "moment";
 import { handleTime } from "../helper/convertReadingTime";
 import { MdOutlineCreate, MdOutlineUpdate } from "react-icons/md";
 import { FaArrowLeftLong } from "react-icons/fa6";
-
 import { CgReadme } from "react-icons/cg";
 import { FaRegEye } from "react-icons/fa";
 import { useUserContext } from "../context/UserContext";
@@ -73,7 +72,7 @@ const SinglePost = ({ onLogin }) => {
 		}
 	};
 
-	// console.log(relatedPosts);
+
 
 	const handleBookmark = async () => {
 		if (user) {
@@ -108,11 +107,6 @@ const SinglePost = ({ onLogin }) => {
 		}
 	};
 
-	// const handleComment = async () => {
-	// 	console.log("HERE")
-	// 	setWriteComment(!writeComment);
-	// };
-
 	useEffect(() => {
 		if (!id) return;
 
@@ -146,7 +140,7 @@ const SinglePost = ({ onLogin }) => {
 		}
 	}, [singlePost]);
 
-	// console.log(singlePost);
+	
 
 	return (
 		<>
@@ -195,18 +189,14 @@ const SinglePost = ({ onLogin }) => {
 				/>
 			) : (
 				<div className="">
-					<div className="px-3 lg:px-10 mb-4">
-						<Button
-							// className="pl-0 justify-start"
-							onPress={() => navigate(-1)}
-							// isIconOnly
-							variant="light"
-							className="px-0 justify-start"
-						>
-							<FaArrowLeftLong />
-						</Button>
-						<div className="mt-5 pb-8">
-							<div className="border-b-2">
+					<div className=" mb-4">
+						<div className="px-2 md:px-5">
+							<Button onPress={() => navigate(-1)} isIconOnly variant="flat">
+								<FaArrowLeftLong />
+							</Button>
+						</div>
+						<div className=" mt-5 pb-8">
+							<div className="border-b-2 px-2 md:px-5">
 								<div className=" md:max-w-2xl">
 									<h1 className="mb-3 max-w-md font-bold text-3xl">
 										{singlePost?.title}
@@ -344,12 +334,12 @@ const SinglePost = ({ onLogin }) => {
 								}
 								`}
 							</style>
-							<div className="grid grid-cols-3 gap-5">
+							<div className="grid grid-cols-3 gap-5 ">
 								<div
-									className="blog-body col-span-3 md:col-span-2"
+									className="px-2 md:px-5 blog-body col-span-3 md:col-span-2"
 									dangerouslySetInnerHTML={{ __html: singlePost?.body }}
 								></div>
-								<div className="col-span-3 md:col-span-1 pt-5 border-t md:border-t-0">
+								<div className="px-2 md:px-5 col-span-3 md:col-span-1 pt-5 border-t-2 md:border-t-0">
 									<h3 className="font-bold text-lg mb-5">Related Post</h3>
 									{relatedPosts?.length > 0 && (
 										<div className="mb-4 max-w-[220px]">
@@ -362,7 +352,6 @@ const SinglePost = ({ onLogin }) => {
 									<div className="space-y-3 ">
 										{relatedPosts && relatedPosts?.posts?.length > 0 ? (
 											relatedPosts?.posts.map((item) => {
-												console.log(item);
 												return (
 													<PostCard
 														key={item._id}

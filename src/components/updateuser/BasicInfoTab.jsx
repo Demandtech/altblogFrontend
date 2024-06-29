@@ -32,8 +32,6 @@ const BasicInfoTab = ({ user }) => {
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
-		console.log(value);
-
 		if (!name) return;
 
 		setIsInputChange(true);

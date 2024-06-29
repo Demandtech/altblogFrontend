@@ -92,7 +92,6 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 				onClose();
 				setIsLoading(false);
 			} else {
-				console.log(result);
 				snackBar(result.message, "error");
 				setIsLoading(false);
 			}
@@ -111,7 +110,7 @@ export default function CreatePost({ isOpen, onOpenChange }) {
 			}
 			onClose();
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			setIsLoading(false);
 		} finally {
 			setIsLoading(false);

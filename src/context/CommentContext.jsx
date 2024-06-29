@@ -18,7 +18,7 @@ const CommentProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -34,7 +34,7 @@ const CommentProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -48,10 +48,10 @@ const CommentProvider = ({ children }) => {
 
 			if (status !== 200)
 				throw new Error("An error occured,  please try again");
-			console.log(status, data);
+
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -65,7 +65,7 @@ const CommentProvider = ({ children }) => {
 
 			return true;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return false;
 		}
 	};
@@ -81,7 +81,7 @@ const CommentProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -97,7 +97,7 @@ const CommentProvider = ({ children }) => {
 
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};
@@ -110,10 +110,10 @@ const CommentProvider = ({ children }) => {
 			} = await axios().get(`/likes/comments/users/${commentId}`);
 
 			if (status !== 200) throw new Error("An error occured, try again!");
-			// console.log(data);
+
 			return { success: true, data };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { success: false, data: null };
 		}
 	};

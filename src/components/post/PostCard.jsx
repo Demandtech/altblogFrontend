@@ -87,13 +87,13 @@ const PostCard = ({
 					snackBar("Something went wrong", "error");
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			} finally {
 				setLikeBtnLoading(false);
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to like post", "error");
+			snackBar("Please login to like post", "info");
 		}
 	};
 
@@ -111,13 +111,13 @@ const PostCard = ({
 					snackBar("Something went wrong", "error");
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			} finally {
 				setBookmarkBtnLoading(false);
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to bookmark post", "error");
+			snackBar("Please login to bookmark post", "info");
 		}
 	};
 

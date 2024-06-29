@@ -27,7 +27,6 @@ export default function Selects({
 				errorMessage={`Tags can not exceed five`}
 				name={name}
 				onChange={(e) => {
-					console.log(e.target.value)
 					handleChange(name, e.target.value.split(","));
 				}}
 				startContent={name === "tags" && <FaHashtag />}

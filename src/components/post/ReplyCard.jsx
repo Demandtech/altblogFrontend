@@ -19,8 +19,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import moment from "moment";
 import { useReplyContext } from "../../context/ReplyContext";
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 const ReplyCard = ({ reply, user, onLogin, setReplies, commentId }) => {
 	const [isLike, setIsLike] = useState(reply?.isLiked || false);
@@ -61,7 +60,6 @@ const ReplyCard = ({ reply, user, onLogin, setReplies, commentId }) => {
 				snackBar("Reply deleted successfully", "info");
 			}
 		} else {
-			console.log(onLogin());
 			onLogin();
 			snackBar("Please login to continue", "info");
 		}
