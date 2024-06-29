@@ -51,7 +51,7 @@ const CommentCard = ({
 		if (user) {
 			setValue(e.target.value);
 		} else {
-			snackBar("Please login to continue", "error");
+			snackBar("Please login to continue", "info");
 			onLogin();
 		}
 	};

@@ -279,11 +279,11 @@ function UserProvider({ children }) {
 					} p-3 rounded-md font-light text-sm text-white`}
 				>
 					{type === "success" ? (
-						<IoMdCheckmarkCircleOutline size={18}/>
+						<IoMdCheckmarkCircleOutline size={20} />
 					) : type === "info" ? (
-						<BiSolidError />
+						<BiSolidError size={20} />
 					) : (
-						<IoMdCloseCircle size={18}/>
+						<IoMdCloseCircle size={20} />
 					)}
 					<span>{text}</span>
 				</div>

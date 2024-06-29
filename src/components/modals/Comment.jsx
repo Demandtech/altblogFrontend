@@ -42,7 +42,7 @@ const Comment = ({
 	const handleChange = (e) => {
 		if (!user) {
 			onLogin();
-			return snackBar("Please login to Comment on a post", "error");
+			return snackBar("Please login to Comment on a post", "info");
 		}
 		setCommentText(e.target.value);
 	};

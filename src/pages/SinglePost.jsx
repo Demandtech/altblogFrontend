@@ -69,7 +69,7 @@ const SinglePost = ({ onLogin }) => {
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to like post", "error");
+			snackBar("Please login to like post", "info");
 		}
 	};
 

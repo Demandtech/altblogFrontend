@@ -46,7 +46,7 @@ const ReplyCard = ({ reply, user, onLogin, setReplies, commentId }) => {
 			}
 		} else {
 			onLogin();
-			snackBar("Please login to continue", "error");
+			snackBar("Please login to continue", "info");
 		}
 	};
 
@@ -63,7 +63,7 @@ const ReplyCard = ({ reply, user, onLogin, setReplies, commentId }) => {
 		} else {
 			console.log(onLogin());
 			onLogin();
-			snackBar("Please login to continue", "error");
+			snackBar("Please login to continue", "info");
 		}
 	};
 
