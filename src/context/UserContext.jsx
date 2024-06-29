@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import axios from "../configs/axios";
 import toast, { toastConfig } from "react-simple-toasts";
 import { RiErrorWarningFill } from "react-icons/ri";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { IoMdCheckmarkCircleOutline, IoMdCloseCircle } from "react-icons/io";
+import { BiSolidError } from "react-icons/bi";
 
 const UserContext = createContext(null);
 toastConfig({ theme: "dark" });
@@ -212,11 +213,18 @@ function UserProvider({ children }) {
 				newPassword,
 			});
 
-			console.log(status, data);
+			if (status !== 200) throw new Error("An error occured!");
+
+			snackBar(data.data.message, "success");
+
+			return true;
 		} catch (error) {
 			if (error.response.status && error.response.status === 400) {
 				snackBar(error.response.data.message || "An error occured!", "error");
 			}
+			snackBar("An error occured, please try again later!", "error");
+
+			return false;
 		}
 	};
 
@@ -264,14 +272,18 @@ function UserProvider({ children }) {
 				<div
 					className={`"text-sm flex gap-1 items-center ${
 						type === "success"
-							? "bg-success-600 text-success-100"
-							: "bg-danger-100 text-danger-400"
-					} px-2 py-1 rounded text-xs`}
+							? "bg-[#0aa700]"
+							: type === "info"
+							? "bg-[#ff9800]"
+							: "bg-[#d3302f]"
+					} p-3 rounded-md font-light text-sm text-white`}
 				>
 					{type === "success" ? (
-						<IoMdCheckmarkCircleOutline />
+						<IoMdCheckmarkCircleOutline size={18}/>
+					) : type === "info" ? (
+						<BiSolidError />
 					) : (
-						<RiErrorWarningFill />
+						<IoMdCloseCircle size={18}/>
 					)}
 					<span>{text}</span>
 				</div>

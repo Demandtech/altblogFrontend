@@ -32,7 +32,7 @@ const PostsContainer = ({ posts, className, editPostOnOpen, onLogin }) => {
 			{posts.length > 0 && !isPending && (
 				<div>
 					<div
-						className={`mb-10 mx-auto grid max-w-2xl gap-4   border-gray-200 lg:mx-0 lg:max-w-none ${
+						className={`mb-10 w-full gap-4   border-gray-200 lg:mx-0 lg:max-w-none ${
 							view === "grid" ? "responsive-grid" : ""
 						}`}
 					>

@@ -134,7 +134,7 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 									>
 										Remember me
 									</Checkbox>
-									<Link color="primary" href="#" size="sm">
+									<Link className='text-blue-700' color="primary" href="#" size="sm">
 										Forgot password?
 									</Link>
 								</div>
@@ -147,7 +147,7 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 												Not a member?{" "}
 												<button
 													onClick={() => handleCreateAccount(onClose)}
-													className="text-primary"
+													className="text-blue-700"
 												>
 													Create an account
 												</button>

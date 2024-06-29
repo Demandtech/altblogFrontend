@@ -5,12 +5,13 @@
 @layer utilities {
 	.responsive-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
 	}
 
-	@media screen and (max-width: 428px) {
+	@media screen and (min-width: 767px) {
 		.responsive-grid {
-			grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+			grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+			display: grid;
 		}
 	}
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useUserContext } from "../../context/UserContext";
 import { ThemeSwitch } from "../ThemeSwitch";
 
-const SettingTab = () => {
+const SettingTab = ({ onClose }) => {
 	const { updateUserTheme, changePassword, theme, toggleTheme } =
 		useUserContext();
 	const [isVisibleCurrent, setIsVisibleCurrent] = useState(false);
@@ -68,7 +68,11 @@ const SettingTab = () => {
 			newPassword: value.new_password,
 		};
 
-		await changePassword(data);
+		const isSuccess = await changePassword(data);
+
+		if (isSuccess) {
+			onClose();
+		}
 	};
 
 	const handleThemeChange = (e) => {
