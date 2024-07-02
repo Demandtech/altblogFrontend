@@ -1,8 +1,9 @@
+import "react-quill/dist/quill.snow.css";
 import { Routes, Route, useSearchParams } from "react-router-dom";
 import Home from "./pages/Home";
 import SinglePost from "./pages/SinglePost";
-import "react-quill/dist/quill.snow.css";
 import Profile from "./pages/Profile";
+import GoogleCallback from "./pages/GoogleCallback";
 import { Spinner, useDisclosure } from "@nextui-org/react";
 import Login from "./components/modals/Login";
 import Signup from "./components/modals/Signup";
@@ -60,7 +61,7 @@ function App() {
 	};
 
 	useEffect(() => {
-		setTimeout(() => setOnMount(true), 500);
+		setOnMount(true);
 	}, []);
 
 	return (
@@ -114,6 +115,7 @@ function App() {
 							}
 							path="/profile/:id"
 						/>
+						<Route element={<GoogleCallback />} path="/auth/callback" />
 					</Routes>
 					<Login
 						onSignUpOpen={signupOnOpen}

@@ -22,7 +22,7 @@ import { useUserContext } from "../../context/UserContext.jsx";
 
 export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { loginUser, snackBar } = useUserContext();
+	const { loginUser, snackBar, getGoogleUrl } = useUserContext();
 	const [values, setValues] = useState(() => {
 		const savedLoginValue = localStorage.getItem("LOGIN-VALUE");
 		return savedLoginValue
@@ -52,10 +52,8 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 		const { isSuccess, errorMessage } = await loginUser(values);
 
 		if (isSuccess) {
-			snackBar(`Welcome back!`, "success");
 			onClose();
 			setIsLoading(false);
-			localStorage.removeItem("LOGIN-VALUE");
 			setValues({
 				email: "",
 				password: "",
@@ -134,7 +132,12 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 									>
 										Remember me
 									</Checkbox>
-									<Link className='text-blue-700' color="primary" href="#" size="sm">
+									<Link
+										className="text-blue-700"
+										color="primary"
+										href="#"
+										size="sm"
+									>
 										Forgot password?
 									</Link>
 								</div>
@@ -169,7 +172,11 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 										</div>
 									</div>
 									<div className="flex gap-3 justify-center my-5">
-										<Button variant="bordered" isIconOnly>
+										<Button
+											onPress={getGoogleUrl}
+											variant="bordered"
+											isIconOnly
+										>
 											<GoogleIcon />
 										</Button>
 										<Button variant="bordered" isIconOnly>

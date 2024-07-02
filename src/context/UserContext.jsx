@@ -13,6 +13,7 @@ toastConfig({ theme: "dark" });
 function UserProvider({ children }) {
 	const savedThemeData = localStorage.getItem("THEME");
 	const savedTokenData = localStorage.getItem("LOGIN-DATA");
+
 	const [initial, setInitial] = useState(() => {
 		const savedToken = savedTokenData ? JSON.parse(savedTokenData).token : null;
 		const savedTheme = savedThemeData ? JSON.parse(savedThemeData) : false;
@@ -77,7 +78,13 @@ function UserProvider({ children }) {
 					token: data.data.token,
 				};
 			});
-			authUser();
+
+			await authUser();
+
+			snackBar(data.data.message, "success");
+
+			localStorage.removeItem("LOGIN-VALUE");
+
 			return { errorMessage: null, isSuccess: true };
 		} catch (error) {
 			localStorage.removeItem("LOGIN-DATA");
@@ -223,6 +230,20 @@ function UserProvider({ children }) {
 		}
 	};
 
+	const getGoogleUrl = async () => {
+		try {
+			const {
+				data: { url },
+				status,
+			} = await axios().get("/auth/google/url");
+			if (status !== 200 || !URL) throw new Error("An error occured!");
+
+			window.location.assign(url);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	const toggleTheme = (theme) => {
 		setInitial((prev) => {
 			return {
@@ -310,6 +331,8 @@ function UserProvider({ children }) {
 				updateUserTheme,
 				toggleTheme,
 				changePassword,
+				getGoogleUrl,
+				authUser
 			}}
 		>
 			{children}
