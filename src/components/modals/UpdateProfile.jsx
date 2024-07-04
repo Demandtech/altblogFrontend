@@ -24,7 +24,7 @@ export default function UpdateProfile({ isOpen, onOpenChange }) {
 							<ModalHeader className="flex border-bottom  flex-col gap-1">
 								Update Profile
 							</ModalHeader>
-							<ModalBody className="px-0">
+							<ModalBody className="px-0 scrollbar-hide">
 								<UpdateProfileTab
 									// setValue={setValue}
 									user={user}

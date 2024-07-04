@@ -120,13 +120,13 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 						{`
               .hero{
                 position: relative;
-                background: url(${profile?.banner_image}) center no-repeat;		
+                background: url(${profile?.banner}) center no-repeat;		
 				background-size: cover;
               }           
             `}
 					</style>
 					<div className="hero  max-h-[350px] pt-4 relative">
-						<div className="absolute bg-white/10 dark:bg-black/10 left-0 top-0 w-full h-full"></div>
+						<div className="absolute bg-black/10 dark:bg-white/10 left-0 top-0 w-full h-full"></div>
 
 						<div className="px-2 mb-5 md:px-5 flex justify-between">
 							<Button
@@ -138,7 +138,10 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 							>
 								<FaArrowLeftLong />
 							</Button>
-							<Button variant="flat" className="text-primary bg-white">
+							<Button
+								variant="flat"
+								className="text-primary dark:text-black bg-white"
+							>
 								Subscribe
 							</Button>
 						</div>
@@ -150,7 +153,7 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 									src={profile?.avatar}
 								/>
 								<div>
-									<h3 className="text-base font-semibold leading-7 text-white tracking-tight">
+									<h3 className="text-base font-semibold leading-7 text-primary tracking-tight">
 										{profile?.first_name} {profile?.last_name}
 									</h3>
 									<p className="text-sm font-semibold leading-6 text-indigo-600">

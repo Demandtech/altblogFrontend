@@ -22,7 +22,7 @@ function PhotosTab({ user }) {
 	});
 	const [displayValue, setDisplayValue] = useState({
 		avatar: user?.avatar || "",
-		banner_image: user?.banner_image || "",
+		banner: user?.banner || "",
 	});
 	const handleChange = (e) => {
 		const { name, files } = e.target;
@@ -59,7 +59,7 @@ function PhotosTab({ user }) {
 					<div className="left-0 !h-[200px]  right-0  absolute  mt-5">
 						<img
 							className="!h-48 w-full object-cover object-center"
-							src={displayValue.banner_image}
+							src={displayValue.banner}
 						/>
 					</div>
 					<Avatar className="w-40 h-40 text-large" src={displayValue.avatar} />
@@ -68,7 +68,7 @@ function PhotosTab({ user }) {
 							<PopoverTrigger>
 								<Button
 									size="sm"
-									variant="light"
+									variant="flat"
 									isIconOnly
 									className="rounded-full"
 								>
@@ -99,7 +99,7 @@ function PhotosTab({ user }) {
 							<PopoverTrigger>
 								<Button
 									size="sm"
-									variant="light"
+									variant="flat"
 									isIconOnly
 									className="rounded-full"
 								>

@@ -69,7 +69,7 @@ const BasicInfoTab = ({ user }) => {
 	};
 	return (
 		<form onSubmit={handleUpdateUser} className="mt-7">
-			<div className="grid px-5 mb-10 gap-3  md:grid-cols-2">
+			<div className="grid scrollbar-hide px-5 mb-10 gap-3  md:grid-cols-2">
 				<Input
 					isRequired
 					type="text"
@@ -208,7 +208,7 @@ const BasicInfoTab = ({ user }) => {
 					onChange={handleChange}
 				/>
 			</div>
-			<div className="flex">
+			<div className="flex px-5">
 				<Button
 					color="primary"
 					className="px-3 ml-auto text-white dark:text-black"
