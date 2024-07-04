@@ -8,6 +8,7 @@ import {
 	Checkbox,
 	Input,
 	Link,
+	Divider
 } from "@nextui-org/react";
 import { MailIcon, EyeFilledIcon, EyeSlashFilledIcon } from "../Svgs.jsx";
 import PropTypes from "prop-types";
@@ -166,7 +167,7 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 											</Button>
 										</div>
 									</div>
-
+									
 									<SocialAuth />
 								</div>
 							</ModalFooter>
