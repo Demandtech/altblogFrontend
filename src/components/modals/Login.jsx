@@ -9,16 +9,11 @@ import {
 	Input,
 	Link,
 } from "@nextui-org/react";
-import {
-	MailIcon,
-	EyeFilledIcon,
-	EyeSlashFilledIcon,
-	GoogleIcon,
-	LinkedinIcon,
-} from "../Svgs.jsx";
+import { MailIcon, EyeFilledIcon, EyeSlashFilledIcon } from "../Svgs.jsx";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useUserContext } from "../../context/UserContext.jsx";
+import SocialAuth from "../SocialAuth.jsx";
 
 export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 	const [isLoading, setIsLoading] = useState(false);
@@ -171,19 +166,8 @@ export default function Login({ isOpen, onOpenChange, onSignUpOpen }) {
 											</Button>
 										</div>
 									</div>
-									<div className="flex gap-3 justify-center my-5">
-										<Button
-											onPress={getGoogleUrl}
-											variant="bordered"
-											isIconOnly
-										>
-											<GoogleIcon />
-										</Button>
-										<Button variant="bordered" isIconOnly>
-											{/* <?xml version="1.0" encoding="iso-8859-1"?> */}
-											<LinkedinIcon />
-										</Button>
-									</div>
+
+									<SocialAuth />
 								</div>
 							</ModalFooter>
 						</>

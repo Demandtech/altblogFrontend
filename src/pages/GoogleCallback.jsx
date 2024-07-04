@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../configs/axios";
 import { useUserContext } from "../context/UserContext";
+import { Spinner } from "@nextui-org/react";
 
 const GoogleCallback = () => {
 	const navigate = useNavigate();
@@ -24,15 +25,22 @@ const GoogleCallback = () => {
 
 				navigate("/");
 			} catch (err) {
-				console.log(err);
 				if (err.response && err?.response.status === 404) {
-					console.log(err.response);
+					snackBar(err.response.data.message, "info");
+				} else {
+					snackBar("Internal server error, please try again!", "error");
 				}
 				navigate("/");
 			}
 		})();
 	}, []);
-	return <></>;
+	return (
+		<>
+			<div className="flex justify-center pt-20">
+				<Spinner label="Loggin in with google" />
+			</div>
+		</>
+	);
 };
 
 export default GoogleCallback;
