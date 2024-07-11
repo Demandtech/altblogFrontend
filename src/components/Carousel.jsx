@@ -59,7 +59,7 @@ const HeroCarousel = ({ featuredPosts }) => {
 								{post?.description}
 							</p>
 						</div>
-						<ul className="pb-5 flex flex-wrap gap-3 text-black/50 items-center dark:text-slate-300 dark:bg-[#171717]">
+						<ul className="pb-5 flex flex-wrap gap-3 text-black/50 items-center dark:text-slate-300 ">
 							<li className="text-nowrap flex items-center">
 								<small className="font-semibold gap-1 pr-1 inline-flex items-center">
 									Written by <MdOutlineCreate /> :

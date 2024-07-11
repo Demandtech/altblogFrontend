@@ -6,6 +6,7 @@ import {
 	PopoverTrigger,
 	PopoverContent,
 	Divider,
+	Image,
 } from "@nextui-org/react";
 import { TbCameraPlus } from "react-icons/tb";
 import { IoIosClose } from "react-icons/io";
@@ -18,7 +19,7 @@ function PhotosTab({ user }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [value, setValue] = useState({
 		avatar: user?.avatar || "",
-		banner_image: user?.banner_image || "",
+		banner: user?.banner || "",
 	});
 	const [displayValue, setDisplayValue] = useState({
 		avatar: user?.avatar || "",
@@ -40,6 +41,8 @@ function PhotosTab({ user }) {
 		setValue((prev) => {
 			return { ...prev, [name]: file };
 		});
+
+		console.log(value)
 	};
 
 	const handleSubmit = async (val) => {
@@ -57,12 +60,17 @@ function PhotosTab({ user }) {
 			<div className="relativ">
 				<div className="flex items-center relative justify-center h-48">
 					<div className="left-0 !h-[200px]  right-0  absolute  mt-5">
-						<img
-							className="!h-48 w-full object-cover object-center"
+						<Image
+							alt="Banner"
+							width={"100%"}
 							src={displayValue.banner}
+							className="h-[200px] w-full"
 						/>
 					</div>
-					<Avatar className="w-40 h-40 text-large" src={displayValue.avatar} />
+					<Avatar
+						className="w-40 h-40 z-10 text-large"
+						src={displayValue.avatar}
+					/>
 					<div className="absolute ">
 						<Popover className="" placement="bottom">
 							<PopoverTrigger>
@@ -77,7 +85,7 @@ function PhotosTab({ user }) {
 							</PopoverTrigger>
 							<PopoverContent className="px-0 rounded-none">
 								<div className="px-3 py-2">
-									<label htmlFor="avatar" className="">
+									<label htmlFor="avatar" className=" cursor-pointer">
 										Upload image
 									</label>
 									<input
@@ -86,7 +94,7 @@ function PhotosTab({ user }) {
 										name="avatar"
 										hidden
 										onChange={handleChange}
-										accept="image/*"
+										accept=".jpeg, .jpg, .png"
 									/>
 								</div>
 								<Divider />
@@ -108,16 +116,16 @@ function PhotosTab({ user }) {
 							</PopoverTrigger>
 							<PopoverContent>
 								<div className="px-1 py-2">
-									<label htmlFor="banner_image" className="">
+									<label htmlFor="banner" className="">
 										Upload image
 									</label>
 									<input
-										id="banner_image"
+										id="banner"
 										type="file"
-										name="banner_image"
+										name="banner"
 										hidden
 										onChange={handleChange}
-										accept="image/*"
+										accept=".jpeg, .jpg, .png"
 									/>
 								</div>
 							</PopoverContent>
@@ -131,9 +139,23 @@ function PhotosTab({ user }) {
 						>
 							<Button
 								size="sm"
-								variant="light"
+								variant="flat"
 								isIconOnly
-								className="rounded-full"
+								className="rounded-full z-10"
+								onPress={() => {
+									setDisplayValue((prev) => {
+										return {
+											...prev,
+											banner: "",
+										};
+									});
+									setValue((prev) => {
+										return {
+											...prev,
+											banner: "",
+										};
+									});
+								}}
 							>
 								<IoIosClose className="dark:text-white/70" />
 							</Button>

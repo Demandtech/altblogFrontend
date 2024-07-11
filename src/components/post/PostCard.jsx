@@ -141,7 +141,7 @@ const PostCard = ({
 		<>
 			<Card
 				isHoverable={true}
-				className="dark:bg-[#27272a] w-full   relative transition-all duration-300 ease-linear dark:border-none dark:shadow-sm border flex shadow-sm hover:drop-shadow-lg flex-col items-start"
+				className="bg-[#f1f1f1] dark:bg-dark80 w-full   relative transition-all duration-300 ease-linear dark:border-none dark:shadow-sm  flex shadow-sm hover:drop-shadow-lg flex-col items-start"
 			>
 				<CardHeader className="flex items-center gap-x-3 text-xs">
 					<time dateTime={"2020-03-16"} className="text-gray-500">
@@ -149,7 +149,7 @@ const PostCard = ({
 					</time>
 
 					<Chip className="px-2" size="sm" endContent={<FaRegEye />}>
-						<span className='pr-1'>{read_count}</span>
+						<span className="pr-1">{read_count}</span>
 					</Chip>
 					<Chip className="px-2" size="sm" startContent={<IoTimerOutline />}>
 						{handleTime(reading_time)}

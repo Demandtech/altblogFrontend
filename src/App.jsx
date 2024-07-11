@@ -68,7 +68,7 @@ function App() {
 		<div className=" max-w-[1440px] mx-auto">
 			{!onMount ? (
 				<Spinner
-					className="w-full dark:bg-black h-svh flex justify-center items-center"
+					className="w-full dark:bg-dark70 h-svh flex justify-center items-center"
 					label="Loading... Please wait"
 				/>
 			) : (
@@ -76,7 +76,7 @@ function App() {
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					transition={{ duration: 2 }}
-					className=" dark:bg-[#171717] min-h-svh w-full "
+					className="  dark:bg-dark70 min-h-svh w-full "
 				>
 					<Navbar
 						createPostOnOpen={createPostOnOpen}

@@ -110,6 +110,7 @@ function UserProvider({ children }) {
 			posts: [],
 			draftPosts: [],
 			publishedPosts: [],
+			theme: JSON.parse(localStorage.getItem("THEME")),
 		});
 		snackBar("Logout successfully", "bg-red-400 px-2");
 	};
@@ -332,7 +333,7 @@ function UserProvider({ children }) {
 				toggleTheme,
 				changePassword,
 				getGoogleUrl,
-				authUser
+				authUser,
 			}}
 		>
 			{children}
