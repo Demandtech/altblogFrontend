@@ -8,7 +8,7 @@ import {
 
 const PostCardSkeleton = () => {
 	return (
-		<Card className="dark:bg-black dark:border-none dark:shadow-sm border flex shadow-sm flex-col items-start">
+		<Card className="bg-[#f1f1f1] dark:bg-dark80 dark:shadow-sm flex shadow-sm flex-col items-start">
 			<CardHeader className="gap-2">
 				<Skeleton className="h-4 w-[75px] rounded-sm" />
 				<Skeleton className="h-5 w-10 rounded-large" />

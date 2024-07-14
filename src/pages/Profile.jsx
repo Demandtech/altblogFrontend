@@ -130,7 +130,6 @@ const Profile = ({ loginOnOpen, editPostOnOpen }) => {
 
 						<div className="px-2 mb-5 md:px-5 flex justify-between">
 							<Button
-								// className="pl-0 justify-start"
 								onPress={() => navigate(-1)}
 								isIconOnly
 								variant="flat"

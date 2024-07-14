@@ -6,6 +6,7 @@ import toast, { toastConfig } from "react-simple-toasts";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { IoMdCheckmarkCircleOutline, IoMdCloseCircle } from "react-icons/io";
 import { BiSolidError } from "react-icons/bi";
+import { io } from "socket.io-client";
 
 const UserContext = createContext(null);
 toastConfig({ theme: "dark" });
@@ -13,6 +14,7 @@ toastConfig({ theme: "dark" });
 function UserProvider({ children }) {
 	const savedThemeData = localStorage.getItem("THEME");
 	const savedTokenData = localStorage.getItem("LOGIN-DATA");
+	const [socket, setSocket] = useState(null);
 
 	const [initial, setInitial] = useState(() => {
 		const savedToken = savedTokenData ? JSON.parse(savedTokenData).token : null;
@@ -95,6 +97,7 @@ function UserProvider({ children }) {
 					isSuccess: false,
 				};
 			}
+			console.error(error);
 			return {
 				errorMessage: "An error occured, please try again!",
 				isSuccess: false,
@@ -317,6 +320,31 @@ function UserProvider({ children }) {
 
 		rootElement.classList.add(initial.theme ? "dark" : "light");
 	}, [initial.theme, initial.user]);
+
+	useEffect(() => {
+		const newSocket = io(import.meta.env.VITE_API_BASE_URL);
+		// alert(import.meta.env.VITE_API_BASE_URL);
+		newSocket.on("connect", () => {
+			console.log("Connected to Socket.IO server with ID:", newSocket.id);
+		});
+
+		newSocket.on("disconnect", () => {
+			console.log("Disconnected from Socket.IO server");
+		});
+
+		setSocket(newSocket);
+
+		return () => newSocket.disconnect();
+		
+	}, [initial.user]);
+
+	useEffect(() => {
+		if (!socket || !initial.user) return;
+
+		// console.log(initial.user._id);
+
+		socket.emit("addNewUser", initial.user._id);
+	}, [socket, initial.user]);
 
 	return (
 		<UserContext.Provider

@@ -41,8 +41,6 @@ function PhotosTab({ user }) {
 		setValue((prev) => {
 			return { ...prev, [name]: file };
 		});
-
-		console.log(value)
 	};
 
 	const handleSubmit = async (val) => {
@@ -130,36 +128,6 @@ function PhotosTab({ user }) {
 								</div>
 							</PopoverContent>
 						</Popover>
-
-						<Tooltip
-							className=" border-none"
-							placement="bottom"
-							content="Remove photo"
-							size="sm"
-						>
-							<Button
-								size="sm"
-								variant="flat"
-								isIconOnly
-								className="rounded-full z-10"
-								onPress={() => {
-									setDisplayValue((prev) => {
-										return {
-											...prev,
-											banner: "",
-										};
-									});
-									setValue((prev) => {
-										return {
-											...prev,
-											banner: "",
-										};
-									});
-								}}
-							>
-								<IoIosClose className="dark:text-white/70" />
-							</Button>
-						</Tooltip>
 					</div>
 				</div>
 			</div>
