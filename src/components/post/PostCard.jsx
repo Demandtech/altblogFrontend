@@ -71,7 +71,7 @@ const PostCard = ({
 		if (user) {
 			try {
 				setLikeBtnLoading(true);
-				const isSuccess = await likePost(_id);
+				const isSuccess = await likePost(_id, author._id);
 
 				if (isSuccess) {
 					if (isLike) {

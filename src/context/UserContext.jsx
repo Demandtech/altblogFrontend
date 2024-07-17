@@ -323,7 +323,7 @@ function UserProvider({ children }) {
 
 	useEffect(() => {
 		const newSocket = io(import.meta.env.VITE_API_BASE_URL);
-		// alert(import.meta.env.VITE_API_BASE_URL);
+
 		newSocket.on("connect", () => {
 			console.log("Connected to Socket.IO server with ID:", newSocket.id);
 		});
@@ -335,7 +335,6 @@ function UserProvider({ children }) {
 		setSocket(newSocket);
 
 		return () => newSocket.disconnect();
-		
 	}, [initial.user]);
 
 	useEffect(() => {
@@ -362,6 +361,7 @@ function UserProvider({ children }) {
 				changePassword,
 				getGoogleUrl,
 				authUser,
+				socket,
 			}}
 		>
 			{children}

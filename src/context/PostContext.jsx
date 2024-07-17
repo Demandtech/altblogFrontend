@@ -7,7 +7,7 @@ import { useUserContext } from "./UserContext";
 const PostContext = createContext(null);
 
 const PostProvider = ({ children }) => {
-	const { snackBar } = useUserContext();
+	const { snackBar, socket, user } = useUserContext();
 	const [initialState, setInitialState] = useState({
 		posts: [],
 		featuredPosts: [],
@@ -209,14 +209,24 @@ const PostProvider = ({ children }) => {
 		}
 	};
 
-	const likePost = async (postId) => {
+	const likePost = async (postId, ownerId) => {
 		if (!postId) return;
 		try {
-			const { status } = await axios().get(`/likes/posts/${postId}`);
+			const { status, data } = await axios().get(`/likes/posts/${postId}`);
 
 			if (status !== 200)
 				throw new Error("An error occured,  please try again");
 
+			if (data.message === "Post liked successfully") {
+				const payload = {
+					userId: user._id,
+					postId,
+					type: "like",
+					ownerId,
+				};
+				socket.emit("like", payload);
+			} else {
+			}
 			return true;
 		} catch (error) {
 			console.error(error);
